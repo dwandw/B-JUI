@@ -72,8 +72,7 @@
         resizable : true,
         drawable  : true,
         maxable   : true,
-        minable   : true,
-        fresh     : true,
+        minable   : true
     }
     
     Dialog.ZINDEX = 30
@@ -155,7 +154,7 @@
             var op = $dialog.data('options') || options
             
             if ($dialog.is(':hidden')) $dialog.show()
-            if (options.fresh || op.url != options.url) {
+            if (op.url != options.url) {
                 $.extend(op, options)
                 $dialog.data('options', op)
                 if (options.title) $dialog.find('> .dialogHeader > h1 > span.title').html(options.title)

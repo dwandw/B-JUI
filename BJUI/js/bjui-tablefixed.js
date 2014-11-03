@@ -213,8 +213,13 @@
         $tds.each(function(i) {
             if (i < styles.length) $(this).width(styles[i][0])
         })
+        
         this.options.$tds = $tds
-        $tbody.wrap('<div class="fixedtableScroller"'+ layoutStr +'><div class="fixedtableTbody"><table class="table table-striped table-hover table-bordered" style="width:'+ (this.options.newWidth - 20) +'px; max-width:'+ (this.options.newWidth - 20) +'px;"></table></div></div>')
+        $tbody.wrap('<div class="fixedtableScroller"'+ layoutStr +'><div class="fixedtableTbody"><table style="width:'+ (this.options.newWidth - 20) +'px; max-width:'+ (this.options.newWidth - 20) +'px;"></table></div></div>')
+        
+        if (!this.$element.attr('class')) $tbody.parent().addClass('table table-striped table-bordered table-hover')
+        else $tbody.parent().addClass(this.$element.attr('class'))
+        
         $tbody.closest('.fixedtableScroller').scroll(function(e) {
             var $scroller  = $(this)
             var scrollLeft = $scroller.scrollLeft()

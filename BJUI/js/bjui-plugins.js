@@ -68,7 +68,7 @@
         $box.find(':text, :password, textarea, :button, a.btn').each(function() {
             var $element = $(this), $tabledit = $element.closest('table.bjui-tabledit')
             
-            if (($element.is(':text') || $element.isTag('textarea')) && !$element.hasClass('form-control'))
+            if (($element.is(':text') || $element.is(':password') || $element.isTag('textarea')) && !$element.hasClass('form-control'))
                 $element.addClass('form-control')
             if ($element.is(':button')) {
                 var icon = $element.data('icon'), large = $element.data('large'), oldClass = $element.attr('class')
@@ -397,7 +397,7 @@
                 var offsetBot = $(window).height() - treeHeight - top - h,
                     maxHeight = $(window).height() - top - h
                 
-                if (height == 'auto' && offsetBot < 0) maxHeight = maxHeight + offsetBot
+                if (options.height == 'auto' && offsetBot < 0) maxHeight = maxHeight + offsetBot
                 $box.css({top:(top + h), left:left, 'max-height':maxHeight})
             }
             
@@ -409,7 +409,7 @@
                 }
                 
                 var zindex = 2
-                var dialog = $.pdialog.getCurrent()
+                var dialog = $.CurrentDialog
                 
                 if (dialog && dialog.length) {
                     zindex = dialog.css('zIndex') + 1

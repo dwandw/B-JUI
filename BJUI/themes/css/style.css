@@ -345,7 +345,7 @@ label.x150{display:inline-block; width:150px; padding-right:5px;}
 /* Masks */
 .bjui-maskBackground{position:absolute; top:0; left:0; z-index:2000; display:block; width:100%; height:100%; opacity:0.4; filter:alpha(opacity=40); background:#FFF;}
 .bjui-maskProgress{position:absolute; top:50%; left:50%; z-index:2001; display:block; margin-left:-120px; margin-top:-14px; padding:3px 10px; width:240px; height:36px; text-align:left; font-size:14px; line-height:1.7; font-weight:bold; border-radius:3px; -webkit-box-shadow:0 3px 7px rgba(0,0,0,0.2);-moz-box-shadow:0 3px 7px rgba(0,0,0,0.2);box-shadow:0 3px 7px rgba(0,0,0,0.2);}
-.bjui-alertBackground{position:absolute; top:0; left:0; z-index:1010; display:none; width:100%; height:100%; background:#000;}
+.bjui-alertBackground{position:absolute; top:0; left:0; z-index:1010; display:none; width:100%; height:100%; opacity:0.4; filter:alpha(opacity=40); background:#FFF;}
 .bjui-dialogBackground{position:absolute; top:0; left:0; z-index:900; display:none; width:100%; height:100%; opacity:0.4; filter:alpha(opacity=40); background:#FFF;}
 /* Contextmenu */
 #bjui-contextmenu{position:absolute; z-index:500; left:0; top:0; display:none;}

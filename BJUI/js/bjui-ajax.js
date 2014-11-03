@@ -6,10 +6,10 @@
  */
 
 /* ========================================================================
- * B-JUI: ajax.js v1.0
+ * B-JUI: bjui-ajax.js v1.0
  * @author K'naan (xknaan@163.com) 
  * -- Modified from dwz.ajax.js (author:ZhangHuihua@msn.com)
- * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/ajax.js
+ * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-ajax.js
  * ========================================================================
  * Copyright 2014 K'naan.
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
@@ -98,9 +98,6 @@
     }
     
     Bjuiajax.prototype.ajaxError = function(xhr, ajaxOptions, thrownError) {
-        console.log(this)
-        console.log(this.$element)
-        
         this.$element.alertmsg('error', '<div>Http status: ' + xhr.status + ' ' + xhr.statusText + '</div>' 
             + '<div>ajaxOptions: '+ ajaxOptions +' </div>'
             + '<div>thrownError: '+ thrownError +' </div>'
@@ -110,7 +107,6 @@
     Bjuiajax.prototype.ajaxCallback = function(json) {
         var that     = this
         var $element = that.$element
-        //var $target  = that.options.target ? $(that.options.target) : null
         var $target  = $element.closest('.bjui-layout')
         
         that.ajaxDone(json)
@@ -119,14 +115,10 @@
             that.divCallback(json, $target)
         } else {
             if (that.tools.getTarget() == Bjuiajax.NAVTAB) {
-                $target = $.CurrentNavtab
                 that.navtabCallback(json)
             } else {
-                $target = $.CurrentDialog
                 that.dialogCallback(json)
             }
-            
-            if (json.tabid) $element.navtab(json.tabid)
         }
     }
     
@@ -164,12 +156,13 @@
     
     Bjuiajax.prototype.navtabCallback = function(json) {
         var that = this
-        if (json.callbackType && json.callbackType == 'closeCurrent')
+        
+        if (json.tabid)
+            that.$element.navtab('reloadFlag', json.tabid)
+        if (json.closeCurrent && !json.forward)
             that.$element.navtab('closeCurrentTab')
-        
-        if (that.options.reload)
+        else if (that.options.reload)
             that.$element.navtab('refresh')
-        
         if (json.forward) {
             var _forward = function() {
                 that.$element.navtab('reload', {url:json.forward})
@@ -177,7 +170,8 @@
             
             if (json.forwardConfirm) {
                 that.$element.alertmsg('confirm', json.forwardConfirm, {
-                    okCall: function() { _forward() }
+                    okCall: function() { _forward() },
+                    cancelCall: function() { if (json.closeCurrent) { that.$element.navtab('closeCurrentTab') } }
                 })
             } else {
                 _forward()
@@ -186,7 +180,7 @@
     }
     
     Bjuiajax.prototype.dialogCallback = function(json) {
-        if (json.callbackType && json.callbackType == 'closeCurrent')
+        if (json.closeCurrent)
             this.$element.dialog('closeCurrent')
         
         if (this.options.reload)
@@ -628,7 +622,5 @@
         
         e.preventDefault()
     })
-    
-    
     
 }(jQuery);

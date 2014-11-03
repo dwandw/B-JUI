@@ -73,7 +73,7 @@
     
     Navtab.DEFAULTS = {
         id       : undefined,
-        title    : 'New Tab',
+        title    : 'New tab',
         url      : undefined,
         type     : 'GET',
         data     : {}
@@ -204,18 +204,24 @@
             switchTab: function(iTabIndex) {
                 var $tab = this.getTabs().removeClass('active').eq(iTabIndex).addClass('active'), $panels = this.getPanels(), $panel = $panels.eq(iTabIndex)
                 
-                if (BJUI.ui.hideMode == 'offsets') {
-                    $panels.css({position: 'absolute', top:'-100000px', left:'-100000px'}).eq(iTabIndex).css({position: '', top:'', left:''})
+                if ($tab.data('reloadFlag')) {
+                    $panels.hide()
+                    $panel.removeClass('fade').show()
+                    that.refresh($tab.data('tabid'))
                 } else {
-                    $panels.addClass('fade').removeClass('in').hide()
-                    $panel.show()
-                    
-                    if ($.support.transition)
-                        $panel.one('bsTransitionEnd', function() { $panel.addClass('in') }).emulateTransitionEnd(100)
-                    else
-                        $panels.removeClass('fade')
+                    if (BJUI.ui.hideMode == 'offsets') {
+                        $panels.css({position: 'absolute', top:'-100000px', left:'-100000px'}).eq(iTabIndex).css({position: '', top:'', left:''})
+                    } else {
+                        $panels.addClass('fade').removeClass('in').hide()
+                        $panel.show()
+                        
+                        if ($.support.transition)
+                            $panel.one('bsTransitionEnd', function() { $panel.addClass('in') }).emulateTransitionEnd(100)
+                        else
+                            $panels.removeClass('fade')
+                    }
                 }
-                  
+                
                 this.getMoreLi().removeClass('active').eq(iTabIndex).addClass('active')
                 currentIndex  = iTabIndex
                 this.scrollCurrent()
@@ -333,7 +339,7 @@
     // if found tabid replace tab, else create a new tab.
     Navtab.prototype.openTab = function() {
         var that = this, $element = this.$element, options = this.options, tools = this.tools
-
+        
         if (!(options.url)) {
             BJUI.debug('Navtab Plugin: Error trying to open a navtab, url is undefined!')
             return
@@ -355,7 +361,7 @@
             var $tab   = tools.getTabs().eq(iOpenIndex)
             var $panel = tools.getPanels().eq(iOpenIndex)
             
-            if (options.fresh || $tab.data('url') != options.url) {
+            if ($tab.data('url') != options.url) {
                 $tab.data('url', options.url)
                 
                 var $pagerForm = $panel.find('#pagerForm')
@@ -443,7 +449,7 @@
         var arr = tabids.split(',')
         
         for (var i = 0; i < arr.length; i++) {
-            var $tab = this.tools.getTab(arr[i])
+            var $tab = this.tools.getTab(arr[i].trim())
             
             if ($tab) {
                 if (this.tools.indexTabId(arr[i]) == currentIndex) this.tools.reload($tab, true)

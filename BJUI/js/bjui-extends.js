@@ -6,10 +6,10 @@
  */
 
 /* ========================================================================
- * B-JUI: core.js v1.0
+ * B-JUI: bjui-extends.js v1.0
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.core.js (author:ZhangHuihua@msn.com)
- * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/core.js
+ * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-extends.js
  * ========================================================================
  * Copyright 2014 K'naan.
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)

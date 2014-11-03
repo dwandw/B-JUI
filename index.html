@@ -114,7 +114,7 @@ function MainMenuClick(event, treeId, treeNode) {
     }
     
     if (treeNode.target && treeNode.target == 'dialog')
-        $.pdialog.open(treeNode.url, treeNode.tabid, treeNode.name, {})
+        $(event.target).dialog({id:treeNode.tabid, url:treeNode.url, title:treeNode.name})
     else
         $(event.target).navtab({id:treeNode.tabid, url:treeNode.url, title:treeNode.name})
 }
@@ -134,7 +134,7 @@ function MainMenuClick(event, treeId, treeNode) {
         <nav class="collapse navbar-collapse" id="bjui-navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li class="datetime"><div><span id="bjui-date"></span><br><i class="fa fa-clock-o"></i> <span id="bjui-clock"></span></div></li>
-                <li><a href="http://b-jui.com/api/" target="_blank">B-JUI在线文档</a></li>
+                <li><a href="http://b-jui.com/doc/" target="_blank">B-JUI在线文档</a></li>
                 <li><a href="http://www.bootcss.com/" target="_blank">Bootstrap中文网</a></li>
                 <li><a href="http://www.j-ui.com/" target="_blank">DWZ(j-ui)官网</a></li>
                 <li><a href="#">消息 <span class="badge">4</span></a></li>
@@ -190,6 +190,7 @@ function MainMenuClick(event, treeId, treeNode) {
                                 <li data-id="31" data-pid="3" data-url="alert.html" data-tabid="alert">信息提示</li>
                                 <li data-id="5" data-pid="0">其他插件</li>
                                 <li data-id="51" data-pid="5" data-url="ztree.html" data-tabid="alert">zTree</li>
+                                <li data-id="51" data-pid="5" data-url="ztree-select.html" data-tabid="alert">zTree下拉选择</li>
                                 <li data-id="8" data-pid="0">综合应用</li>
                                 <li data-id="80" data-pid="8" data-url="table-layout.html" data-tabid="table-layout">局部刷新1</li>
                             </ul>
@@ -237,7 +238,7 @@ function MainMenuClick(event, treeId, treeNode) {
                             <div class="row">
                                 <div class="col-md-6">
                                     <h5>网址：<a href="http://b-jui.com/" target="_blank">http://b-jui.com/</a></h5>
-                                    <h5>项目地址：<a href="http://www.oschina.net/p/bootstrap-for-DWZ" target="_blank">GIT</a>　<a href="http://www.oschina.net/p/B-JUI" target="_blank">OSCHINA</a></h5>
+                                    <h5>项目地址：<a href="http://git.oschina.net/xknaan/B-JUI" target="_blank">GIT</a>　<a href="http://www.oschina.net/p/bootstrap-for-DWZ" target="_blank">OSCHINA</a></h5>
                                     <h5>微博地址：<a href="http://weibo.com/xknaan" target="_blank">http://weibo.com/xknaan</a></h5>                                    
                                 </div>
                                 <div class="col-md-6">
@@ -263,6 +264,7 @@ function MainMenuClick(event, treeId, treeNode) {
                                                     <tr>
                                                         <th>版本号</th>
                                                         <th>发布日期</th>
+                                                        <th>在线DEMO</th>
                                                         <th>下载地址</th>
                                                         <th>描述</th>
                                                     </tr>
@@ -271,12 +273,14 @@ function MainMenuClick(event, treeId, treeNode) {
                                                     <tr>
                                                         <td>1.0 beta</td>
                                                         <td>2014.10.31</td>
+                                                        <td>http://b-jui.com/</td>
                                                         <td>http://git.oschina.net/xknaan/B-JUI</td>
                                                         <td>全新的前端框架B-JUI，全Bootstrap插件式的组合，仅借鉴了DWZ的思想，功能已全部重写。</td>
                                                     </tr>
                                                     <tr>
                                                         <td>0.1 released</td>
                                                         <td>2014.08.01</td>
+                                                        <td>http://xknaan.com/</td>
                                                         <td>http://git.oschina.net/xknaan/Bootstrap_for_DWZ</td>
                                                         <td>穿上Bootstrap衣服的DWZ</td>
                                                     </tr>

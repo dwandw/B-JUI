@@ -137,6 +137,7 @@
         splitBar: '<div id="bjui-splitBar"></div>',
         splitBarProxy: '<div id="bjui-splitBarProxy"></div>',
         resizable: '<div id="bjui-resizable" class="bjui-resizable"></div>',
+        alertBackground: '<div class="bjui-alertBackground"></div>',
         maskBackground: '<div class="bjui-maskBackground"></div>',
         maskProgress: '<div class="bjui-maskProgress"><i class="fa fa-cog fa-spin"></i>&nbsp;&nbsp;#msg#</div>',
         progressBar_custom: '<div id="bjui-progressBar-custom" class="progressBar"><i class="fa fa-cog fa-spin"></i> <span></span></div>',

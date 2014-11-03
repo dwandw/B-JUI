@@ -107,7 +107,6 @@
         // Recovery not need to initialize the UI DOM
         if (noinits) {
             $.each(noinits, function(i, n) {
-                //if (!n.$target.data('noinit')) return
                 if (n.$next.length) n.$next.before(n.$target)
                 else if (n.$prev.length) n.$prev.after(n.$target)
                 else if (n.$parent.length) n.$parent.append(n.$target)

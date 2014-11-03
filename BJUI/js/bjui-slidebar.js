@@ -29,7 +29,6 @@
     // ======================
     
     var Slidebar = function(element, options) {
-        var $this       = this
         this.$element   = $(element)
         this.$bar       = this.$element.find('#bjui-sidebar')
         this.$sbar      = this.$element.find('#bjui-sidebar-s')
@@ -44,38 +43,41 @@
     }
     
     Slidebar.prototype.init = function() {
-        var $this = this
+        var that = this
+        
         this.$toggle.click(function() {
-            $this.$split.hide()
+            that.$split.hide()
             BJUI.ui.showSlidebar = false
-            var sbarwidth = parseInt($this.$sbar.css('left')) + $this.$sbar.outerWidth()
-            var barleft   = sbarwidth - $this.$bar.outerWidth()
-            var cleft     = parseInt($this.$container.css('left')) - ($this.$bar.outerWidth() - $this.$sbar.outerWidth())
-            var cwidth    = $this.$bar.outerWidth() - $this.$sbar.outerWidth() + $this.$container.outerWidth()
-            $this.$container.animate({left:cleft, width:cwidth}, 50, function() {
-                $this.$bar.animate({left: barleft}, 500, function() {
-                    $this.$bar.hide()
-                    $this.$sbar.show().css('left', -50).animate({left:5}, 200)
+            var sbarwidth = parseInt(that.$sbar.css('left')) + that.$sbar.outerWidth()
+            var barleft   = sbarwidth - that.$bar.outerWidth()
+            var cleft     = parseInt(that.$container.css('left')) - (that.$bar.outerWidth() - that.$sbar.outerWidth())
+            var cwidth    = that.$bar.outerWidth() - that.$sbar.outerWidth() + that.$container.outerWidth()
+            
+            that.$container.animate({left:cleft, width:cwidth}, 50, function() {
+                that.$bar.animate({left: barleft}, 500, function() {
+                    that.$bar.hide()
+                    that.$sbar.show().css('left', -50).animate({left:5}, 200)
                     $(window).trigger(BJUI.eventType.resizeGrid)
                 })
             })
-            $this.$collapse.on('click', function() {
-                var sbarwidth = parseInt($this.$sbar.css('left')) + $this.$sbar.outerWidth()
+            that.$collapse.on('click', function() {
+                var sbarwidth = parseInt(that.$sbar.css('left')) + that.$sbar.outerWidth()
                 var _hideBar  = function() {
                     if (!BJUI.ui.showSlidebar) {
-                        $this.$bar.animate({left: barleft}, 500, function() {
-                            $this.$bar.hide()
+                        that.$bar.animate({left: barleft}, 500, function() {
+                            that.$bar.hide()
                         })
                     }
-                    $this.$container.off('click')
+                    that.$container.off('click')
                 }
-                if ($this.$bar.is(':hidden')) {
-                    $this.$toggle.hide()
-                    $this.$bar.show().animate({left: sbarwidth}, 500)
-                    $this.$container.on('click', _hideBar)
+                
+                if (that.$bar.is(':hidden')) {
+                    that.$toggle.hide()
+                    that.$bar.show().animate({left: sbarwidth}, 500)
+                    that.$container.on('click', _hideBar)
                 } else {
-                    $this.$bar.animate({left: barleft}, 500, function() {
-                        $this.$bar.hide()
+                    that.$bar.animate({left: barleft}, 500, function() {
+                        that.$bar.hide()
                     })
                 }
                 return false
@@ -84,35 +86,43 @@
         })
         this.$stoggle.click(function() {
             BJUI.ui.showSlidebar = true
-            $this.$sbar.animate({left: -25}, 200, function() {                
-                $this.$bar.show()
+            
+            that.$sbar.animate({left: -25}, 200, function() {
+                that.$bar.show()
             })
-            $this.$bar.animate({left: 5}, 800, function() {
-                $this.$split.show()
-                $this.$toggle.show()                    
-                var cleft = 5 + $this.$bar.outerWidth() + $this.$split.outerWidth()
-                var cwidth = $this.$container.outerWidth() - (cleft - parseInt($this.$container.css('left')))
-                $this.$container.css({left:cleft, width:cwidth})
-                $this.$collapse.off('click')
+            that.$bar.animate({left: 5}, 800, function() {
+                that.$split.show()
+                that.$toggle.show()
+                
+                var cleft = 5 + that.$bar.outerWidth() + that.$split.outerWidth()
+                var cwidth = that.$container.outerWidth() - (cleft - parseInt(that.$container.css('left')))
+                
+                that.$container.css({left:cleft, width:cwidth})
+                that.$collapse.off('click')
                 $(window).trigger(BJUI.eventType.resizeGrid)
             })
+            
             return false
         })
-        this.$split.mousedown(function(event) {
-            $this.$split2.each(function() {
+        this.$split.mousedown(function(e) {
+            that.$split2.each(function() {
                 var $spbar2 = $(this)
+                
                 setTimeout(function() { $spbar2.show() }, 100)
-                $spbar2.css({visibility:'visible', left: $this.$split.css('left')})                    
-                $spbar2.basedrag($.extend($this.options, {obj:$this.$bar, move:'horizontal', event:event, stop: function() {
-                    $(this).css('visibility', 'hidden')
-                    var move      = parseInt($(this).css('left')) - parseInt($this.$split.css('left'))
-                    var sbarwidth = $this.$bar.outerWidth() + move
-                    var cleft     = parseInt($this.$container.css('left')) + move
-                    var cwidth    = $this.$container.outerWidth() - move
-                    $this.$bar.css('width', sbarwidth)
-                    $this.$split.css('left', $(this).css('left'))
-                    $this.$container.css({left:cleft, width:cwidth})
-                }}))
+                $spbar2
+                    .css({visibility:'visible', left: that.$split.css('left')})
+                    .basedrag($.extend(that.options, {obj:that.$bar, move:'horizontal', event:e, stop: function() {
+                        $(this).css('visibility', 'hidden')
+                        var move      = parseInt($(this).css('left')) - parseInt(that.$split.css('left'))
+                        var sbarwidth = that.$bar.outerWidth() + move
+                        var cleft     = parseInt(that.$container.css('left')) + move
+                        var cwidth    = that.$container.outerWidth() - move
+                        
+                        that.$bar.css('width', sbarwidth)
+                        that.$split.css('left', $(this).css('left'))
+                        that.$container.css({left:cleft, width:cwidth})
+                    }}))
+                
                 return false                    
             })
         })
@@ -122,16 +132,20 @@
     // =======================
     
     function Plugin(option) {
-        var args = arguments
+        var args     = arguments
+        var property = option
+        
         return this.each(function () {
             var $this   = $(this)
             var options = $.extend({}, $this.data(), typeof option == 'object' && option)
             var data    = $this.data('bjui.slidebar')
+            
             if (!data) $this.data('bjui.slidebar', (data = new Slidebar(this, options)))
-            if (typeof option == 'string' && data[option] instanceof Function) {
+            
+            if (typeof property == 'string' && $.isFunction(data[property])) {
                 [].shift.apply(args)
-                if (!args) data[option]()
-                else data[option].apply(data, args)
+                if (!args) data[property]()
+                else data[property].apply(data, args)
             } else {
                 data.init()
             }

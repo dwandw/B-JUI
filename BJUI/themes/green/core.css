@@ -124,7 +124,7 @@ fieldset{border-color:#0f4c0f;}
 .bjui-dialog.dialogShadow{-webkit-box-shadow:0 3px 9px rgba(62,153,62, 0.9); box-shadow:0 3px 9px rgba(62,153,62, 0.9);}
 .bjui-dialog > .dialogHeader{background:#e9f3e9; border-bottom:1px #0f4c0f solid;}
 .bjui-dialog > .dialogHeader a{color:#0f4c0f !important;}
-.bjui-dialog > .dialogHeader a:hover{color:#0f4c0f !important;}
+.bjui-dialog > .dialogHeader a:hover{color:#1ca61c !important;}
 .bjui-dialog > .dialogHeader h1{color:#0f4c0f;}
 .bjui-dialog > .dialogContent .bjui-pageHeader{margin-bottom:0; border:1px #0f4c0f solid; border-bottom:none;}
 .bjui-dialog > .dialogContent .bjui-pageContent{background-color:#fff; border:1px #0f4c0f solid;}
