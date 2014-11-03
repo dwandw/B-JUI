@@ -271,6 +271,9 @@
                 data: {
                     simpleData: {
                         enable: op.simpleData || true
+                    },
+                    key: {
+                        title: op.title || ''
                     }
                 }
             }
