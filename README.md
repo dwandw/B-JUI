@@ -15,4 +15,4 @@ B-JUI前端框架 ，你值得拥有。
 ## 其他 ##
 
 - QQ交流群：232781006
-- 在线DEMO：http://bjui.com
+- 在线DEMO：http://b-jui.com
