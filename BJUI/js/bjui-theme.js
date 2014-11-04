@@ -117,7 +117,7 @@
     // ==============
 
     $(document).on('click.bjui.theme.data-api', '[data-toggle="theme"]', function(e) {
-        Plugin.call($(this), $(this).data())
+        Plugin.call($(this))
         
         e.preventDefault()
     })

@@ -339,7 +339,7 @@
     // =======================
     
     function Plugin(option) {
-        var args = arguments
+        var args     = arguments
         var property = option
         
         return this.each(function () {
@@ -375,25 +375,26 @@
     // ==============
 
     $(document).on(BJUI.eventType.initUI, function(e) {
-        var $this = $(e.target).find('[data-toggle="tabledit"]')
+        var $this = $(e.target).find('table[data-toggle="tabledit"]')
         
         if (!$this.length) return
-        if (!$this.isTag('table')) return
         
-        Plugin.call($this, $this.data())
+        Plugin.call($this)
     })
     
     // init add tr
     $(document).on(BJUI.eventType.afterInitUI, function(e) {
         var $this = $(e.target).find('table[data-toggle="tabledit"]')
         
-        if ($this.is('[data-initnum]')) {
-            var initNum = $this.data('initnum')
-            
-            if (initNum > 0) {
-                Plugin.call($this, 'add', $this, initNum)
+        $this.each(function() {
+            if ($(this).is('[data-initnum]')) {
+                var initNum = $(this).data('initnum')
+                
+                if (initNum > 0) {
+                    Plugin.call($(this), 'add', $(this), initNum)
+                }
             }
-        }
+        })
     })
     
     $(document).on('click.bjui.tabledit.data-api', '[data-toggle="tableditadd"]', function(e) {

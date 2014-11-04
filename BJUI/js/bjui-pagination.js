@@ -212,7 +212,7 @@
         
         if (!$this.length) return
         
-        Plugin.call($this, $this.data())
+        Plugin.call($this)
     })
     
     $(document).on('change.bjui.pagination.data-api', 'select[data-toggle-change="changepagesize"]', function(e) {

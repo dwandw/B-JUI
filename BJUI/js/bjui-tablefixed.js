@@ -382,7 +382,7 @@
         
         if (!$this.length) return
         
-        Plugin.call($this, $this.data())
+        Plugin.call($this)
     })
     
     /* orderby */
@@ -391,7 +391,7 @@
         
         if (!$this.length) return
         
-        Plugin.call($this, 'setOrderBy', $this.data())
+        Plugin.call($this, 'setOrderBy')
     })
     
 }(jQuery);

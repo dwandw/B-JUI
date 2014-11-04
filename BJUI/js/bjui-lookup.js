@@ -188,7 +188,7 @@
         
         if (!$this.length) return
         
-        Plugin.call($this, 'addBtn', $this.data())
+        Plugin.call($this, 'addBtn')
     })
     
     $(document).on('click.bjui.lookup.data-api', '[data-toggle="lookupbtn"]', function(e) {

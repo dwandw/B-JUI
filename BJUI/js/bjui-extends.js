@@ -104,7 +104,7 @@
                     iH = iRefH - iLayoutH > 50 ? iRefH - iLayoutH : 50
                 }
                 if ($this.isTag('table') && !$this.parent('[data-layout-h]').length) {
-                    $this.removeAttr('data-layout-h').wrap('<div data-layout-h="'+ iLayoutH +'" style="overflow:auto;height:'+ iH +'px"></div>')
+                    $this.removeAttr('data-layout-h').wrap('<div data-layout-h="'+ iLayoutH +'" style="overflow:auto;width:100%;height:'+ iH +'px"></div>')
                 } else {
                     $this.height(iH).css('overflow','auto')
                 }

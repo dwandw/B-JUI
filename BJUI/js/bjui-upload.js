@@ -473,8 +473,6 @@
             var options = $.extend({}, Upload.DEFAULTS, $this.data(), typeof option == 'object' && option)
             var data    = $this.data('bjui.upload')
             
-            console.log(options.uploader)
-            
             if (!data) $this.data('bjui.upload', (data = new Upload(this, options)))
             if (typeof property == 'string' && $.isFunction(data[property])) {
                 [].shift.apply(args)
@@ -522,7 +520,10 @@
             }
             
             $this.each(function() {
-                $.extend(options, $(this).data())
+                var op = $(this).data()
+                
+                if (!op.id) op.id = $(this).attr('id')
+                $.extend(options, op)
                 if (options.id == 'fileInput') options.id = options.id + (new Date().getTime())
                 var $file = $('<input type="file" name="'+ options.name +'" id="'+ options.id +'">')
                 

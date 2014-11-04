@@ -145,12 +145,11 @@
     // ==============
 
     $(document).on(BJUI.eventType.initUI, function(e) {
-        var $this = $(e.target).find('[data-toggle="spinner"]')
+        var $this = $(e.target).find('input[data-toggle="spinner"]')
         
         if (!$this.length) return
-        if (!$this.is(':text')) return
         
-        Plugin.call($this, $this.data())
+        Plugin.call($this)
     })
 
 }(jQuery);
