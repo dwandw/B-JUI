@@ -41,14 +41,17 @@
             msgClass: 'n-right',
             msgShow: function($msgbox, type) {
                 var $el   = $msgbox.children()
-                var ww    = $(window).width(),
-                    left  = $el.offset().left,
-                    width = $el.outerWidth()
-                
+                var $el   = $msgbox.children()
+                var $form   = $msgbox.closest('form'),
+                    fW      = $form.width(),
+                    fL      = $form.offset().left,
+                    eL      = $msgbox.offset().left,
+                    mw      = $el.outerWidth()
                 var offLeft = fixedLeft($msgbox)
                 
-                if (width > (ww - left)) {
-                    $msgbox.find('> .msg-wrap').addClass('wrap')
+                if ((fW - (eL - fL)) < (mw + offLeft + 8)) {
+                    $msgbox.find('> .msg-wrap').addClass('wrap').width(fW - (eL - fL) - offLeft - 8)
+                        .find('> .n-msg').width(fW - (eL - fL) - offLeft - 8 - 30)
                 }
                 $el.css({
                     left: offLeft,
@@ -74,14 +77,17 @@
             msgArrow: TPL_ARROW,
             msgShow: function($msgbox, type) {
                 var $el   = $msgbox.children()
-                var ww    = $(window).width(),
-                    left  = $el.offset().left,
-                    width = $el.outerWidth()
-                
+                var $el   = $msgbox.children()
+                var $form   = $msgbox.closest('form'),
+                    fW      = $form.width(),
+                    fL      = $form.offset().left,
+                    eL      = $msgbox.offset().left,
+                    mw      = $el.outerWidth()
                 var offLeft = fixedLeft($msgbox)
                 
-                if (width > (ww - left)) {
-                    $msgbox.find('> .msg-wrap').addClass('wrap')
+                if ((fW - (eL - fL)) < (mw + offLeft + 8)) {
+                    $msgbox.find('> .msg-wrap').addClass('wrap').width(fW - (eL - fL) - offLeft - 8)
+                        .find('> .n-msg').width(fW - (eL - fL) - offLeft - 8 - 30)
                 }
                 $el.css({
                     left: offLeft,
@@ -98,14 +104,17 @@
             msgArrow: TPL_ARROW,
             msgShow: function($msgbox, type) {
                 var $el   = $msgbox.children()
-                var ww    = $(window).width(),
-                    left  = $el.offset().left,
-                    width = $el.outerWidth()
-                
+                var $el   = $msgbox.children()
+                var $form   = $msgbox.closest('form'),
+                    fW      = $form.width(),
+                    fL      = $form.offset().left,
+                    eL      = $msgbox.offset().left,
+                    mw      = $el.outerWidth()
                 var offLeft = fixedLeft($msgbox)
                 
-                if (width > (ww - left)) {
-                    $msgbox.find('> .msg-wrap').addClass('wrap')
+                if ((fW - (eL - fL)) < (mw + offLeft + 8)) {
+                    $msgbox.find('> .msg-wrap').addClass('wrap').width(fW - (eL - fL) - offLeft - 8)
+                        .find('> .n-msg').width(fW - (eL - fL) - offLeft - 8 - 30)
                 }
                 if ($el.is(':animated')) return
                 if (type === 'error') {
@@ -144,14 +153,16 @@
             msgArrow: TPL_ARROW,
             msgShow: function($msgbox, type) {
                 var $el   = $msgbox.children()
-                var ww    = $(window).width(),
-                    left  = $el.offset().left,
-                    width = $el.outerWidth()
-                
+                var $form   = $msgbox.closest('form'),
+                    fW      = $form.width(),
+                    fL      = $form.offset().left,
+                    eL      = $msgbox.offset().left,
+                    mw      = $el.outerWidth()
                 var offLeft = fixedLeft($msgbox)
                 
-                if (width > (ww - left)) {
-                    $msgbox.find('> .msg-wrap').addClass('wrap')
+                if ((fW - (eL - fL)) < (mw + offLeft + 8)) {
+                    $msgbox.find('> .msg-wrap').addClass('wrap').width(fW - (eL - fL) - offLeft - 8)
+                        .find('> .n-msg').width(fW - (eL - fL) - offLeft - 8 - 30)
                 }
                 $msgbox.find('.n-icon').removeClass('n-icon').addClass('glyphicon glyphicon-remove-circle').css({top:-1, 'font-size':'14px', 'vertical-align':'middle'})
                 if ($el.is(':animated')) return

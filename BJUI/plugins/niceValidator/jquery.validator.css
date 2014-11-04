@@ -4,7 +4,7 @@
  */
 .n-inline-block,.nice-validator input,.nice-validator select,.nice-validator textarea,.msg-wrap,.n-icon,.n-msg{display:inline-block;*display:inline;*zoom:1}
 .msg-box{position:relative;*zoom:1}
-.msg-wrap{position:relative;white-space:nowrap; min-height:26px;}
+.msg-wrap{position:relative;white-space:nowrap; min-height:24px;}
 .msg-wrap.wrap{white-space:normal;}
 .msg-wrap,.n-icon,.n-msg{vertical-align:middle;}
 .n-arrow{position:absolute;overflow:hidden;}
@@ -21,7 +21,7 @@
 .n-loading .n-icon{background:url("images/loading.gif") 0 center no-repeat !important}
 .n-top,.n-right,.n-bottom,.n-left{display:inline-block;line-height:0;vertical-align:top;outline:0}
 .n-top .n-arrow,.n-bottom .n-arrow{height:6px;width:12px;left:8px}
-.n-left .n-arrow,.n-right .n-arrow{width:6px;height:12px;top:6px}
+.n-left .n-arrow,.n-right .n-arrow{width:6px;height:12px;top:4px}
 .n-top{vertical-align:top;}
 .n-top .msg-wrap{margin-bottom:6px}
 .n-top .n-arrow{bottom:-6px;}
@@ -64,9 +64,9 @@
 .n-yellow .n-tip .n-arrow i,.n-yellow .n-ok .n-arrow i,.n-yellow .n-loading .n-arrow i{color:#f8fdff}
 .n-yellow .n-tip .n-icon{display:none}
 
-.n-red .msg-wrap{position:absolute;z-index:1;padding:4px 6px;font-size:12px;border:1px solid transparent;background-color:#fff6f6;border-color:#ff6464;color:#ff2929;box-shadow:0 1px 3px #ccc;border-radius:2px;}
+.n-red .msg-wrap{position:absolute;z-index:1;padding:4px 6px 3px;font-size:12px;border:1px solid transparent;background-color:#fff6f6;border-color:#ff6464;color:#ff2929;box-shadow:0 1px 3px #ccc;border-radius:2px;}
 .n-red .msg-wrap .n-arrow b{color:#ff6464;text-shadow:0 0 2px #ccc}
-.n-red .msg-wrap .n-arrow i{color:#ffecec}
+.n-red .msg-wrap .n-arrow i{color:#ffecec;}
 .n-red .msg-wrap .n-icon{background-image:url("images/validator_simple.png")}
 .n-red .n-top .msg-wrap{bottom:100%}
 .n-red .n-bottom .msg-wrap{top:100%}
