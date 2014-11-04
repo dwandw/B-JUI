@@ -121,8 +121,8 @@
     })
     
     /* ajaxStatus */
-    $(document).on(BJUI.eventType.ajaxStatus, function(e) {
-        var $this    = $(e.target)
+    var bjui_ajaxStatus = function($target) {
+        var $this    = $target
         var $offset  = $this
         var position = $this.css('position')
         
@@ -142,13 +142,35 @@
             $ajaxProgress.css('zIndex', zIndex + 2)
         }
         
-        $this.one('ajaxStart', function() {
-            $ajaxBackground.fadeIn()
-            $ajaxProgress.fadeIn()
-        }).one('ajaxStop', function() {
-            $ajaxBackground.fadeOut()
-            $ajaxProgress.fadeOut()
+        return {$bg:$ajaxBackground, $pr:$ajaxProgress}
+    }
+    
+    $(document)
+        .on('bjui.ajaxStart', function(e) {
+            var ajaxMask = bjui_ajaxStatus($(e.target))
+
+            ajaxMask.$bg.fadeIn()
+            ajaxMask.$pr.fadeIn()
         })
+        .on('bjui.ajaxStop', function(e) {
+            var ajaxMask = bjui_ajaxStatus($(e.target))
+            
+            ajaxMask.$bg.fadeOut()
+            ajaxMask.$pr.fadeOut()
+        })
+    
+    $(document).on(BJUI.eventType.ajaxStatus, function(e) {
+        var ajaxMask = bjui_ajaxStatus($(e.target))
+        
+        $(e.target)
+            .one('ajaxStart', function() {
+                ajaxMask.$bg.fadeIn()
+                ajaxMask.$pr.fadeIn()
+            })
+            .one('ajaxStop', function() {
+                ajaxMask.$bg.fadeOut()
+                ajaxMask.$pr.fadeOut()
+            })
     })
     
     /* Clean plugins generated 'Dom elements' in the body */

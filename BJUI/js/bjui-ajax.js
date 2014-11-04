@@ -59,15 +59,10 @@
         return tools
     }
     
-    Bjuiajax.prototype.ajaxForm4Iframe = function($form, callback) {
+    Bjuiajax.prototype.ajaxForm4Iframe = function($form, $target, callback) {
         var that      = this,
-            $target   = $form.closest('.bjui-layout'),
             $iframe   = $('#bjui-ajaxIframe')
         
-        if (!$target || !$target.length) {
-            if (that.tools.getTarget() == Bjuiajax.NAVTAB) $target = $.CurrentNavtab
-            else $target = $.CurrentDialog
-        }
         if (!$iframe.length) {
             $iframe = $('<iframe id="bjuiajaxIframe" name="bjuiajaxIframe" src="about:blank" style="display:none"></iframe>').appendTo('body')
         }
@@ -75,9 +70,11 @@
             $form.append('<input type="hidden" name="ajax" value="1">')
         }
         $form[0].target = 'bjuiajaxIframe'
+        $target.trigger('bjui.ajaxStart')
         $iframe.bind('load', function(e) {
             var iframe = $iframe[0]
             
+            $iframe.unbind('load')
             if (iframe.src == 'javascript:"<html></html>";') return
             
             var doc = iframe.contentDocument || iframe.document
@@ -97,14 +94,20 @@
                 // response is a xml document
                 response = doc
             }
-            
+            $target.trigger('bjui.ajaxStop')
             callback ? callback.apply(that, [response, $form]) : $.proxy(that.ajaxCallback(response), that)
         })
     }
     
-    Bjuiajax.prototype.ajaxForm4Html5 = function($form, callback) {
+    Bjuiajax.prototype.ajaxForm4Html5 = function($form, $target, callback) {
         var that     = this
-        var formData = new FormData($form[0])
+        var formData = window.FormData ? new FormData($form[0]) : $form.serializeArray()
+        
+        $form.one('ajaxStart', function() {
+            $target.trigger('bjui.ajaxStart')
+        }).one('ajaxStop', function() {
+            $target.trigger('bjui.ajaxStop')
+        })
         
         $.ajax({
             type        : $form.attr('method') || 'POST',
@@ -123,13 +126,20 @@
     
     Bjuiajax.prototype.ajaxForm = function(callback) {
         var that      = this
-        var $form     = this.$element
+        var $form     = this.$element,
+            $target   = $form.closest('.bjui-layout')
+        
+        if (!$target || !$target.length) {
+            if (that.tools.getTarget() == Bjuiajax.NAVTAB) $target = $.CurrentNavtab
+            else $target = $.CurrentDialog
+        }
+        
         var _submitFn = function() {
-            if (window.FormData) {
-                that.ajaxForm4Html5($form, callback)
-            } else {
-                that.ajaxForm4Iframe($form, callback)
-            }
+            //if (window.FormData) {
+            //    that.ajaxForm4Iframe($form, $target, callback)
+            //} else {
+                that.ajaxForm4Html5($form, $target, callback)
+            //}
         }
         
         if (that.options.confirmMsg) {
@@ -159,10 +169,6 @@
     }
     
     Bjuiajax.prototype.ajaxCallback = function(json) {
-        console.log('type:'+ ($.parseJSON(json.statusCode)))
-        
-        //if (typeof json)
-        //
         var that     = this
         var $element = that.$element
         var $target  = $element.closest('.bjui-layout')
