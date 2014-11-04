@@ -38,10 +38,10 @@
             BJUI.debug('Ajaxtab Plugin: Error trying to open a tab, url is undefined!')
             return
         } else {
-            options.url = decodeURI(options.url).replacePlh($element.closest('.unitBox'))
+            options.url = decodeURI(options.url).replacePlh(this.$element.closest('.unitBox'))
             
             if (!options.url.isFinishedTm()) {
-                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                this.$element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
                 BJUI.debug('Ajaxtab Plugin: The new ajaxtab\'s url is incorrect, url: '+ options.url)
                 return
             }

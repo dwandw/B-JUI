@@ -30,9 +30,10 @@ fieldset{border-color:#6f6f6f;}
 .panel-main .panel-default .panel-heading .panel-title a:hover{background:#efefef;}
 .nav-tabs{border-bottom-color:#6f6f6f;}
 .nav-tabs > li > a{background-color:#fafafa; border-bottom-color:#6f6f6f;}
+.nav-tabs > li > a:hover,
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
-.nav-tabs > li.active > a:focus{border-color:#6f6f6f;}
+.nav-tabs > li.active > a:focus{border-color:#6f6f6f; border-bottom-color:#FFF;}
 .tab-content{border-color:#6f6f6f;}
 .table > thead > tr > th{font-weight:bold; color:#6f6f6f; background:#fafafa; border-bottom-color:#6f6f6f;}
 .table > thead > tr > th{background:#fafafa; border-bottom-color:#6f6f6f;}

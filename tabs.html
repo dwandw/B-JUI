@@ -1,109 +1,30 @@
-<script type="text/javascript">
-
-</script>
-<div class="pageContent">
-    <div class="pageFormContent" layouth="29">
-        <div style="margin: 0 auto; width: 550px;">
-            <fieldset>
-                <legend>Bootstrap Tabs</legend>
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="active"><a href="#home" role="tab" data-toggle="tab">Home</a></li>
-                    <li><a href="form.html" role="tab" data-toggle="ajaxtab" data-target="#profile" data-reload="false">Profile</a></li>
-                    <li><a href="#messages" role="tab" data-toggle="tab">Messages</a></li>
-                    <li><a href="#settings" role="tab" data-toggle="tab">Settings</a></li>
-                </ul>
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane fade active in" id="home"><p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p></div>
-                    <div class="tab-pane fade" id="profile"><p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p></div>
-                    <div class="tab-pane fade" id="messages">No3.</div>
-                    <div class="tab-pane fade" id="settings">No4.</div>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend>选项卡</legend>
-                <div class="tabs" currentIndex="1" eventType="click">
-                    <div class="tabsHeader">
-                        <div class="tabsHeaderContent">
-                            <ul class="nav nav-tabs">
-                                <li><a href="javascript:;"><span>标题1</span></a></li>
-                                <li><a href="javascript:;"><span>标题2</span></a></li>
-                                <li><a href="php/get-project-list.php" class="j-ajax"><span>标题3</span></a></li>
-                            </ul>
-                        </div>
+<div class="bjui-pageContent">
+    <form action="ajaxDone1.html" id="j_form_form" class="pageForm" data-toggle="validate">
+        <div class="pageFormContent" data-layout-h="0">
+            <div style="margin:15px auto 0; width:800px;">
+                <fieldset>
+                    <legend>选项卡</legend>
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#home" role="tab" data-toggle="tab">Home</a></li>
+                        <li><a href="form-input.html" role="tab" data-toggle="ajaxtab" data-target="#profile" data-reload="false">ajax加载</a></li>
+                        <li><a href="#messages" role="tab" data-toggle="tab">Messages</a></li>
+                        <li><a href="#settings" role="tab" data-toggle="tab">Settings</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="home"><p>选项卡的a标签上添加[data-toggle="ajaxtab"]属性可以实现ajax加载内容。</p><p>[data-reload]属性可以定义点击该选项卡时是否每次都需要重新加载。</p></div>
+                        <div class="tab-pane fade" id="profile"><!-- Ajax加载 --></div>
+                        <div class="tab-pane fade" id="messages">No3. Messages</div>
+                        <div class="tab-pane fade" id="settings">No4. Settings</div>
                     </div>
-                    <div class="tabsContent">
-                        <div>
-                            <pre>
-                            currentIndex: 0-n	default:0
-                            eventType: click|hover	default:click
-                            </pre>
-                        </div>
-                        <div>内容2</div>
-                        <div></div>
-                    </div>
-                </div>
-                <p>&nbsp;</p>
-                <div class="tabs" currentIndex="0" eventType="click">
-                    <div class="tabsHeader">
-                        <div class="tabsHeaderContent">
-                            <ul class="nav nav-tabs">
-                                <li><a href="javascript:;"><span>标题1</span></a></li>
-                                <li><a href="javascript:;"><span>标题2</span></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="tabsContent" style="height:250px;">
-                        <div>内容1
-                            <p>
-                                <label>客户名称：</label>
-                                <input type="text" name="name" class="form-control" size="30" value="" >
-                            </p>
-                        </div>
-                        <div>
-                            
-                            <div class="tabs" currentIndex="0" eventType="click" style="width:300px">
-                                <div class="tabsHeader">
-                                    <div class="tabsHeaderContent">
-                                        <ul class="nav nav-tabs">
-                                            <li><a href="javascript:;"><span>标题1</span></a></li>
-                                            <li><a href="javascript:;"><span>标题2</span></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="tabsContent" style="height:150px;">
-                                    <div>内容1</div>
-                                    <div>内容2</div>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <p>实例代码：</p>
-                <pre>&lt;div class=&quot;tabs&quot; currentIndex=&quot;0&quot; eventType=&quot;click&quot; style=&quot;width:300px&quot;&gt;
-    &lt;div class=&quot;tabsHeader&quot;&gt;
-        &lt;div class=&quot;tabsHeaderContent&quot;&gt;
-            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
-                &lt;li&gt;&lt;a href=&quot;javascript:;&quot;&gt;&lt;span&gt;标题1&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;a href=&quot;javascript:;&quot;&gt;&lt;span&gt;标题2&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;tabsContent&quot; style=&quot;height:150px;&quot;&gt;
-        &lt;div&gt;内容1&lt;/div&gt;
-        &lt;div&gt;内容2&lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</pre>
-                <p><span class="red">*</span> 参数配置同DWZ</p>
-            </fieldset>
+                </fieldset>
+            </div>
         </div>
-    </div>
-    <div class="formBar">
+    </form>
+    <div class="bjui-footBar">
         <ul>
-            <li><button type="button" class="btn-close">关闭</button></li>
+            <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
         </ul>
     </div>
 </div>
