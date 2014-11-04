@@ -107,14 +107,11 @@
             
             $element
                 .validator({
-                    valid: function(form) {},
+                    valid: function(form) {
+                        $(form).bjuiajax('ajaxForm', callback)
+                    },
                     validClass: 'ok',
                     theme: 'red_right_effect'
-                })
-            
-            $element
-                .on('valid.form', function(e, form) {
-                    $(form).bjuiajax('ajaxForm', callback)
                 })
                 .on('invalid.form', function(e, form, errors) {
                     $(form).alertmsg('error', FRAG.validateErrorMsg.replace('#validatemsg#', BJUI.regional.validatemsg).replaceMsg(errors.length))

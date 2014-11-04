@@ -220,7 +220,10 @@
                         $(this).remove()
                         var filelen = that.$element.find('> .queue > .item:visible').length
                         
-                        if (filelen == 0) that.$element.find('> .queue').hide()
+                        if (filelen == 0) {
+                            that.$element.find('> .queue').hide()
+                            that.$file.val('')
+                        }
                     })
                 }, options.removeTimeout)
             },
@@ -514,7 +517,7 @@
                 id            : 'fileInput',
                 fileObjName   : 'file',
                 buttonText    : '选择上传文件',
-                auto          : true,
+                auto          : false,
                 multi         : false,
                 height        : 26
             }

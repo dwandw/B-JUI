@@ -59,60 +59,33 @@
         return tools
     }
     
-    Bjuiajax.prototype.ajaxForm4Iframe = function($form, $target, callback) {
-        var that      = this,
-            $iframe   = $('#bjui-ajaxIframe')
-        
-        if (!$iframe.length) {
-            $iframe = $('<iframe id="bjuiajaxIframe" name="bjuiajaxIframe" src="about:blank" style="display:none"></iframe>').appendTo('body')
-        }
-        if (!$form[0].ajax) {
-            $form.append('<input type="hidden" name="ajax" value="1">')
-        }
-        $form[0].target = 'bjuiajaxIframe'
-        $target.trigger('bjui.ajaxStart')
-        $iframe.bind('load', function(e) {
-            var iframe = $iframe[0]
-            
-            $iframe.unbind('load')
-            if (iframe.src == 'javascript:"<html></html>";') return
-            
-            var doc = iframe.contentDocument || iframe.document
-            var response
-            
-            if (doc.XMLDocument) {
-                // response is a xml document Internet Explorer property
-                response = doc.XMLDocument
-            } else if (doc.body) {
-                try {
-                    response = $iframe.contents().find('body').text()
-                    response = $.parseJSON(response)
-                } catch (e) { // response is html document or plain text
-                    response = doc.body.innerHTML
-                }
-            } else {
-                // response is a xml document
-                response = doc
-            }
-            $target.trigger('bjui.ajaxStop')
-            callback ? callback.apply(that, [response, $form]) : $.proxy(that.ajaxCallback(response), that)
-        })
-    }
-    
-    Bjuiajax.prototype.ajaxForm4Html5 = function($form, $target, callback) {
-        var that     = this
-        var formData = window.FormData ? new FormData($form[0]) : $form.serializeArray()
-        
-        $form.one('ajaxStart', function() {
-            $target.trigger('bjui.ajaxStart')
-        }).one('ajaxStop', function() {
-            $target.trigger('bjui.ajaxStop')
-        })
+    Bjuiajax.prototype.ajaxForm4Iframe = function($form, callback) {
+        var that      = this
         
         $.ajax({
             type        : $form.attr('method') || 'POST',
             url         : $form.attr('action'),
-            data        : formData,//$form.serializeArray(),
+            data        : $form.serializeArray(),
+            dataType    : 'json',
+            files       : $form.find(':file'),
+            iframe      : true,
+            processData : false,
+            cache       : false,
+            success     : function(data, textStatus, jqXHR) {
+                callback ? callback.apply(that, [data, $form]) : $.proxy(that.ajaxCallback(data), that)
+            },
+            error       : $.proxy(that.ajaxError, that)
+        })
+    }
+    
+    Bjuiajax.prototype.ajaxForm4Html5 = function($form, callback) {
+        var that     = this
+        var formData = new FormData($form[0])
+        
+        $.ajax({
+            type        : $form.attr('method') || 'POST',
+            url         : $form.attr('action'),
+            data        : formData,
             contentType : false,
             processData : false,
             dataType    : 'json',
@@ -134,12 +107,18 @@
             else $target = $.CurrentDialog
         }
         
+        $form.one('ajaxStart', function() {
+            $target.trigger('bjui.ajaxStart')
+        }).one('ajaxStop', function() {
+            $target.trigger('bjui.ajaxStop')
+        })
+        
         var _submitFn = function() {
-            //if (window.FormData) {
-            //    that.ajaxForm4Iframe($form, $target, callback)
-            //} else {
-                that.ajaxForm4Html5($form, $target, callback)
-            //}
+            if (window.FormData) {
+                that.ajaxForm4Html5($form, callback)
+            } else {
+                that.ajaxForm4Iframe($form, callback)
+            }
         }
         
         if (that.options.confirmMsg) {
