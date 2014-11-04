@@ -6,9 +6,9 @@
  */
 
 /* ========================================================================
- * B-JUI: plugins.js v1.0
+ * B-JUI: bjui-plugins.js v1.0
  * @author K'naan (xknaan@163.com)
- * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/plugins.js
+ * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-plugins.js
  * ========================================================================
  * Copyright 2014 K'naan.
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
@@ -101,22 +101,21 @@
         $box.find('form[data-toggle="validate"]').each(function() {
             var $element = $(this)
             var callback = $element.data('callback')
-
+            
             if (!$element.attr('method')) $element.attr('method', 'POST')
             if (callback) callback = callback.toFunc()
             
             $element
                 .validator({
-                    valid: function(form) {
-                        $element.bjuiajax('ajaxForm', callback)
-                        return false
-                    },
+                    valid: function(form) {},
                     validClass: 'ok',
                     theme: 'red_right_effect'
                 })
+                .on('valid.form', function(e, form) {
+                    $(form).bjuiajax('ajaxForm', callback)
+                })
                 .on('invalid.form', function(e, form, errors) {
                     $element.alertmsg('error', FRAG.validateErrorMsg.replace('#validatemsg#', BJUI.regional.validatemsg).replaceMsg(errors.length))
-                    return false
                 })
         })
         

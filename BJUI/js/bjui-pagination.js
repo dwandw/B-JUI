@@ -150,6 +150,13 @@
         }
     }
     
+    Pagination.prototype.changePagesize = function() {
+        var that = this, pageSize = that.$element.val()
+        
+        if (!isNaN(pageSize))
+            that.$element.bjuiajax('pageCallback', {pageSize:pageSize}, that.$element.closest('.bjui-layout'))
+    }
+    
     Pagination.prototype.orderBy = function(options) {
         var that = this
         
@@ -206,6 +213,15 @@
         if (!$this.length) return
         
         Plugin.call($this, $this.data())
+    })
+    
+    $(document).on('change.bjui.pagination.data-api', 'select[data-toggle-change="changepagesize"]', function(e) {
+        var $this   = $(this)
+        var options = $this.data()
+        
+        Plugin.call($this, 'changePagesize')
+        
+        e.preventDefault()
     })
     
 }(jQuery);

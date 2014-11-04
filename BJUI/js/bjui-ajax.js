@@ -59,30 +59,84 @@
         return tools
     }
     
-    Bjuiajax.prototype.ajaxForm = function(callback, confirmMsg) {
+    Bjuiajax.prototype.ajaxForm4Iframe = function($form, callback) {
+        var that      = this,
+            $target   = $form.closest('.bjui-layout'),
+            $iframe   = $('#bjui-ajaxIframe')
+        
+        if (!$target || !$target.length) {
+            if (that.tools.getTarget() == Bjuiajax.NAVTAB) $target = $.CurrentNavtab
+            else $target = $.CurrentDialog
+        }
+        if (!$iframe.length) {
+            $iframe = $('<iframe id="bjuiajaxIframe" name="bjuiajaxIframe" src="about:blank" style="display:none"></iframe>').appendTo('body')
+        }
+        if (!$form[0].ajax) {
+            $form.append('<input type="hidden" name="ajax" value="1">')
+        }
+        $form[0].target = 'bjuiajaxIframe'
+        $iframe.bind('load', function(e) {
+            var iframe = $iframe[0]
+            
+            if (iframe.src == 'javascript:"<html></html>";') return
+            
+            var doc = iframe.contentDocument || iframe.document
+            var response
+            
+            if (doc.XMLDocument) {
+                // response is a xml document Internet Explorer property
+                response = doc.XMLDocument
+            } else if (doc.body) {
+                try {
+                    response = $iframe.contents().find('body').text()
+                    response = $.parseJSON(response)
+                } catch (e) { // response is html document or plain text
+                    response = doc.body.innerHTML
+                }
+            } else {
+                // response is a xml document
+                response = doc
+            }
+            
+            callback ? callback.apply(that, [response, $form]) : $.proxy(that.ajaxCallback(response), that)
+        })
+    }
+    
+    Bjuiajax.prototype.ajaxForm4Html5 = function($form, callback) {
+        var that     = this
+        var formData = new FormData($form[0])
+        
+        $.ajax({
+            type        : $form.attr('method') || 'POST',
+            url         : $form.attr('action'),
+            data        : formData,//$form.serializeArray(),
+            contentType : false,
+            processData : false,
+            dataType    : 'json',
+            cache       : false,
+            success     : function(data, textStatus, jqXHR) {
+                callback ? callback.apply(that, [data, $form]) : $.proxy(that.ajaxCallback(data), that)
+            },
+            error       : $.proxy(that.ajaxError, that)
+        })
+    }
+    
+    Bjuiajax.prototype.ajaxForm = function(callback) {
         var that      = this
         var $form     = this.$element
-        var _submitFn = function(){
-            $.ajax({
-                type     : $form.attr('method') || 'POST',
-                url      : $form.attr('action'),
-                data     : $form.serializeArray(),
-                dataType : 'json',
-                cache    : false,
-                success  : function(data, textStatus, jqXHR) {
-                    callback ? callback.apply(that, [data, $form]) : $.proxy(that.ajaxCallback(data), that)
-                },
-                error    : $.proxy(that.ajaxError, that)
-            })
+        var _submitFn = function() {
+            if (window.FormData) {
+                that.ajaxForm4Html5($form, callback)
+            } else {
+                that.ajaxForm4Iframe($form, callback)
+            }
         }
         
-        if (confirmMsg) {
-            $form.alertmsg('confirm', confirmMsg, {okCall: _submitFn})
+        if (that.options.confirmMsg) {
+            $form.alertmsg('confirm', that.options.confirmMsg, {okCall: _submitFn})
         } else {
             _submitFn()
         }
-        
-        return false
     }
     
     Bjuiajax.prototype.ajaxDone = function(json) {
@@ -105,6 +159,10 @@
     }
     
     Bjuiajax.prototype.ajaxCallback = function(json) {
+        console.log('type:'+ ($.parseJSON(json.statusCode)))
+        
+        //if (typeof json)
+        //
         var that     = this
         var $element = that.$element
         var $target  = $element.closest('.bjui-layout')
