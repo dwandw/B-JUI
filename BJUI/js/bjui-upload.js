@@ -473,6 +473,8 @@
             var options = $.extend({}, Upload.DEFAULTS, $this.data(), typeof option == 'object' && option)
             var data    = $this.data('bjui.upload')
             
+            console.log(options.uploader)
+            
             if (!data) $this.data('bjui.upload', (data = new Upload(this, options)))
             if (typeof property == 'string' && $.isFunction(data[property])) {
                 [].shift.apply(args)
@@ -506,7 +508,7 @@
         if (!$this.length) return
         
         if (window.FileReader) {
-            Plugin.call($this, $this.data())
+            Plugin.call($this)
         } else {
             if (!$.fn.uploadify) return
             var options = {
