@@ -119,7 +119,7 @@ function MainMenuClick(event, treeId, treeNode) {
     if (treeNode.target && treeNode.target == 'dialog')
         $(event.target).dialog({id:treeNode.tabid, url:treeNode.url, title:treeNode.name})
     else
-        $(event.target).navtab({id:treeNode.tabid, url:treeNode.url, title:treeNode.name})
+        $(event.target).navtab({id:treeNode.tabid, url:treeNode.url, title:treeNode.name, fresh:treeNode.fresh})
 }
 </script>
 </head>
@@ -311,7 +311,7 @@ function MainMenuClick(event, treeId, treeNode) {
                                                     <tr>
                                                         <td>2014.11.04</td>
                                                         <td>V1.0 内测版本</td>
-                                                        <td>修复IE8下的selectpicker；多个html5的上传组件bug修复</td>
+                                                        <td>修复IE8下的selectpicker；多个html5的上传组件bug修复；启用tabs选项卡组件</td>
                                                         <td><span class="label label-info">一般</span></td>
                                                     </tr>
                                                     <tr>

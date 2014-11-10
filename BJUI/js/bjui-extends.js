@@ -33,6 +33,7 @@
                 data     : op.data || {},
                 cache    : false,
                 dataType : 'text',
+                timeout  : 300,
                 success  : function(response) {
                     var json = response.toJson()
                     
@@ -280,7 +281,7 @@
          */
         toFunc: function() {
             if (!this || this.length == 0) return undefined
-            if ($.isFunction(this)) return this
+            //if ($.isFunction(this)) return this
             
             if (this.startsWith('function')) {
                 return (new Function('return '+ this))()
@@ -301,4 +302,10 @@
         }
     })
     
+    $.extend(Function.prototype, {
+        //to fixed String.prototype -> toFunc
+        toFunc: function() {
+            return this
+        }
+    })
 }(jQuery);

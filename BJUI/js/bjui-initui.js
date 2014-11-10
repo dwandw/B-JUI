@@ -129,18 +129,22 @@
         if (position == 'static') $offset  = $this.offsetParent()
         
         var zIndex   = parseInt($offset.css('zIndex')) || 0
-        var $ajaxBackground = $(FRAG.maskBackground)
-        var $ajaxProgress   = $(FRAG.maskProgress.replace('#msg#', BJUI.regional.progressmsg))
-        
-        $this.append($ajaxBackground).append($ajaxProgress)
+        var $ajaxBackground = $this.find('> .bjui-maskBackground')
+        var $ajaxProgress   = $this.find('> .bjui-maskProgress')
+            
+        if (!$ajaxBackground.length) {
+            $ajaxBackground = $(FRAG.maskBackground)
+            $ajaxProgress   = $(FRAG.maskProgress.replace('#msg#', BJUI.regional.progressmsg))
+            $this.append($ajaxBackground).append($ajaxProgress)
+        }
         
         var bgZindex = parseInt($ajaxBackground.css('zIndex')) || 0
         var prZindex = parseInt($ajaxProgress.css('zIndex')) || 0
         
-        if (zIndex > bgZindex) {
+        //if (zIndex > bgZindex) {
             $ajaxBackground.css('zIndex', zIndex + 1)
             $ajaxProgress.css('zIndex', zIndex + 2)
-        }
+        //}
         
         return {$bg:$ajaxBackground, $pr:$ajaxProgress}
     }
@@ -148,7 +152,7 @@
     $(document)
         .on('bjui.ajaxStart', function(e) {
             var ajaxMask = bjui_ajaxStatus($(e.target))
-
+            
             ajaxMask.$bg.fadeIn()
             ajaxMask.$pr.fadeIn()
         })
@@ -160,9 +164,9 @@
         })
     
     $(document).on(BJUI.eventType.ajaxStatus, function(e) {
-        var ajaxMask = bjui_ajaxStatus($(e.target))
+        var $target = $(e.target), ajaxMask = bjui_ajaxStatus($target)
         
-        $(e.target)
+        $target
             .one('ajaxStart', function() {
                 ajaxMask.$bg.fadeIn()
                 ajaxMask.$pr.fadeIn()

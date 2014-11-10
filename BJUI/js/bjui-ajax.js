@@ -201,11 +201,11 @@
         var that = this
         
         if (json.tabid)
-            that.$element.navtab('reloadFlag', json.tabid)
+            setTimeout(function() { that.$element.navtab('reloadFlag', json.tabid) }, 100)
         if (json.closeCurrent && !json.forward)
             that.$element.navtab('closeCurrentTab')
         else if (that.options.reload)
-            that.$element.navtab('refresh')
+            setTimeout(function() { that.$element.navtab('refresh') }, 100)
         if (json.forward) {
             var _forward = function() {
                 that.$element.navtab('reload', {url:json.forward})
@@ -223,12 +223,16 @@
     }
     
     Bjuiajax.prototype.dialogCallback = function(json) {
-        if (json.closeCurrent)
-            this.$element.dialog('closeCurrent')
+        var that = this
         
-        if (this.options.reload)
-            this.$element.dialog('refresh')
-        
+        if (json.dialogid)
+            setTimeout(function() { that.$element.dialog('refresh', json.dialogid) }, 100)
+        if (json.closeCurrent && !json.forward)
+            that.$element.dialog('closeCurrent')
+        else if (that.options.reload)
+            setTimeout(function() { that.$element.dialog('refresh') }, 100)
+        if (that.options.reloadNavtab)
+            setTimeout(function() { that.$element.navtab('refresh') }, 100)
         if (json.forward) {
             var _forward = function() {
                 that.$element.dialog('reload', {url:json.forward})
@@ -341,7 +345,7 @@
     
     Bjuiajax.prototype.doAjax = function(options) {
         var that = this, $element = that.$element
-
+        
         if (!options.url) {
             BJUI.debug('Error trying to open a ajax link: url is undefined!')
             return
@@ -362,6 +366,7 @@
             $.ajax({
                 type     : options.type || 'POST',
                 url      : options.url,
+                data     : options.data || {},
                 dataType : 'json',
                 cache    : false,
                 success  : function(data, textStatus, jqXHR) {

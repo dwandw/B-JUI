@@ -244,25 +244,29 @@
                 })
             },
             delData: function($btnDel) {
-                var tool   = this
-                var $tbody = $btnDel.closest('tbody')
+                var tool    = this
+                var $tbody  = $btnDel.closest('tbody')
+                var options = $btnDel.data()
+                var _delRow = function(json) {
+                    $btnDel.closest('tr').remove()
+                    tool.initSuffix($tbody)
+                    tool.afterDelete($tbody)
+                    if (options.callback) (options.callback.toFunc()).apply(that, [json])
+                }
                 
                 if ($btnDel.is('[href^=javascript:]') || $btnDel.is('[href^="#"]')) {
-                    $btnDel.closest('tr').remove()
-                    this.initSuffix($tbody)
-                    this.afterDelete($tbody)
+                    if ($btnDel.data('confirmMsg')) {
+                        $btnDel.alertmsg('confirm', $btnDel.data('confirmMsg'), {okCall: function() {
+                            _delRow()
+                        }})
+                    } else {
+                        _delRow()
+                    }
                 } else {
-                    $.ajax({
-                        type:'POST', dataType:'json', url:$btnDel.attr('href'), cache: false,
-                        success: function(json) {
-                            $tbody.bjuiajax('ajaxDone', json)
-                            if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
-                                $btnDel.closest('tr').remove()
-                                tool.initSuffix($tbody)
-                                tool.afterDelete($tbody)
-                            }
-                        },
-                        error: BJUI.ajaxError
+                    $btnDel.bjuiajax('doAjax', {
+                        url      : $btnDel.attr('href'),
+                        data     : options.data,
+                        callback : _delRow
                     })
                 }
             },

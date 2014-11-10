@@ -258,9 +258,17 @@
     }
     
     Dialog.prototype.refresh = function(id) {
-        var $dialog = id ? $('body').data(id) : $current
-        
-        if ($dialog) this.tools.reload($dialog)
+        if (id && typeof id == 'string') {
+            var arr = id.split(',')
+            
+            for (var i = 0; i < arr.length; i++) {
+                var $dialog = $('body').data(arr[i].trim())
+                
+                if ($dialog) this.tools.reload($dialog)
+            }
+        } else {
+            this.tools.reload($current)
+        }
     }
     
     Dialog.prototype.reload = function(option) {
