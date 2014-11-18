@@ -75,14 +75,26 @@
                 
                 if (!$element.hasClass('btn')) 
                     $element.removeClass().addClass('btn').addClass(oldClass)
-                if (icon)   $element.html('<i class="fa fa-'+ icon.replace('fa-', '') +'"></i> '+ $element.html())
-                //if (!$element.hasClass('btn-sm') || !$element.hasClass('btn-nm') || !$element.hasClass('btn-lg')) $element.addClass('btn-sm')
+                if (icon) {
+                    var _icon = 'fa-'+ icon.replace('fa-', '')
+                    
+                    if (!$element.data('bjui.icon')) {
+                        $element.html('<i class="fa '+ _icon +'"></i> '+ $element.html())
+                            .data('bjui.icon', true)
+                    }
+                }
             }
             if ($element.isTag('a')) {
                 var icon = $element.data('icon'), large = $element.data('large')
                 
-                if (icon)   $element.html('<i class="fa fa-'+ icon +'"></i> '+ $element.html())
-                //if (!$element.hasClass('btn-sm') || !$element.hasClass('btn-nm') || !$element.hasClass('btn-lg')) $element.addClass('btn-sm')
+                if (icon) {
+                    var _icon = 'fa-'+ icon.replace('fa-', '')
+                    
+                    if (!$element.data('bjui.icon')) {
+                        $element.html('<i class="fa '+ _icon +'"></i> '+ $element.html())
+                            .data('bjui.icon', true)
+                    }
+                }
             }
             if ($element.isTag('textarea')) {
                 var toggle = $element.data('toggle')
@@ -453,12 +465,13 @@
             var $this = $(this)
             var initAccordion = function(hBox, height) {
                 var offsety   = $this.data('offsety') || 0
-                var height    = height || ($(hBox).height() - (offsety * 1))
+                var height    = height || ($(hBox).outerHeight() - (offsety * 1))
                 var $pheader  = $this.find('.panel-heading')
                 var h1        = $pheader.outerHeight()
                 
+                h1 = h1 * $pheader.length + (parseInt($pheader.last().parent().css('marginTop')) * ($pheader.length - 1))
                 $this.css('height', height)
-                height = height - (h1 * $pheader.length) - (5 * ($pheader.length))
+                height = height - h1 - (2 * $pheader.length)
                 $this.find('.panel-collapse').find('.panel-body').css('height', height)
             }
             var hBox   = $this.data('heightbox')

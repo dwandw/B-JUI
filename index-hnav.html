@@ -137,7 +137,6 @@ function MainMenuClick(event, treeId, treeNode) {
         <nav class="collapse navbar-collapse" id="bjui-navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li class="datetime"><div><span id="bjui-date"></span><br><i class="fa fa-clock-o"></i> <span id="bjui-clock"></span></div></li>
-                <li><a href="http://b-jui.com/index-hnav.html" target="_blank"><span class="badge">横向菜单版</span></a></li>
                 <li><a href="http://b-jui.com/doc/" target="_blank">B-JUI在线文档</a></li>
                 <li><a href="http://www.bootcss.com/" target="_blank">Bootstrap中文网</a></li>
                 <li><a href="http://www.j-ui.com/" target="_blank">DWZ(j-ui)官网</a></li>
@@ -162,7 +161,59 @@ function MainMenuClick(event, treeId, treeNode) {
             </ul>
         </nav>
     </header>
-
+    
+    <style>
+        #bjui-hnav{position:absolute; top:50px; z-index:5; margin-bottom:5px; width:100%;}
+        #bjui-hnav > .navbar{margin-bottom:0; min-height:36px; background-color:#eae7ef; border-bottom:1px #CCC solid;}
+        #bjui-hnav > .navbar .navbar-brand{padding:0 20px; height:36px; line-height:34px; color:#563d7c;}
+        #bjui-hnav > .navbar .navbar-nav > li > a{margin-right:1px; padding:0 15px; height:36px; font-size:14px; line-height:36px;}
+        #bjui-hnav > .navbar .navbar-nav > li > a:hover,
+        #bjui-hnav > .navbar .navbar-nav >.active > a,
+        #bjui-hnav > .navbar .navbar-nav >.active > a:hover,
+        #bjui-hnav > .navbar .navbar-nav >.active > a:focus{color:#FFF; background-color:#927ab5;}
+        #bjui-hnav > .navbar .navbar-form{margin:0; padding:0; height:36px; line-height:34px;}
+        .panel-group{margin-bottom:0;}
+    </style>
+    <div class="bjui-hnav" id="bjui-hnav">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bjui-h-navbar">
+                        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#"><i class="fa fa-bars"></i> 主菜单 <i class="fa fa-angle-right"></i></a>
+                </div>
+                <div class="collapse navbar-collapse" id="bjui-h-navbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#leftBar-main" data-toggle="leftbar"><i class="fa fa-user"></i> 我的业务</a></li>
+                        <li><a href="#leftBar-line" data-toggle="leftbar"><i class="fa fa-plane"></i> 线路规划</a></li>
+                        <li><a href="#leftBar-group" data-toggle="leftbar"><i class="fa fa-group"></i> 组团信息</a></li>
+                        <li><a href="#leftBar-scenic" data-toggle="leftbar"><i class="fa fa-image"></i> 景点模块</a></li>
+                        <li><a href="#leftBar-dining" data-toggle="leftbar"><i class="fa fa-coffee"></i> 餐饮模块</a></li>
+                        <li><a href="#leftBar-hotel" data-toggle="leftbar"><i class="fa fa-home"></i> 酒店模块</a></li>
+                        <li><a href="#leftBar-finance" data-toggle="leftbar"><i class="fa fa-dollar"></i> 财务结算</a></li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> 系统相关 <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">部门管理</a></li>
+                                <li><a href="#">员工管理</a></li>
+                                <li><a href="#">导游管理</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">地接社</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">友情链接</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-right" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default" data-icon="search">Go!</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </div>
     <div class="bjui-leftside" id="bjui-leftside">
         <div id="bjui-sidebar-s">
             <div class="collapse">
@@ -170,48 +221,120 @@ function MainMenuClick(event, treeId, treeNode) {
             </div>
         </div>
         <div id="bjui-sidebar">
-            <div class="toggleCollapse"><h2>主菜单</h2><div title="收缩菜单"><i class="fa fa-angle-double-left"></i></div></div>
-            <div class="panel-group panel-main" data-toggle="accordion" id="bjui-accordionmenu" data-heightbox="#bjui-sidebar" data-offsety="26">
+            <div class="toggleCollapse"><h2>导航菜单</h2><div title="收缩菜单"><i class="fa fa-angle-double-left"></i></div></div>
+            <div class="panel-group panel-main" data-toggle="accordion" id="leftBar-main" data-heightbox="#bjui-sidebar" data-offsety="26">
                 <div class="panel panel-default">
                     <div class="panel-heading panelContent">
-                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#bjui-accordionmenu" href="#bjui-collapse0" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;基本信息</a></h4>
+                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#leftBar-main" href="#bjui-collapse-main" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;我的业务</a></h4>
                     </div>
-                    <div id="bjui-collapse0" class="panel-collapse panelContent collapse in">
+                    <div id="bjui-collapse-main" class="panel-collapse panelContent collapse in">
                         <div class="panel-body">
-                            <ul id="bjui-tree0" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
-                                <li data-id="1" data-pid="0">表单元素</li>
-                                <li data-id="10" data-pid="1" data-url="form-button.html" data-tabid="form-button">按钮</li>
-                                <li data-id="11" data-pid="1" data-url="form-input.html" data-tabid="form-input">文本框</li>
-                                <li data-id="12" data-pid="1" data-url="form-select.html" data-tabid="form-select">下拉选择框</li>
-                                <li data-id="13" data-pid="1" data-url="form-checkbox.html" data-tabid="table">复选、单选框</li>
-                                <li data-id="14" data-pid="1" data-url="form.html" data-tabid="form">表单综合演示</li>
-                                <li data-id="2" data-pid="0">表格</li>
-                                <li data-id="20" data-pid="2" data-url="table.html" data-tabid="table">普通表格</li>
-                                <li data-id="21" data-pid="2" data-url="table-fixed.html" data-tabid="table-fixed">固定表头表格</li>
-                                <li data-id="22" data-pid="2" data-url="table-edit.html" data-tabid="table-edit">可编辑表格</li>
-                                <li data-id="3" data-pid="0">弹出窗口</li>
-                                <li data-id="30" data-pid="3" data-url="dialog.html" data-tabid="dialog">弹出窗口</li>
-                                <li data-id="31" data-pid="3" data-url="alert.html" data-tabid="alert">信息提示</li>
-                                <li data-id="5" data-pid="0">框架组件</li>
-                                <li data-id="51" data-pid="5" data-url="tabs.html" data-tabid="tabs">选项卡</li>
-                                <li data-id="6" data-pid="0">其他插件</li>
-                                <li data-id="61" data-pid="6" data-url="ztree.html" data-tabid="ztree">zTree</li>
-                                <li data-id="62" data-pid="6" data-url="ztree-select.html" data-tabid="ztree-select">zTree下拉选择</li>
-                                <li data-id="8" data-pid="0">综合应用</li>
-                                <li data-id="80" data-pid="8" data-url="table-layout.html" data-tabid="table-layout">局部刷新1</li>
+                            <ul id="bjui-tree-main" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
+                                <li data-id="1" data-pid="0">我的业务</li>
+                                <li data-id="10" data-pid="1" data-url="form.html" data-tabid="form">我的表单</li>
+                                <li data-id="10" data-pid="1" data-url="table.html" data-tabid="table">我的表格</li>
                             </ul>
                         </div>
                     </div>
                     <div class="panelFooter"><div class="panelFooterContent"></div></div>
                 </div>
+            </div>
+            <div class="panel-group panel-main hide" data-toggle="accordion" id="leftBar-line" data-heightbox="#bjui-sidebar" data-offsety="26">
                 <div class="panel panel-default">
                     <div class="panel-heading panelContent">
-                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#bjui-accordionmenu" href="#bjui-collapse1" class=""><i class="fa fa-caret-square-o-right"></i>&nbsp;系统信息</a></h4>
+                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#leftBar-line" href="#bjui-collapse-line" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;线路规划</a></h4>
                     </div>
-                    <div id="bjui-collapse1" class="panel-collapse panelContent collapse">
+                    <div id="bjui-collapse-line" class="panel-collapse panelContent collapse in">
                         <div class="panel-body">
-                            <ul id="bjui-tree1" class="ztree ztree_main" 
-                                attrs = '{"onClick":"MainMenuClick", "expandAll":true}' nodes='[{"id":9, "pId":0, "name":"关于"},{"id":91, "pId":9, "name": "关于本框架", "nurl":"about.html", "target":"navtab", "rel":"about"}]'>
+                            <ul id="bjui-tree-line" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
+                                <li data-id="1" data-pid="0">线路规划</li>
+                                <li data-id="10" data-pid="1" data-url="form.html" data-tabid="form">线路表单</li>
+                                <li data-id="10" data-pid="1" data-url="table.html" data-tabid="table">线路表格</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panelFooter"><div class="panelFooterContent"></div></div>
+                </div>
+            </div>
+            <div class="panel-group panel-main hide" data-toggle="accordion" id="leftBar-group" data-heightbox="#bjui-sidebar" data-offsety="26">
+                <div class="panel panel-default">
+                    <div class="panel-heading panelContent">
+                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#leftBar-group" href="#bjui-collapse-group" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;组团信息</a></h4>
+                    </div>
+                    <div id="bjui-collapse-group" class="panel-collapse panelContent collapse in">
+                        <div class="panel-body">
+                            <ul id="bjui-tree-group" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
+                                <li data-id="1" data-pid="0">组团信息</li>
+                                <li data-id="10" data-pid="1" data-url="form.html" data-tabid="form">组团表单</li>
+                                <li data-id="10" data-pid="1" data-url="table.html" data-tabid="table">组团表格</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panelFooter"><div class="panelFooterContent"></div></div>
+                </div>
+            </div>
+            <div class="panel-group panel-main hide" data-toggle="accordion" id="leftBar-scenic" data-heightbox="#bjui-sidebar" data-offsety="26">
+                <div class="panel panel-default">
+                    <div class="panel-heading panelContent">
+                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#leftBar-scenic" href="#bjui-collapse-scenic" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;景点模块</a></h4>
+                    </div>
+                    <div id="bjui-collapse-scenic" class="panel-collapse panelContent collapse in">
+                        <div class="panel-body">
+                            <ul id="bjui-tree-scenic" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
+                                <li data-id="1" data-pid="0">景点模块</li>
+                                <li data-id="10" data-pid="1" data-url="form.html" data-tabid="form">景点表单</li>
+                                <li data-id="10" data-pid="1" data-url="table.html" data-tabid="table">景点表格</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panelFooter"><div class="panelFooterContent"></div></div>
+                </div>
+            </div>
+            <div class="panel-group panel-main hide" data-toggle="accordion" id="leftBar-dining" data-heightbox="#bjui-sidebar" data-offsety="26">
+                <div class="panel panel-default">
+                    <div class="panel-heading panelContent">
+                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#leftBar-dining" href="#bjui-collapse-dining" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;餐饮模块</a></h4>
+                    </div>
+                    <div id="bjui-collapse-dining" class="panel-collapse panelContent collapse in">
+                        <div class="panel-body">
+                            <ul id="bjui-tree-dining" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
+                                <li data-id="1" data-pid="0">餐饮模块</li>
+                                <li data-id="10" data-pid="1" data-url="form.html" data-tabid="form">餐饮表单</li>
+                                <li data-id="10" data-pid="1" data-url="table.html" data-tabid="table">餐饮表格</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panelFooter"><div class="panelFooterContent"></div></div>
+                </div>
+            </div>
+            <div class="panel-group panel-main hide" data-toggle="accordion" id="leftBar-hotel" data-heightbox="#bjui-sidebar" data-offsety="26">
+                <div class="panel panel-default">
+                    <div class="panel-heading panelContent">
+                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#leftBar-hotel" href="#bjui-collapse-hotel" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;酒店模块</a></h4>
+                    </div>
+                    <div id="bjui-collapse-hotel" class="panel-collapse panelContent collapse in">
+                        <div class="panel-body">
+                            <ul id="bjui-tree-hotel" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
+                                <li data-id="1" data-pid="0">酒店模块</li>
+                                <li data-id="10" data-pid="1" data-url="form.html" data-tabid="form">酒店表单</li>
+                                <li data-id="10" data-pid="1" data-url="table.html" data-tabid="table">酒店表格</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panelFooter"><div class="panelFooterContent"></div></div>
+                </div>
+            </div>
+            <div class="panel-group panel-main hide" data-toggle="accordion" id="leftBar-finance" data-heightbox="#bjui-sidebar" data-offsety="26">
+                <div class="panel panel-default">
+                    <div class="panel-heading panelContent">
+                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#leftBar-finance" href="#bjui-collapse-finance" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;财务结算</a></h4>
+                    </div>
+                    <div id="bjui-collapse-finance" class="panel-collapse panelContent collapse in">
+                        <div class="panel-body">
+                            <ul id="bjui-tree-finance" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
+                                <li data-id="1" data-pid="0">财务结算</li>
+                                <li data-id="10" data-pid="1" data-url="form.html" data-tabid="form">财务表单</li>
+                                <li data-id="10" data-pid="1" data-url="table.html" data-tabid="table">财务表格</li>
                             </ul>
                         </div>
                     </div>
@@ -310,15 +433,9 @@ function MainMenuClick(event, treeId, treeNode) {
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>2014.11.10</td>
-                                                        <td>V1.0 内测版本</td>
-                                                        <td>doAjax支持data属性[data-data]；ajax回调新增参数(dialogid)；新增ajax回调属性[data-reload-navtab]；navtab新增属性[data-fresh]</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
                                                         <td>2014.11.04</td>
                                                         <td>V1.0 内测版本</td>
-                                                        <td>修复IE8下的selectpicker；多个html5的上传组件bug修复；启用tabs选项卡组件</td>
+                                                        <td>修复IE8下的selectpicker</td>
                                                         <td><span class="label label-info">一般</span></td>
                                                     </tr>
                                                     <tr>

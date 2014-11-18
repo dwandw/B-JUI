@@ -76,6 +76,21 @@
         e.preventDefault()
     })
     
+    /* Lateral Navigation */
+    $(document).on('click.bjui.lnav.data-api', '[data-toggle="leftbar"]', function(e) {
+        var $this = $(this)
+        var $box  = $($this.attr('href'))
+        
+        if ($box.length) {
+            $('#bjui-sidebar').find('.panel-group').addClass('hide')
+            $box.removeClass('hide')
+            $this.parent().addClass('active').siblings().removeClass('active')
+            //$this.parent()
+        }
+        
+        e.preventDefault()
+    })
+    
     /* beforeInitUI */
     $(document).on(BJUI.eventType.beforeInitUI, function(e) {
         var $box    = $(e.target)

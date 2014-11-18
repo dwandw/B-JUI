@@ -82,6 +82,12 @@
             if ((!$.cookie || !$.cookie('bjui_theme')) && op.theme) $(this).theme('setTheme', op.theme)
         },
         initEnv: function() {
+            if ($('#bjui-hnav')) {
+                var h = $('#bjui-hnav').height() + $('#bjui-header').outerHeight() + 5
+                
+                $('#bjui-leftside, #bjui-container, #bjui-splitBar, #bjui-splitBarProxy').css({top:h})
+            }
+            
             $(window).resize(function() {
                 BJUI.initLayout()
                 $(this).trigger(BJUI.eventType.resizeGrid)
@@ -94,7 +100,7 @@
         },
         initLayout: function() {
             var iContentW = $(window).width() - (BJUI.ui.showSlidebar ? $('#bjui-sidebar').width() + 10 : 31) - 5
-            var iContentH = $(window).height() - $('#bjui-header').height() - 31
+            var iContentH = $(window).height() - $('#bjui-header').height() - $('#bjui-hnav').outerHeight() - 31
             $('#bjui-container').width(iContentW)
             $('#bjui-container .tabsPageContent').height(iContentH - 31).find('[data-layout-h]').layoutH()
             $('#bjui-sidebar, #bjui-sidebar-s .collapse, #bjui-splitBar, #bjui-splitBarProxy').height(iContentH - 5)
