@@ -125,9 +125,8 @@
         })
         
         this.$element.find(options.jump).each(function() {
-            var that      = $(this)
-            var $inputBox = that.find(':text')
-            var $button   = that.find('.goto')
+            var $inputBox = $(this).find(':text')
+            var $button   = $(this).find('.goto')
             
             $button.on('click', function() {
                 var pageNum = $inputBox.val()
@@ -137,7 +136,7 @@
             })
             
             $inputBox.keyup(function(e) {
-                if (e.keyCode == DWZ.keyCode.ENTER) $button.trigger('click')
+                if (e.keyCode == BJUI.keyCode.ENTER) $button.trigger('click')
             })
         })
         
