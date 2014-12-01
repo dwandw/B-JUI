@@ -46,6 +46,7 @@
             afterCloseDialog  : 'bjui.afterCloseDialog'
         },
         pageInfo: {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'},
+        ajaxTimeout: 3000,
         statusCode: {ok:200, error:300, timeout:301},
         keys: {statusCode:'statusCode', message:'message'},
         ui: {
@@ -76,6 +77,9 @@
             $.extend(BJUI.statusCode, op.statusCode)
             $.extend(BJUI.pageInfo, op.pageInfo)
             $.extend(BJUI.loginInfo, op.loginInfo)
+            
+            if (op.ajaxTimeout) this.ajaxTimeout = op.ajaxTimeout
+            
             this.IS_DEBUG = op.debug || false
             this.initEnv()
             

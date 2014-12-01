@@ -33,7 +33,7 @@
                 data     : op.data || {},
                 cache    : false,
                 dataType : 'text',
-                timeout  : 300,
+                timeout  : BJUI.ajaxTimeout,
                 success  : function(response) {
                     var json = response.toJson()
                     

@@ -89,13 +89,14 @@
 <script type="text/javascript">
 $(function() {
     BJUI.init({
-        loginInfo  : {url:'logintimeout.html', title:'登录', width:300, height:200}, // 弹出登录对话框
-        statusCode : {ok:200, error:300, timeout:301}, //[可选]
-        pageInfo   : {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'}, //[可选]
-        keys       : {statusCode:'statusCode', message:'message'}, //[可选]
-        ui         : {hideMode:'display'}, //[可选]hideMode:navtab组件切换的隐藏方式，支持的值有’display’，’offsets’负数偏移位置的值，默认值为’display’
-        debug      : true,    // [可选]调试模式 [true|false，默认false]
-        theme      : 'purple' // 若有Cookie['bjui_theme'],优先选择Cookie['bjui_theme']。皮肤[五种皮肤:default, orange, purple, blue, green]
+        loginInfo   : {url:'logintimeout.html', title:'登录', width:300, height:200}, // 弹出登录对话框
+        statusCode  : {ok:200, error:300, timeout:301}, //[可选]
+        ajaxTimeout : 5000, //[可选]全局Ajax请求超时时间(毫秒)
+        pageInfo    : {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'}, //[可选]
+        keys        : {statusCode:'statusCode', message:'message'}, //[可选]
+        ui          : {hideMode:'display'}, //[可选]hideMode:navtab组件切换的隐藏方式，支持的值有’display’，’offsets’负数偏移位置的值，默认值为’display’
+        debug       : true,    // [可选]调试模式 [true|false，默认false]
+        theme       : 'purple' // 若有Cookie['bjui_theme'],优先选择Cookie['bjui_theme']。皮肤[五种皮肤:default, orange, purple, blue, green]
     })
     //时钟
     var today = new Date(), time = today.getTime()
