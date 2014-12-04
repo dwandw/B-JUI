@@ -119,10 +119,7 @@
                 })
             },
             alert: function(type, msg, options) {
-                var op = {okName:BJUI.regional.alertmsg.btnMsg.ok, okCall:null}
-                
-                $.extend(op, options)
-                
+                var op = $.extend({}, {okName:BJUI.regional.alertmsg.btnMsg.ok, okCall:null}, options)
                 var buttons = [
                     {name:op.okName, call:op.okCall, cls:'default', keyCode:BJUI.keyCode.ENTER}
                 ]
@@ -142,7 +139,7 @@
     }
     
     Alertmsg.prototype.error = function(msg, options) {
-        this.tools.alert(this.options.types.error, msg)
+        this.tools.alert(this.options.types.error, msg, options)
     }
     
     Alertmsg.prototype.info = function(msg, options) {

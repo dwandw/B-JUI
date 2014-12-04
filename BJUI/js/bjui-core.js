@@ -69,7 +69,7 @@
         loadLogin: function() {
             var login = this.loginInfo
             
-            $(this).dialog({id:'bjui-login', title:login.title, width:login.width, height:login.height, mask:login.mask})
+            $('body').dialog({id:'bjui-login', url:login.url, title:login.title, width:login.width, height:login.height, mask:login.mask})
         },
         init: function(options) {
             var op = $.extend({}, options)
