@@ -42,6 +42,10 @@
         this.options    = options
     }
     
+    Slidebar.prototype.hide = function() {
+        this.$toggle.trigger('click')
+    }
+    
     Slidebar.prototype.init = function() {
         var that = this
         
@@ -126,6 +130,8 @@
                 return false                    
             })
         })
+        
+        if (BJUI.ui.showSlidebar) that.hide()
     }
     
     // SLIDEBAR PLUGIN DEFINITION

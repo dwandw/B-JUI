@@ -77,6 +77,7 @@
             $.extend(BJUI.statusCode, op.statusCode)
             $.extend(BJUI.pageInfo, op.pageInfo)
             $.extend(BJUI.loginInfo, op.loginInfo)
+            $.extend(BJUI.ui, op.ui)
             
             if (op.ajaxTimeout) this.ajaxTimeout = op.ajaxTimeout
             
