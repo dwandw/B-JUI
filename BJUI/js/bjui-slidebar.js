@@ -130,7 +130,7 @@
             })
         })
         
-        if (BJUI.ui.showSlidebar) that.hide()
+        if (!BJUI.ui.showSlidebar) that.hide()
     }
     
     // SLIDEBAR PLUGIN DEFINITION
