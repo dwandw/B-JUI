@@ -22,7 +22,6 @@
     // ======================
     $(function() {
         $('body').append('<!-- Adjust the width of Left slide -->').append(FRAG.splitBar).append(FRAG.splitBarProxy)
-        $('#bjui-leftside').slidebar({minW:150, maxW:700})
     })
     
     // SLIDEBAR CLASS DEFINITION
@@ -170,5 +169,11 @@
         $.fn.slidebar = old
         return this
     }
+    
+    // SLIDEBAR DATA-API
+    // ==============
+    $(document).on(BJUI.eventType.initUI, function() {
+        $('#bjui-leftside').slidebar({minW:150, maxW:700})
+    })
     
 }(jQuery);
