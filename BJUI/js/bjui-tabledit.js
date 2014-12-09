@@ -127,15 +127,17 @@
                         
                         if (typeof val == 'undefined') val = $td.html()
                         if (!$td.data('noedit')) {
-                            if ($child.is('input:checkbox') || $child.is('input:radio')) {
-                                $child.filter('[value="'+ val +'"]').prop('checked', true)
-                            } else if ($pic.length) {
-                                if ($td.data('val')) $th.find('.pic-name').val($td.data('val'))
-                                $pic.html($td.html())
-                            } else {
-                                $child.attr('value', val +'')
+                            if ($child.length) {
+                                if ($child.is('input:checkbox') || $child.is('input:radio')) {
+                                    $child.filter('[value="'+ val +'"]').prop('checked', true)
+                                } else if ($pic.length) {
+                                    if ($td.data('val')) $th.find('.pic-name').val($td.data('val'))
+                                    $pic.html($td.html())
+                                } else {
+                                    $child.attr('value', val +'')
+                                }
+                                $td.html($th.html())
                             }
-                            $td.html($th.html())
                         }
                     })
                     

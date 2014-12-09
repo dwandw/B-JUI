@@ -80,6 +80,7 @@
             $.extend(BJUI.ui, op.ui)
             
             if (op.ajaxTimeout) this.ajaxTimeout = op.ajaxTimeout
+            if (!op.ui.showSlidebar) $('#bjui-leftside').slidebar('hide')
             
             this.IS_DEBUG = op.debug || false
             this.initEnv()

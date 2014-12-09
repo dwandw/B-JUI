@@ -22,6 +22,8 @@
     // ======================
     $(function() {
         $('body').append('<!-- Adjust the width of Left slide -->').append(FRAG.splitBar).append(FRAG.splitBarProxy)
+        
+        $('#bjui-leftside').slidebar({minW:150, maxW:700})
     })
     
     // SLIDEBAR CLASS DEFINITION
@@ -129,8 +131,6 @@
                 return false                    
             })
         })
-        
-        if (!BJUI.ui.showSlidebar) that.hide()
     }
     
     // SLIDEBAR PLUGIN DEFINITION
@@ -172,8 +172,5 @@
     
     // SLIDEBAR DATA-API
     // ==============
-    $(document).on(BJUI.eventType.initUI, function() {
-        $('#bjui-leftside').slidebar({minW:150, maxW:700})
-    })
     
 }(jQuery);
