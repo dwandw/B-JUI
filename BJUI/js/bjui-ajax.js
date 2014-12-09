@@ -103,7 +103,6 @@
     }
     
     Bjuiajax.prototype.ajaxForm = function(options) {
-        alert('ajax')
         var that      = this
         var $form     = this.$element,
             callback  = options.callback,
