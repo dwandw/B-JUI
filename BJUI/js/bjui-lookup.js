@@ -43,6 +43,10 @@
         resizable : true
     }
     
+    Lookup.EVENTS = {
+        afterChange : 'afterchange.bjui.lookup'
+    }
+    
     Lookup.prototype.init = function() {
         var that = this, options = this.options, tools = this.tools
         
@@ -62,6 +66,8 @@
         group          = this.options.group  || null
         suffix         = this.options.suffix || null
         $currentLookup = this.$element
+        
+        if (suffix) suffix = suffix.trim()
         
         this.open(that.$element)
     }
@@ -135,7 +141,10 @@
                 var name = that.getField(key)
                 
                 if (name == inputName) {
-                    $input.val(args[key])
+                    $input
+                        .val(args[key])
+                        .trigger(Lookup.EVENTS.afterChange, {value:args[key]})
+                        
                     break
                 }
             }

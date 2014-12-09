@@ -288,10 +288,7 @@
                 return false
             },
             afterChange: function(date) {
-                var changedEvent = $.Event(Datepicker.EVENTS.afterChange, {date:date})
-                
-                that.$element.trigger(changedEvent)
-                if (changedEvent.isDefaultPrevented()) return
+                that.$element.trigger(Datepicker.EVENTS.afterChange, {value:date})
             }
         }
         return tools

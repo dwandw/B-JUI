@@ -290,13 +290,12 @@
         if ($dialog) {
             if (typeof option == 'object') {
                 if (option.title) $dialog.find('> .dialogHeader > h1 > span.title').html(option.title)
-                options = $.extend(option, $dialog.data('options'))
+                options = $.extend({}, option, $dialog.data('options'))
             }
             var $pagerForm = $dialog.find('#pagerForm')
             
             if ($pagerForm && $pagerForm.length) {
                 if (!option || !option.type) options.type = $pagerForm.attr('method') || 'POST'
-                
                 options.data = $pagerForm.serializeJson()
                 
                 if (clearQuery) {

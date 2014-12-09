@@ -147,7 +147,7 @@
         if (typeof this.options.width == 'string' && this.options.width.indexOf('%')) {
             this.options.newWidth = width * (this.options.width.replace('%', '') / 100)
         } else {
-            this.options.newWidth = parseInt(this.options.width) 
+            this.options.newWidth = parseInt(this.options.width)
         }
         
         this.options.styles = []
@@ -161,38 +161,79 @@
     
     Tablefixed.prototype.initHead = function() {
         var styles  = this.options.styles = []
-        var $oldThs = this.$element.find('thead > tr:last-child > th')
+        var $hTrs   = this.$element.find('thead > tr')
+        var $fThs   = $hTrs.eq(0).find('> th')
         var $table  = this.$element
-        var thLen   = $oldThs.length
         var fixedW  = 0
+        var hTh     = []
+        var cols    = []
+        var jj      = -1
         
-        for (var i = 0; i < $oldThs.size(); i++) {
-            var $th   = $oldThs.eq(i)
+        $fThs.each(function(i) {
+            var $th     = $(this),
+                colspan = parseInt($th.attr('colspan') || 1),
+                width   = $th.attr('width'),
+                align   = $th.attr('align'),
+                w       = ''
+            for (var k = 0; k < colspan; k++) {
+                if (colspan == 1 && width) w = ' width="'+ width +'"'
+                if (align) $th.removeAttr('align').addClass(align)
+                hTh.push('<th'+ w +'></th>')
+            }
+            $th.attr('colsNum', jj += colspan)
+            cols[i] = colspan
+        })
+        
+        var thLen = hTh.length,
+            $hTh  = $('<tr class="resize-head">'+ hTh.join('') +'</tr>')
+        
+        if ($hTrs.length > 1) {
+            jj = 0
+            var $ths2 = $hTrs.eq(1).find('> th')
+            $.each(cols, function(i, n) {
+                n = parseInt(n)
+                if (n > 1) {
+                    var colsNum = parseInt($fThs.eq(i).attr('colsnum'))
+                    for (var k = n - 1; k >= 0; k--) {
+                        var $th  = $ths2.eq(jj++), myNum = colsNum - k, width = $th.attr('width'), align = $th.attr('align')
+                        var $_th = $hTh.find('> th').eq(myNum)
+                        
+                        if ($th && $th.length) $th.attr('colsnum', myNum)
+                        if (width)  $_th.attr('width', width)
+                        if (align)  $th.addClass(align).removeAttr('align')
+                    }
+                }
+            })
+        }
+        
+        this.$fixed.html(this.$element.html())
+        var $thead  = this.$fixed.find('thead')
+        
+        $thead.prepend($hTh)
+        $hTh.find('> th').each(function(i) {
+            var $th   = $(this)
             var style = [], width = $th.innerWidth()
             
             style[0]  = parseInt(width)
-            style[1]  = $th.attr('align')
-            style[2]  = $th.attr('class')
+            //style[1]  = $th.attr('align')
+            //style[2]  = $th.attr('class')
             fixedW   += style[0]
             styles[styles.length] = style
-        }
+        })
+        
         fixedW = parseInt((this.options.newWidth - fixedW) / thLen)
-        this.$fixed.html(this.$element.html())
-
-        var $thead  = this.$fixed.find('thead')
-        var $ths    = $thead.find('> tr:last-child > th')
+        var $ths = $thead.find('> tr:eq(0) > th')
         
         this.options.$ths = $ths
         $ths.each(function(i) {
             var $th = $(this), style = styles[i], w = $th.attr('width')
             
             $th
-                .addClass(style[1])
-                .addClass(style[2])
+                //.addClass(style[1])
+                //.addClass(style[2])
                 .removeAttr('align')
                 .width(style[0] + fixedW)
-                .attr('title', $th.text())
-                .html('<div class="fixedtableCol">'+ $th.html() +'</div>')
+                //.attr('title', $th.text())
             
             style[0] = (style[0] + fixedW)
             if (w) {
@@ -200,6 +241,13 @@
                 $th.width(w).removeAttr('width')
             }
         })
+        
+        $thead.find('> tr:gt(0) > th').each(function() {
+            var $th = $(this)
+            
+            $th.html('<div class="fixedtableCol">'+ $th.html() +'</div>')
+        })
+        
         $thead.wrap('<div class="fixedtableHeader"><div class="fixedtableThead"><table class="table table-bordered" style="width:'+ (this.options.newWidth - 20) + 'px; max-width:'+ (this.options.newWidth - 20) +'px;"></table></div></div>')
         this.$fixed.append('<div class="resizeMarker" style="display:none; height:300px; left:57px;"></div><div class="resizeProxy" style="left:377px; display:none; height:300px;"></div>')
     }
@@ -220,6 +268,16 @@
         if (!this.$element.attr('class')) $tbody.parent().addClass('table table-striped table-bordered table-hover')
         else $tbody.parent().addClass(this.$element.attr('class'))
         
+        if (this.options.nowrap) {
+            $tbody.find('> tr > td').each(function(i) {
+                var $td = $(this)
+                
+                $td
+                    .html('<div class="fixedtableCol">'+ $td.html() +'</div>')
+                    .attr('title', $td.text())
+            })
+        }
+        
         $tbody.closest('.fixedtableScroller').scroll(function(e) {
             var $scroller  = $(this)
             var scrollLeft = $scroller.scrollLeft()
@@ -238,19 +296,20 @@
         var $tds   = this.options.$tds
         var tools  = this.tools
         
-        $ths.each(function(i) {
+        $fixed.find('thead > tr:gt(0) > th').each(function(i) {
             var $th = $(this)
             
             $th.mouseover(function(e) {
-                var ofLeft = parseInt($fixed.find('.fixedtableThead').css('left')) || 0
-                var offset = tools.getOffset($th, e).offsetX
+                var ofLeft    = parseInt($fixed.find('.fixedtableThead').css('left')) || 0
+                var offset    = tools.getOffset($th, e).offsetX
+                var $resizeTh = $ths.eq($th.attr('colsnum'))
                 
                 if ($th.outerWidth() - offset < 5) {
                     $th.css('cursor', 'col-resize').off('mousedown.bjui.tablefixed.resize').on('mousedown.bjui.tablefixed.resize', function(event) {
                         $fixed.find('> .resizeProxy')
                             .show()
                             .css({
-                                left:   tools.getRight($th) + ofLeft,
+                                left:   tools.getRight($resizeTh) + ofLeft,
                                 top:    tools.getTop($th),
                                 height: tools.getHeight($th, $fixed),
                                 cursor: 'col-resize'
@@ -262,15 +321,14 @@
                                 stop:  function() {
                                     var pleft   = $fixed.find('.resizeProxy').position().left
                                     var mleft   = $fixed.find('.resizeMarker').position().left
-                                    var move    = pleft - mleft - $th.outerWidth() - 9
-                                    var cols    = tools.getColspan($th)
-                                    var cellNum = tools.getCellNum($th)
-                                    var oldW    = $th.width(), newW = $th.width() + move
+                                    var move    = pleft - mleft - $resizeTh.outerWidth() - 9
+                                    var cellNum = tools.getCellNum($resizeTh)
+                                    var oldW    = $resizeTh.width(), newW = $resizeTh.width() + move
                                     var $dcell  = $tds.eq(cellNum - 1)
                                     var scrolW  = $fixed.find('> .fixedtableScroller').width()
                                     var tableW  = $fixed.find('> .fixedtableHeader .table').width()
                                     
-                                    $th.width(newW)
+                                    $resizeTh.width(newW)
                                     $dcell.width(newW)
                                     
                                     $fixed.find('.table').width(tableW + move)
@@ -282,7 +340,7 @@
                             .find('> .resizeMarker')
                             .show()
                             .css({
-                                left:   tools.getLeft($th) + 1 + ofLeft,
+                                left:   tools.getLeft($resizeTh) + 1 + ofLeft,
                                 top:    tools.getTop($th),
                                 height: tools.getHeight($th, $fixed)
                             })

@@ -46,20 +46,20 @@
 <script src="BJUI/js/bjui-navtab.js"></script>
 <script src="BJUI/js/bjui-dialog.js"></script>
 <script src="BJUI/js/bjui-taskbar.js"></script>
-<script src="BJUI/js/bjui-tablefixed.js"></script>
+<script src="BJUI/js/bjui-ajax.js"></script>
 <script src="BJUI/js/bjui-alertmsg.js"></script>
 <script src="BJUI/js/bjui-pagination.js"></script>
 <script src="BJUI/js/bjui-util.date.js"></script>
 <script src="BJUI/js/bjui-datepicker.js"></script>
-<script src="BJUI/js/bjui-spinner.js"></script>
-<script src="BJUI/js/bjui-theme.js"></script>
 <script src="BJUI/js/bjui-ajaxtab.js"></script>
+<script src="BJUI/js/bjui-tablefixed.js"></script>
 <script src="BJUI/js/bjui-tabledit.js"></script>
+<script src="BJUI/js/bjui-spinner.js"></script>
 <script src="BJUI/js/bjui-lookup.js"></script>
 <script src="BJUI/js/bjui-tags.js"></script>
-<script src="BJUI/js/bjui-ajax.js"></script>
-<script src="BJUI/js/bjui-initui.js"></script>
 <script src="BJUI/js/bjui-upload.js"></script>
+<script src="BJUI/js/bjui-theme.js"></script>
+<script src="BJUI/js/bjui-initui.js"></script>
 <script src="BJUI/js/bjui-plugins.js"></script>
 <!-- plugins -->
 <!-- swfupload for uploadify && kindeditor -->
@@ -89,12 +89,12 @@
 <script type="text/javascript">
 $(function() {
     BJUI.init({
-        loginInfo   : {url:'logintimeout.html', title:'登录', width:300, height:200}, // 弹出登录对话框
+        loginInfo   : {url:'login_timeout.html', title:'登录', width:400, height:200}, // 弹出登录对话框
         statusCode  : {ok:200, error:300, timeout:301}, //[可选]
         ajaxTimeout : 5000, //[可选]全局Ajax请求超时时间(毫秒)
         pageInfo    : {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'}, //[可选]
         keys        : {statusCode:'statusCode', message:'message'}, //[可选]
-        ui          : {hideMode:'display'}, //[可选]hideMode:navtab组件切换的隐藏方式，支持的值有’display’，’offsets’负数偏移位置的值，默认值为’display’
+        ui          : {showSlidebar:true, hideMode:'display'}, //[可选]hideMode:navtab组件切换的隐藏方式，支持的值有’display’，’offsets’负数偏移位置的值，默认值为’display’
         debug       : true,    // [可选]调试模式 [true|false，默认false]
         theme       : 'purple' // 若有Cookie['bjui_theme'],优先选择Cookie['bjui_theme']。皮肤[五种皮肤:default, orange, purple, blue, green]
     })
@@ -121,8 +121,24 @@ function MainMenuClick(event, treeId, treeNode) {
         $(event.target).dialog({id:treeNode.tabid, url:treeNode.url, title:treeNode.name})
     else
         $(event.target).navtab({id:treeNode.tabid, url:treeNode.url, title:treeNode.name, fresh:treeNode.fresh})
+        
+    event.preventDefault()
 }
 </script>
+<!-- for doc begin -->
+<link type="text/css" rel="stylesheet" href="/js/syntaxhighlighter-2.1.382/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="/js/syntaxhighlighter-2.1.382/styles/shThemeEclipse.css"/>
+<script type="text/javascript" src="/js/syntaxhighlighter-2.1.382/scripts/brush.js"></script>
+<link href="doc/doc.css" rel="stylesheet">
+<script type="text/javascript">
+$(function(){
+    SyntaxHighlighter.config.clipboardSwf = '/js/syntaxhighlighter-2.1.382/scripts/clipboard.swf'
+    $(document).on(BJUI.eventType.initUI, function(e) {
+        SyntaxHighlighter.highlight();
+    })
+})
+</script>
+<!-- for doc end -->
 </head>
 <body>
     <!--[if lte IE 7]>
@@ -139,7 +155,6 @@ function MainMenuClick(event, treeId, treeNode) {
             <ul class="nav navbar-nav navbar-right">
                 <li class="datetime"><div><span id="bjui-date"></span><br><i class="fa fa-clock-o"></i> <span id="bjui-clock"></span></div></li>
                 <li><a href="http://b-jui.com/index-hnav.html" target="_blank"><span class="badge">横向菜单版</span></a></li>
-                <li><a href="http://b-jui.com/doc/" target="_blank">B-JUI在线文档</a></li>
                 <li><a href="http://www.bootcss.com/" target="_blank">Bootstrap中文网</a></li>
                 <li><a href="http://www.j-ui.com/" target="_blank">DWZ(j-ui)官网</a></li>
                 <li><a href="#">消息 <span class="badge">4</span></a></li>
@@ -175,7 +190,7 @@ function MainMenuClick(event, treeId, treeNode) {
             <div class="panel-group panel-main" data-toggle="accordion" id="bjui-accordionmenu" data-heightbox="#bjui-sidebar" data-offsety="26">
                 <div class="panel panel-default">
                     <div class="panel-heading panelContent">
-                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#bjui-accordionmenu" href="#bjui-collapse0" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;基本信息</a></h4>
+                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#bjui-accordionmenu" href="#bjui-collapse0" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;Demo演示</a></h4>
                     </div>
                     <div id="bjui-collapse0" class="panel-collapse panelContent collapse in">
                         <div class="panel-body">
@@ -207,12 +222,42 @@ function MainMenuClick(event, treeId, treeNode) {
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading panelContent">
-                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#bjui-accordionmenu" href="#bjui-collapse1" class=""><i class="fa fa-caret-square-o-right"></i>&nbsp;系统信息</a></h4>
+                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#bjui-accordionmenu" href="#bjui-collapse1" class="" style="color:#FF1100;"><i class="fa fa-caret-square-o-right"></i>&nbsp;简要文档</a></h4>
                     </div>
                     <div id="bjui-collapse1" class="panel-collapse panelContent collapse">
                         <div class="panel-body">
-                            <ul id="bjui-tree1" class="ztree ztree_main" 
-                                attrs = '{"onClick":"MainMenuClick", "expandAll":true}' nodes='[{"id":9, "pId":0, "name":"关于"},{"id":91, "pId":9, "name": "关于本框架", "nurl":"about.html", "target":"navtab", "rel":"about"}]'>
+                            <ul id="bjui-tree1" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="false">
+                                <li data-id="99" data-pid="0">文件列表</li>
+                                <li data-id="100" data-pid="99" data-url="doc/base/filelist.html" data-tabid="doc-file">文件详解</li>
+                                <li data-id="1" data-pid="0">框架介绍</li>
+                                <li data-id="10" data-pid="1" data-url="doc/base/structure.html" data-tabid="doc-base">页面结构</li>
+                                <li data-id="11" data-pid="1" data-url="doc/base/navtab.html" data-tabid="doc-base">标签工作区(navtab)</li>
+                                <li data-id="12" data-pid="1" data-url="doc/base/dialog.html" data-tabid="doc-base">弹窗工作区(dialog)</li>
+                                <li data-id="13" data-pid="1" data-url="doc/base/idname.html" data-tabid="doc-base">元素ID命名规范</li>
+                                <li data-id="14" data-pid="1" data-url="doc/base/data.html" data-tabid="doc-base">data属性</li>
+                                <li data-id="15" data-pid="1" data-url="doc/base/api.html" data-tabid="doc-base">jQuery API调用</li>
+                                <li data-id="16" data-pid="1" data-url="doc/base/event.html" data-tabid="doc-base">事件</li>
+                                <li data-id="17" data-pid="1" data-url="doc/base/url.html" data-tabid="doc-base">URL动态赋值</li>
+                                <li data-id="2" data-pid="0">标签navtab</li>
+                                <li data-id="20" data-pid="2" data-url="doc/navtab/navtab.html" data-tabid="doc-navtab">创建navtab</li>
+                                <li data-id="21" data-pid="2" data-url="doc/navtab/navtab-op.html" data-tabid="doc-navtab">参数及方法</li>
+                                <li data-id="3" data-pid="0">弹窗dialog</li>
+                                <li data-id="30" data-pid="3" data-url="doc/dialog/dialog.html" data-tabid="doc-dialog">创建dialog</li>
+                                <li data-id="31" data-pid="3" data-url="doc/dialog/dialog-op.html" data-tabid="doc-dialog">参数及方法</li>
+                                <li data-id="4" data-pid="0">Ajax</li>
+                                <li data-id="40" data-pid="4" data-url="doc/ajax/callback.html" data-tabid="doc-ajax">回调函数</li>
+                                <li data-id="41" data-pid="4" data-url="doc/ajax/form.html" data-tabid="doc-ajax">提交表单</li>
+                                <li data-id="42" data-pid="4" data-url="doc/ajax/search.html" data-tabid="doc-ajax">搜索表单</li>
+                                <li data-id="43" data-pid="4" data-url="doc/ajax/load.html" data-tabid="doc-ajax">加载(局部刷新)</li>
+                                <li data-id="44" data-pid="4" data-url="doc/ajax/action.html" data-tabid="doc-ajax">执行动作</li>
+                                <li data-id="5" data-pid="0">表单相关</li>
+                                <li data-id="50" data-pid="5" data-url="doc/form/datepicker.html" data-tabid="doc-form">日期选择器</li>
+                                <li data-id="51" data-pid="5" data-url="doc/form/spinner.html" data-tabid="doc-form">微调器</li>
+                                <li data-id="52" data-pid="5" data-url="doc/form/lookup.html" data-tabid="doc-form">查找带回</li>
+                                <li data-id="53" data-pid="5" data-url="doc/form/tags.html" data-tabid="doc-form">自动完成标签</li>
+                                <li data-id="54" data-pid="5" data-url="doc/form/upload.html" data-tabid="doc-form">上传组件</li>
+                                <li data-id="6" data-pid="0">表格相关</li>
+                                <li data-id="60" data-pid="6" data-url="doc/table/order.html" data-tabid="doc-table">字段排序</li>
                             </ul>
                         </div>
                     </div>
@@ -257,9 +302,11 @@ function MainMenuClick(event, treeId, treeNode) {
                         </div>
                     </div>
                     <div class="bjui-pageFormContent" data-layout-h="0">
+                        <!--  
                         <div style="position: absolute;top:10px;right:0;width:300px;">
                             <iframe width="100%" height="550" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=0&uid=2838273614&verifier=75a3b95b&dpc=1"></iframe>
                         </div>
+                        -->
                         <div style="margin-right:300px; overflow: hidden;">
                             <div class="row" style="padding: 0 8px;">
                                 <div class="col-md-12">
@@ -352,8 +399,10 @@ function MainMenuClick(event, treeId, treeNode) {
             </div>
         </div>
     </div>
+    <!--  
     <footer id="bjui-footer">Copyright &copy; 2013 - 2014 <a href="http://xknaan.com" target="_blank">K'naan</a>(xknaan@163.com)　<a href="http://b-jui.com/" target="_blank">B-JUI 前端框架</a>　
         <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1252983288'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/stat.php%3Fid%3D1252983288%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
     </footer>
+    -->
 </body>
 </html>

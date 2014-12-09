@@ -76,7 +76,8 @@
         title    : 'New tab',
         url      : undefined,
         type     : 'GET',
-        data     : {}
+        data     : {},
+        fresh    : false
     }
     
     Navtab.prototype.TOOLS = function() {
@@ -361,7 +362,7 @@
             var $tab   = tools.getTabs().eq(iOpenIndex)
             var $panel = tools.getPanels().eq(iOpenIndex)
             
-            if ($tab.data('url') != options.url) {
+            if (options.fresh || $tab.data('url') != options.url) {
                 $tab.data('url', options.url)
                 
                 var $pagerForm = $panel.find('#pagerForm')

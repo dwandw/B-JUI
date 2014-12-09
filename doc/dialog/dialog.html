@@ -1,0 +1,51 @@
+<div class="bjui-pageContent">
+    <div class="pageFormContent" data-layout-h="0">
+        <div class="bjui-doc">
+            <h3 class="page-header">创建dialog</h3>
+            <blockquote>
+                <p>创建一个dialog有以下两种方式：</p>
+            </blockquote>
+            <ul>
+                <li>Data属性：DOM添加属性<code>data-toggle="dialog"</code>后，单击触发。<br>
+                    <span class="label label-default">DOM示例1：</span>　<a href="doc/dialog/mydialog.html" data-toggle="dialog" data-id="mydialog1" data-title="我的业务弹窗1">打开dialog</a><br>
+                    <pre class="brush: html">
+                        <a href="mydialog.html" data-toggle="dialog" data-id="mydialog1" data-title="我的业务弹窗1">打开dialog</a>
+                    </pre>
+                    <span class="label label-default">DOM示例2：</span>　<button type="button" class="btn-green" data-toggle="dialog" data-id="mydialog2" data-url="doc/dialog/mydialog.html" data-title="我的业务弹窗2">打开dialog</button>
+                    <pre class="brush: html">
+                        <button type="button" class="btn-green" data-toggle="dialog" data-id="mydialog2" data-url="mydialog.html" data-title="我的业务弹窗2">打开dialog</button>
+                    </pre>
+                </li>
+                <li>jQuery API：<br>
+                    <script type="text/javascript">
+                        function openMydialog(obj) {
+                            $(obj).dialog({id:'mydialog', url:'doc/dialog/mydialog.html', title:'我的业务弹窗-jQuery API'});
+                        }
+                    </script>
+                    <span class="label label-default">jQuery示例：</span>　<button type="button" class="btn-default" onclick="openMydialog(this)">打开dialog</button>
+                    <p>本例完整代码：</p>
+                    <pre class="brush: js; html-script: true">
+                        &lt;script type="text/javascript">
+                        function openMydialog(obj) {
+                            $(obj).dialog({id:'mydialog', url:'doc/dialog/mydialog.html', title:'我的业务弹窗'});
+                        }
+                        &lt;/script>
+                        <button type="button" class="btn-default" onclick="openMydialog(this)">打开dialog</button>
+                    </pre>
+                    <p>jQuery方法代码：</p>
+                    <pre class="brush: js">
+                        $(selector).dialog(options)
+                    </pre>
+                </li>
+            </ul>
+            <blockquote class="point">
+                <p>取得当前dialog的容器：<code>$.CurrentDialog</code></p>
+            </blockquote>
+        </div>
+    </div>
+    <div class="bjui-footBar">
+        <ul>
+            <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+        </ul>
+    </div>
+</div>

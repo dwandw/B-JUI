@@ -1,0 +1,54 @@
+<div class="bjui-pageContent">
+    <div class="pageFormContent" data-layout-h="0">
+        <div class="bjui-doc">
+            <h3 class="page-header">创建navtab</h3>
+            <blockquote>
+                <p>创建一个navtab有以下两种方式：</p>
+            </blockquote>
+            <ul>
+                <li>Data属性：DOM添加属性<code>data-toggle="navtab"</code>后，单击触发。<br>
+                    <span class="label label-default">DOM示例1：</span>　<a href="doc/navtab/mytab.html?d=1" data-toggle="navtab" data-id="mynavtab" data-reload-warn="已打开业务页面，确认将重新载入?" data-title="我的业务页面">打开navtab</a><br>
+                    <pre class="brush: html">
+                        <a href="mytab.html?d=1" data-toggle="navtab" data-id="mynavtab" data-reload-warn="已打开业务页面，确认将重新载入?" data-title="我的业务页面">打开navtab</a>
+                    </pre>
+                    <span class="label label-default">DOM示例2：</span>　<button type="button" class="btn-green" data-toggle="navtab" data-id="mynavtab" data-reload-warn="已打开业务页面，确认将重新载入?" data-url="doc/navtab/mytab.html?d=2" data-title="我的业务页面">打开navtab</button>
+                    <pre class="brush: html">
+                        <button type="button" class="btn-green" data-toggle="navtab" data-id="mynavtab" data-reload-warn="已打开业务页面，确认将重新载入?" data-url="mytab.html?d=2" data-title="我的业务页面">打开navtab</button>
+                    </pre>
+                </li>
+                <li>jQuery API：<br>
+                    <script type="text/javascript">
+                        function openMytab(obj) {
+                            $(obj).navtab(options);
+                        }
+                    </script>
+                    <span class="label label-default">jQuery示例：</span>　<button type="button" class="btn-default" onclick="openMytab(this)">打开navtab</button>
+                    <p>本例完整代码：</p>
+                    <pre class="brush: js; html-script: true">
+                        &lt;script type="text/javascript">
+                        function openMytab(obj) {
+                            $(obj).navtab({id:'mynavtab', url:'doc/navtab/mytab.html', title:'我的业务页面'});
+                        }
+                        &lt;/script>
+                        <button type="button" class="btn-default" onclick="openMytab(this)">打开navtab</button>
+                    </pre>
+                    <p>jQuery API代码：</p>
+                    <pre class="brush: js">
+                        $(selector).navtab({id:'标签的id', url:'载入页片的url', title:'标签的标题'})
+                    </pre>
+                </li>
+            </ul>
+            <blockquote class="point">
+                <ul>
+                    <li>取得当前navtab的内容容器：<code>$.CurrentNavtab</code></li>
+                    <li>创建已存在相同ID的navtab时，如果url一致(未设置<code>fresh</code>参数时)，默认会直接切换到该navtab，否则覆盖已存在的navtab，可以增加<code>reloadWarn</code>参数以获得警告提醒</li>
+                </ul>
+            </blockquote>
+        </div>
+    </div>
+    <div class="bjui-footBar">
+        <ul>
+            <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+        </ul>
+    </div>
+</div>

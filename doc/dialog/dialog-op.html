@@ -1,0 +1,184 @@
+<div class="bjui-pageContent">
+    <div class="pageFormContent" data-layout-h="0">
+        <div class="bjui-doc">
+            <h3 class="page-header">dialog参数、方法及事件</h3>
+            <blockquote>
+                <p>本节介绍dialog组件的参数、方法及事件。</p>
+            </blockquote>
+            <h4>参数（options）</h4>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>类型</th>
+                        <th>默认值</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>id</td>
+                        <td>string</td>
+                        <td>navtab</td>
+                        <td>弹窗的ID，如果指定重复，将覆盖现有的ID相同弹窗。</td>
+                    </tr>
+                    <tr>
+                        <td>title</td>
+                        <td>string</td>
+                        <td>New tab</td>
+                        <td>弹窗打开后显示的名称。</td>
+                    </tr>
+                    <tr>
+                        <td>url</td>
+                        <td>string</td>
+                        <td>undefined</td>
+                        <td><span class="badge"><i>D-Url</i></span> 请求数据的url，a链接触发时可以将url定义在href属性。</td>
+                    </tr>
+                    <tr>
+                        <td>type</td>
+                        <td>string</td>
+                        <td>GET</td>
+                        <td>Http请求方式，可选‘GET/POST’。</td>
+                    </tr>
+                    <tr>
+                        <td>data</td>
+                        <td>object</td>
+                        <td>{}</td>
+                        <td>请求url时，需要发送的data数据。</td>
+                    </tr>
+                    <tr>
+                        <td>width</td>
+                        <td>int</td>
+                        <td>500</td>
+                        <td>弹窗的宽度。</td>
+                    </tr>
+                    <tr>
+                        <td>height</td>
+                        <td>int</td>
+                        <td>300</td>
+                        <td>弹窗的高度。</td>
+                    </tr>
+                    <tr>
+                        <td>max</td>
+                        <td>boolean</td>
+                        <td>false</td>
+                        <td>打开弹窗时直接最大化。</td>
+                    </tr>
+                    <tr>
+                        <td>mask</td>
+                        <td>boolean</td>
+                        <td>false</td>
+                        <td>是否模态窗口。</td>
+                    </tr>
+                    <tr>
+                        <td>resizable</td>
+                        <td>boolean</td>
+                        <td>true</td>
+                        <td>可以调整弹窗的大小。</td>
+                    </tr>
+                    <tr>
+                        <td>drawable</td>
+                        <td>boolean</td>
+                        <td>true</td>
+                        <td>可以拖动弹窗。</td>
+                    </tr>
+                    <tr>
+                        <td>maxable</td>
+                        <td>boolean</td>
+                        <td>true</td>
+                        <td>是否显示最大化按钮。</td>
+                    </tr>
+                    <tr>
+                        <td>minable</td>
+                        <td>boolean</td>
+                        <td>true</td>
+                        <td>是否显示最小化按钮（模态弹窗无效）。</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4>方法</h4>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>方法名</th>
+                        <th>参数类型</th>
+                        <th>参数说明</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>switchDialog(id)</td>
+                        <td>string</td>
+                        <td>dialog ID</td>
+                        <td>切换到某个弹窗(模态弹窗无效)。</td>
+                    </tr>
+                    <tr>
+                        <td>refresh(id)</td>
+                        <td>string</td>
+                        <td>dialog ID</td>
+                        <td>刷新某个弹窗。</td>
+                    </tr>
+                    <tr>
+                        <td>reloadFlag(tabids)</td>
+                        <td>string</td>
+                        <td>一个或多个标签ID，多个ID以<code>,</code>分隔</td>
+                        <td>为某(几)个标签设定重载标记(当切换到该标签时重新载入)。</td>
+                    </tr>
+                    <tr>
+                        <td>reload(options)</td>
+                        <td>object</td>
+                        <td>同dialog默认参数</td>
+                        <td>重新载入某个弹窗，如果未指定ID，则默认重载入当前弹窗。</td>
+                    </tr>
+                    <tr>
+                        <td>close(id)</td>
+                        <td>string</td>
+                        <td>dialog ID</td>
+                        <td>关闭某个弹窗。</td>
+                    </tr>
+                    <tr>
+                        <td>closeCurrent()</td>
+                        <td>--</td>
+                        <td>--</td>
+                        <td>关闭当前弹窗。</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4>事件</h4>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>事件名称</th>
+                        <th>中文说明</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>bjui.beforeLoadDialog</td>
+                        <td>载入dialog内容前事件</td>
+                        <td>监听该事件，可以在载入dialog内容前进行相关操作。</td>
+                    </tr>
+                    <tr>
+                        <td>bjui.beforeCloseDialog</td>
+                        <td>关闭dialog前事件</td>
+                        <td>监听该事件，可以在关闭dialog前进行相关操作。</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>这样监听dialog的事件：</p>
+            <pre class="brush: js">
+                $(document).on('bjui.beforeLoadDialog', function(e) {
+                    var $dialog = $(e.target)
+                    // do something...
+                })
+            </pre>
+        </div>
+    </div>
+    <div class="bjui-footBar">
+        <ul>
+            <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+        </ul>
+    </div>
+</div>

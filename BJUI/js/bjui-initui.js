@@ -195,13 +195,7 @@
     /* Clean plugins generated 'Dom elements' in the body */
     var bodyClear = function($target) {
         $target.find('select[data-toggle="selectpicker"]').selectpicker('destroyMenu')
-        $target.find('[data-toggle="selectztree"]').trigger('destory.bjui.selectztree')
-        //$box.find('.j-selectzTree').trigger
-        //
-        //var destorySelectzTree = $.Event(DWZ.eventType.destorySelectzTree);
-        //if (destorySelectzTree && destorySelectzTree.type) {
-        //    $box.find('.j-selectzTree').trigger(DWZ.eventType.destorySelectzTree); 
-       // }
+        $target.find('[data-toggle="selectztree"]').trigger('destroy.bjui.selectztree')
     }
     
     $(document).on(BJUI.eventType.beforeLoadDialog, function(e) {
@@ -214,12 +208,5 @@
         bodyClear($(e.target))
     })
     
-    /* tooltip */
-    /*$(document).on(BJUI.eventType.initUI, function(e) {
-        var $this = $(e.target).find('[data-toggle="tooltip"]')
-        
-        $this.tooltip()
-    })
-    */
     
 }(jQuery);

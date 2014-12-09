@@ -35,6 +35,10 @@
         decimalPlace: 0
     }
     
+    Spinner.EVENTS = {
+        afterChange : 'afterchange.bjui.spinner'
+    }
+    
     Spinner.prototype.TOOLS = function() {
         var that  = this
         var tools = {
@@ -57,8 +61,12 @@
                 }
                 if (that.options.decimalPlace)
                     ivalue = new String(ivalue.toFixed(that.options.decimalPlace))
-                $input.val(ivalue)
+                
                 that.ivalue = ivalue
+                
+                $input
+                    .val(ivalue)
+                    .trigger(Spinner.EVENTS.afterChange, {value:ivalue})
             }
         }
         

@@ -59,9 +59,7 @@
         return tools
     }
     
-    Bjuiajax.prototype.ajaxForm4Iframe = function($form, callback) {
-        var that      = this
-        
+    Bjuiajax.prototype.ajaxForm4Iframe = function($form, successFn) {
         $.ajax({
             type        : $form.attr('method') || 'POST',
             url         : $form.attr('action'),
@@ -71,15 +69,12 @@
             iframe      : true,
             processData : false,
             cache       : false,
-            success     : function(data, textStatus, jqXHR) {
-                callback ? callback.apply(that, [data, $form]) : $.proxy(that.ajaxCallback(data), that)
-            },
-            error       : $.proxy(that.ajaxError, that)
+            success     : successFn,
+            error       : $.proxy(this.ajaxError, this)
         })
     }
     
-    Bjuiajax.prototype.ajaxForm4Html5 = function($form, callback) {
-        var that     = this
+    Bjuiajax.prototype.ajaxForm4Html5 = function($form, successFn) {
         var formData = new FormData($form[0])
         
         $.ajax({
@@ -90,17 +85,32 @@
             processData : false,
             dataType    : 'json',
             cache       : false,
-            success     : function(data, textStatus, jqXHR) {
-                callback ? callback.apply(that, [data, $form]) : $.proxy(that.ajaxCallback(data), that)
-            },
-            error       : $.proxy(that.ajaxError, that)
+            success     : successFn,
+            error       : $.proxy(this.ajaxError, this)
         })
     }
     
-    Bjuiajax.prototype.ajaxForm = function(callback) {
+    Bjuiajax.prototype.ajaxForm4Serialize = function($form, successFn) {
+        $.ajax({
+            type        : $form.attr('method') || 'POST',
+            url         : $form.attr('action'),
+            data        : $form.serializeArray(),
+            dataType    : 'json',
+            cache       : false,
+            success     : successFn,
+            error       : $.proxy(this.ajaxError, this)
+        })
+    }
+    
+    Bjuiajax.prototype.ajaxForm = function(options) {
+        alert('ajax')
         var that      = this
         var $form     = this.$element,
+            callback  = options.callback,
+            enctype   = $form.attr('enctype'),
             $target   = $form.closest('.bjui-layout')
+        
+        if (callback) callback = callback.toFunc()
         
         if (!$target || !$target.length) {
             if (that.tools.getTarget() == Bjuiajax.NAVTAB) $target = $.CurrentNavtab
@@ -113,16 +123,23 @@
             $target.trigger('bjui.ajaxStop')
         })
         
+        var successFn = function(data, textStatus, jqXHR) {
+            callback ? callback.apply(that, [data, $form]) : $.proxy(that.ajaxCallback(data), that)
+        }
         var _submitFn = function() {
-            if (window.FormData) {
-                that.ajaxForm4Html5($form, callback)
+            if (enctype && enctype == 'multipart/form-data') {
+                if (window.FormData) {
+                    that.ajaxForm4Html5($form, successFn)
+                } else {
+                    that.ajaxForm4Iframe($form, successFn)
+                }
             } else {
-                that.ajaxForm4Iframe($form, callback)
+                that.ajaxForm4Serialize($form, successFn)
             }
         }
         
-        if (that.options.confirmMsg) {
-            $form.alertmsg('confirm', that.options.confirmMsg, {okCall: _submitFn})
+        if (options.confirmMsg) {
+            $form.alertmsg('confirm', options.confirmMsg, {okCall: _submitFn})
         } else {
             _submitFn()
         }
@@ -170,18 +187,22 @@
         
         if (that.options.reload) {
             var form = that.tools.getPagerForm($target)
-            var url  = null, type = 'GET'
+            var url  = null, type = null
             
             if (form) {
                 url  = form.attr('action')
                 type = form.attr('method') || 'GET'
-            } else url = $target.data('url')
+            } else {
+                url  = $target.data('url')
+                type = $target.data('type') || 'GET'
+            }
             
             if (!url) return
             
             $target.ajaxUrl({url: url, type: type})
         }
-        
+        if (that.options.reloadNavtab)
+            setTimeout(function() { that.$element.navtab('refresh') }, 100)
         if (json.forward) {
             var _forward = function() {
                 $target.ajaxUrl({url: json.forward})
@@ -250,7 +271,7 @@
     
     Bjuiajax.prototype.pageCallback = function(options, target) {
         var that    = this
-        var op      = options//$.extend(BJUI.pageInfo, options)
+        var op      = options
         var $target = target || null
         var form    = null
         
@@ -275,6 +296,7 @@
     Bjuiajax.prototype.doSearch = function(options) {
         var that = this, $element = that.$element, form = $element[0], $target = $element.closest('.bjui-layout')
         
+        if (!options.url) options.url = $element.attr('action')
         if (!options.url) {
             BJUI.debug('Error trying to submit form action: action url is undefined!')
             return false
@@ -316,7 +338,7 @@
     }
     
     Bjuiajax.prototype.doLoad = function(options) {
-        var that = this, $element = that.$element, form = $element[0], $target = options.target ? $(options.target) : null
+        var that = this, $element = that.$element, type = options.type || 'GET', $target = options.target ? $(options.target) : null
         
         if (!options.url) {
             BJUI.debug('Error trying to open a ajax link: The url is undefined!')
@@ -339,7 +361,23 @@
         }
         
         if ($target && $target.length) {
-            $target.ajaxUrl({ type:'POST', url:options.url, data:options.data || {} })
+            $target
+                .data('url', options.url).data('type', type).data('data', options.data)
+                .ajaxUrl({ type:type, url:options.url, data:options.data || {} })
+        }
+    }
+    
+    Bjuiajax.prototype.refreshLayout = function(options) {
+        var that = this, $element = that.$element, $target = options.target ? $(options.target) : null
+        
+        if ($target && $target.length) {
+            var url  = options.url || $target.data('url'),
+                type = options.type || $target.data('type'),
+                data = options.data || $target.data('data') || {}
+            
+            $target
+                .data('url', url).data('type', type).data('data', data)
+                .ajaxUrl({ type:type, url:url, data:data })
         }
     }
     
@@ -484,7 +522,7 @@
         }
     }
     
-    Bjuiajax.prototype.doDelChecked = function(options) {
+    Bjuiajax.prototype.doAjaxChecked = function(options) {
         var that = this, $element = that.$element, $target = options.target ? $(options.target) : null
 
         if (!options.url) {
@@ -589,12 +627,21 @@
     // BJUIAJAX DATA-API
     // ==============
     
+    $(document).on('submit.bjui.bjuiajax.data-api', '[data-toggle="ajaxform"]', function(e) {
+        var $this   = $(this)
+        
+        if (!$this.isTag('form')) return
+        
+        Plugin.call($this, 'ajaxForm', $this.data())
+        
+        e.preventDefault()
+    })
+    
     $(document).on('submit.bjui.bjuiajax.data-api', '[data-toggle="ajaxsearch"]', function(e) {
         var $this   = $(this)
         var options = $this.data()
         
         if (!$this.isTag('form')) return
-        if (!options.url) options.url = $this.attr('action')
         
         Plugin.call($this, 'doSearch', options)
         
@@ -608,7 +655,6 @@
         if (!$form || !$form.length) return
         
         options = $form.data()
-        if (!options.url) options.url = $form.attr('action')
         options.clearQuery = $this.data('clearQuery') || true
         
         Plugin.call($form, 'doSearch', options)
@@ -625,6 +671,23 @@
         Plugin.call($this, 'doLoad', options)
         
         e.preventDefault()
+    })
+    
+    $(document).on(BJUI.eventType.initUI, function(e) {
+        var $box    = $(e.target).find('[data-toggle="autoajaxload"]')
+        var options = $box.data()
+        
+        if ($box && $box.length) {
+            options.target = $box[0]
+            Plugin.call($box, 'doLoad', options)
+        }
+    })
+    
+    $(document).on('click.bjui.bjuiajax.data-api', '[data-toggle="refreshlayout"]', function(e) {
+        var $this   = $(this)
+        var options = $this.data()
+        
+        Plugin.call($this, 'refreshLayout', options)
     })
     
     $(document).on('click.bjui.bjuiajax.data-api', '[data-toggle="doajax"]', function(e) {
@@ -660,13 +723,13 @@
         e.preventDefault()
     })
     
-    $(document).on('click.bjui.bjuiajax.data-api', '[data-toggle="dodelchecked"]', function(e) {
+    $(document).on('click.bjui.bjuiajax.data-api', '[data-toggle="doajaxchecked"]', function(e) {
         var $this   = $(this)
         var options = $this.data()
         
         if (!options.url) options.url = $this.attr('href')
         
-        Plugin.call($this, 'doDelChecked', options)
+        Plugin.call($this, 'doAjaxChecked', options)
         
         e.preventDefault()
     })

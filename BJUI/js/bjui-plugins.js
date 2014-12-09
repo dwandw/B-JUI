@@ -19,7 +19,7 @@
     
     $(document).on(BJUI.eventType.initUI, function(e) {
         var $box    = $(e.target)
-        
+
         // UI init begin...
         
         /* i-check */
@@ -111,16 +111,10 @@
         
         /* form validate */
         $box.find('form[data-toggle="validate"]').each(function() {
-            var $element = $(this)
-            var callback = $element.data('callback')
-            
-            if (!$element.attr('method')) $element.attr('method', 'POST')
-            if (callback) callback = callback.toFunc()
-            
-            $element
+            $(this)
                 .validator({
                     valid: function(form) {
-                        $(form).bjuiajax('ajaxForm', callback)
+                        $(form).bjuiajax('ajaxForm', $(form).data())
                     },
                     validClass: 'ok',
                     theme: 'red_right_effect'
@@ -377,9 +371,6 @@
             function _beforeDrop(treeId, treeNodes, targetNode, moveType) {
                 return targetNode ? targetNode.drop !== false : true
             }
-            
-            if (op.onClick)
-                $this.find('li > a').click(function(e) { e.preventDefault() })
         })
         
         /* zTree - drop-down selector */
@@ -578,6 +569,11 @@
             }
         })
         
+        /* not validate */
+        $box.find('form[data-toggle="ajaxform"]').each(function() {
+            $(this).validator({ignore: ':input'})
+            $(this).validator('destroy')
+        })
     })
     
 }(jQuery);

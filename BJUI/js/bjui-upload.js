@@ -27,7 +27,7 @@
     }
     
     Upload.DEFAULTS = {
-        fileTypeExts        : '',     //允许上传的文件类型，格式'*.jpg;*.doc'
+        fileTypeExts        : '*.jpg;*.png',     //允许上传的文件类型，格式'*.jpg;*.doc'
         uploader            : '',     //文件提交的地址
         auto                : false,  //是否开启自动上传
         method              : 'POST', //发送请求的方式，get或post
@@ -176,7 +176,7 @@
                 }
                 this.showProgress(file.id, uploadedSize, file.size)
                 //判断是否预览图片
-                if (options.previewImg) {
+                if (options.previewImg && file.type.indexOf('image') != -1) {
                     var $prevbox = $temp.find('> .preview > .img')
                     
                     if (options.previewLoadimg) $prevbox.html('<img src="'+ options.previewLoadimg +'" height="114">')
@@ -471,20 +471,88 @@
         var args     = arguments
         var property = option
         
-        return this.each(function () {
-            var $this   = $(this)
-            var options = $.extend({}, Upload.DEFAULTS, $this.data(), typeof option == 'object' && option)
-            var data    = $this.data('bjui.upload')
+        if (window.FileReader) {
+            return this.each(function () {
+                var $this   = $(this)
+                var options = $.extend({}, Upload.DEFAULTS, $this.data(), typeof option == 'object' && option)
+                var data    = $this.data('bjui.upload')
             
-            if (!data) $this.data('bjui.upload', (data = new Upload(this, options)))
-            if (typeof property == 'string' && $.isFunction(data[property])) {
-                [].shift.apply(args)
-                if (!args) data[property]()
-                else data[property].apply(data, args)
-            } else {
-                data.init()
-            }
-        })
+                if (!data) $this.data('bjui.upload', (data = new Upload(this, options)))
+                if (typeof property == 'string' && $.isFunction(data[property])) {
+                    [].shift.apply(args)
+                    if (!args) data[property]()
+                    else data[property].apply(data, args)
+                } else {
+                    data.init()
+                }
+            })
+        } else { //for IE8-9
+            this.each(function() {
+                if (!$.fn.uploadify) return
+                var options = {
+                    swf           : BJUI.PLUGINPATH +'uploadify/scripts/uploadify.swf',
+                    fileTypeExts  : '*.jpg;*.png',
+                    id            : 'fileInput',
+                    fileObjName   : 'file',
+                    fileSizeLimit : 204800,
+                    buttonText    : '选择上传文件',
+                    auto          : false,
+                    multi         : false,
+                    height        : 24
+                }
+                var $element = $(this), op = $element.data()
+                
+                if (!op.id) op.id = $element.attr('id')
+                $.extend(options, op)
+                if (!(options.uploader)) {
+                    BJUI.debug('Upload Plugin: The options uploader is undefined!')
+                    return
+                } else {
+                    options.uploader = decodeURI(options.uploader).replacePlh($element.closest('.unitBox'))
+                    
+                    if (!options.uploader.isFinishedTm()) {
+                        $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                        BJUI.debug('Upload Plugin: The options uploader is incorrect: '+ options.uploader)
+                        return
+                    }
+                    
+                    options.uploader = encodeURI(options.uploader)
+                }
+                if (options.id == 'fileInput') options.id = options.id + (new Date().getTime())
+                var $file = $('<input type="file" name="'+ options.name +'" id="'+ options.id +'">')
+                
+                if (options.onInit && typeof options.onInit == 'string')
+                    options.onInit = options.onInit.toFunc()
+                if (options.onCancel && typeof options.onCancel == 'string')
+                    options.onCancel = options.onCancel.toFunc()
+                if (options.onSelect && typeof options.onSelect == 'string')
+                    options.onSelect = options.onSelect.toFunc()
+                if (options.onUploadSuccess && typeof options.onUploadSuccess == 'string')
+                    options.onUploadSuccess = options.onUploadSuccess.toFunc()
+                if (options.onUploadComplete && typeof options.onUploadComplete == 'string')
+                    options.onUploadComplete = options.onUploadComplete.toFunc()
+                if (options.onUploadError && typeof options.onUploadError == 'string')
+                    options.onUploadError   = options.onUploadError.toFunc()
+                
+                $file.appendTo($element)
+                if (!options.auto) {
+                    var $upBtn = $('<button class="btn btn-orange" data-icon="cloud-upload">开始上传</button>')
+                    
+                    $upBtn
+                        .hide()
+                        .insertAfter($element)
+                        .click(function() {
+                            $file.uploadify('upload', '*');
+                            $(this).hide()
+                        })
+                        
+                    options.onSelect = function() {
+                        $upBtn.show()
+                    }
+                }
+                $file.uploadify(options)
+            })
+        }
     }
     
     var old = $.fn.upload
@@ -508,45 +576,7 @@
         
         if (!$this.length) return
         
-        if (window.FileReader) {
-            Plugin.call($this)
-        } else {
-            if (!$.fn.uploadify) return
-            var options = {
-                swf           : BJUI.PLUGINPATH +'uploadify/scripts/uploadify.swf',
-                id            : 'fileInput',
-                fileObjName   : 'file',
-                buttonText    : '选择上传文件',
-                auto          : false,
-                multi         : false,
-                height        : 26
-            }
-            
-            $this.each(function() {
-                var op = $(this).data()
-                
-                if (!op.id) op.id = $(this).attr('id')
-                $.extend(options, op)
-                if (options.id == 'fileInput') options.id = options.id + (new Date().getTime())
-                var $file = $('<input type="file" name="'+ options.name +'" id="'+ options.id +'">')
-                
-                if (options.onInit && typeof options.onInit == 'string')
-                    options.onInit = options.onInit.toFunc()
-                if (options.onCancel && typeof options.onCancel == 'string')
-                    options.onCancel = options.onCancel.toFunc()
-                if (options.onSelect && typeof options.onSelect == 'string')
-                    options.onSelect = options.onSelect.toFunc()
-                if (options.onUploadSuccess && typeof options.onUploadSuccess == 'string')
-                    options.onUploadSuccess = options.onUploadSuccess.toFunc()
-                if (options.onUploadComplete && typeof options.onUploadComplete == 'string')
-                    options.onUploadComplete = options.onUploadComplete.toFunc()
-                if (options.onUploadError && typeof options.onUploadError == 'string')
-                    options.onUploadError   = options.onUploadError.toFunc()
-                
-                $file.appendTo($(this))
-                $file.uploadify(options)
-            })
-        }
+        Plugin.call($this)
     })
 
 }(jQuery);

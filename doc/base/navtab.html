@@ -1,0 +1,35 @@
+<div class="bjui-pageContent">
+    <div class="pageFormContent" data-layout-h="0">
+        <div class="bjui-doc">
+            <h3 class="page-header">标签工作区(navtab)</h3>
+            <blockquote>
+                <p>B-JUI框架的整个工作区部分就是一个navtab组件，本组件位于主页面的"<code>#bjui-container</code>"容器内，固定的html结构如下：</p>
+            </blockquote>
+            <pre class="brush: html">
+                <div id="bjui-navtab" class="tabsPage">
+                    <div class="tabsPageHeader">
+                        <div class="tabsPageHeaderContent">
+                            <ul class="navtab-tab nav nav-tabs">
+                                <li data-tabid="main" class="main active"><a href="javascript:;"><span>我的主页</span></a></li>
+                            </ul>
+                        </div>
+                        <div class="tabsLeft"><i class="fa fa-angle-double-left"></i></div>
+                        <div class="tabsRight"><i class="fa fa-angle-double-right"></i></div>
+                        <div class="tabsMore"><i class="fa fa-angle-double-down"></i></div>
+                    </div>
+                    <ul class="tabsMoreList">
+                        <li><a href="javascript:;">我的主页</a></li>
+                    </ul>
+                    <div class="navtab-panel tabsPageContent layoutBox">
+                        各页片内容区域
+                    </div>
+                </div>
+            </pre>
+        </div>
+    </div>
+    <div class="bjui-footBar">
+        <ul>
+            <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+        </ul>
+    </div>
+</div>

@@ -26,6 +26,7 @@
         this.$box     = $(this.$element.wrap('<div class="bjui-tags"></div>')).parent()
         this.timeout  = null
         this.$tagsArr = {}
+        this.tags     = []
     }
     
     Tags.DEFAULTS = {
@@ -37,6 +38,10 @@
         max      : 0,         // The maximum allowable number of tags(0=unlimited)
         clear    : false,     // If not found, clear the input characters
         lightCls : 'tags-highlight'
+    }
+    
+    Tags.EVENTS = {
+        afterCreated : 'aftercreated.bjui.tags'
     }
     
     Tags.prototype.TOOLS = function() {
@@ -98,25 +103,25 @@
                 case BJUI.keyCode.ENTER:
                     if (options.max > 0 && that.$tagsArr.length >= options.max) return false
                     
-                    var label = false, value = false
+                    var label = false, value = false, item = null
                     var $selectedItem = that.$menu && that.$menu.find('> .'+ options.lightCls)
                     
                     if ($selectedItem && $selectedItem.length) {
                         label = $selectedItem.text()
-                        value = $selectedItem.data('value')
+                        item  = $selectedItem.data('item')
+                        value = item.value
                     } else {
                         label = $.trim(that.$element.val())
                         
                         if (!label.length) return false
                         if (options.clear) {
-                            if ($.inArray(label, tags) == -1) {
+                            if ($.inArray(label, that.tags) == -1) {
                                 that.$element.val('')
                                 return false
                             }
                         }
                         value = label
                     }
-                    
                     if (!label) return
                     
                     /* Check the repeatability */
@@ -138,6 +143,9 @@
                     that.tools.removeMenu()
                     that.$element.val('')
                     
+                    //events
+                    $.proxy(that.tools.onAfterCreated(item, value), that)
+                    
                     return false
                     break
                 }
@@ -151,8 +159,16 @@
                 if (options.max > 0 && that.$tagsArr.length >= options.max) return
                 
                 var term = that.$element.val(), $menu = that.$box.find('> .tags-menu'), tags = [], $item = null
+                var $parentBox = that.$element.closest('.navtab-panel').length ? $.CurrentNavtab : $.CurrentDialog
                 
+                if (that.$element.closest('.bjui-layout').length) $parentBox = that.$element.closest('.bjui-layout')
                 if (term.length == 0) return
+                
+                that.$element.one('ajaxStart', function() {
+                    $parentBox.trigger('bjui.ajaxStart')
+                }).one('ajaxStop', function() {
+                    $parentBox.trigger('bjui.ajaxStop')
+                })
                 
                 $.ajax({
                     url      : options.url,
@@ -167,11 +183,13 @@
                             $menu.empty().hide().appendTo(that.$box)
                             
                             for (var i = 0; i < json.length; i++) {
-                                $item = $('<li class="tags-item">'+ json[i].label + '</li>').attr('data-value', json[i].value)
+                                $item = $('<li class="tags-item">'+ json[i].label + '</li>').data('item', json[i])
                                 $item.appendTo($menu)
                                 tags.push(json[i].label)
                             }
 
+                            that.tags = tags
+                            
                             $menu
                                 .css({'top':that.$element.position().top + (that.$element.outerHeight()), 'left':that.$element.position().left})
                                 .fadeIn()
@@ -183,7 +201,8 @@
                                     })
                                     .click(function() {
                                         var label    = $(this).text()
-                                        var value    = $(this).data('value')
+                                        var item     = $(this).data('item')
+                                        var value    = item.value
                                         var isRepeat = false
                                         
                                         that.$box.find('input:hidden').each(function() {
@@ -203,6 +222,9 @@
                                         
                                         $menu.remove()
                                         that.$element.val('')
+                                        
+                                        //events
+                                        $.proxy(that.tools.onAfterCreated(item, value), that)
                                     })
                             
                             that.$menu = $menu
@@ -230,11 +252,21 @@
                     })
                 
                 var $hidden = $('<input type="hidden" name="'+ that.options.tagname +'">').val(value)
+                
                 $hidden.appendTo(that.$box)
                 that.$tagsArr = that.$box.find('input[name="'+ that.options.tagname +'"]')
             },
             removeMenu: function() {
                 if (that.$menu) that.$menu.remove()
+            },
+            onAfterCreated: function(item, value) {
+                var alltags = []
+                
+                that.$tagsArr.length && that.$tagsArr.each(function() {
+                    alltags.push($(this).val())
+                })
+                
+                that.$element.trigger(Tags.EVENTS.afterCreated, {item:item, value:value, tags:alltags.join(',')})
             }
         }
         
