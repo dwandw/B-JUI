@@ -130,6 +130,8 @@
                             if ($child.length) {
                                 if ($child.is('input:checkbox') || $child.is('input:radio')) {
                                     $child.filter('[value="'+ val +'"]').prop('checked', true)
+                                } else if ($child.isTag('select')) {
+                                    if (typeof $td.data('val') != 'undefined') $child.find('option[value="'+ $td.data('val') +'"]').attr('selected', 'selected')
                                 } else if ($pic.length) {
                                     if ($td.data('val')) $th.find('.pic-name').val($td.data('val'))
                                     $pic.html($td.html())
@@ -158,10 +160,12 @@
                 
                 function _doEdit($tr) {
                     $tr.removeClass('readonly').find('> td *').each(function() {
-                        var $this = $(this), toggle = $this.attr('data-toggle-old')
+                        var $this = $(this), $td = $this.closest('td'), toggle = $this.attr('data-toggle-old')
                         
-                        if ($this.isTag('select'))
+                        if ($this.isTag('select')) {
+                            if (typeof $td.data('val') != 'undefined') $this.val($td.data('val') +'')
                             $this.prop('disabled', false).selectpicker('refresh')
+                        }   
                         if ($this.is(':checkbox') || $this.is(':radio'))
                             $this.prop('disabled', false).closest('.icheckbox_minimal-purple').removeClass('disabled')
                         if ($this.is(':radio'))
