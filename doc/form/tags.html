@@ -125,7 +125,7 @@
             </table>
             <p>这样监听tags的事件：<code>mytags - selector</code>表示触发自动完成标签的input选择器</p>
             <pre class="brush: js">
-                $(document).on('aftercreated.bjui.tags', '.mytags-type', function(e, data) {
+                $(document).on('aftercreated.bjui.tags', 'mytags - selector', function(e, data) {
                     var value = data.value // 当前创建的标签值
                     var item  = data.item  // 当前选定项的值(object，具体值由返回JSON决定)
                     var tags  = data.tags  // 所有已生成标签的值，以英文逗号(,)分隔

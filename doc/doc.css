@@ -13,6 +13,7 @@
 .bjui-doc .table{margin-bottom:15px;}
 .bjui-doc td{line-height:1.7;}
 .bjui-doc .syntaxhighlighter *{font-size:12px !important; line-height:1.5 !important;}
+.bjui-doc .bjui-tablefixed .table{margin-bottom:0;}
 
 /*
 

@@ -129,9 +129,9 @@
                         if (!$td.data('noedit')) {
                             if ($child.length) {
                                 if ($child.is('input:checkbox') || $child.is('input:radio')) {
-                                    $child.filter('[value="'+ val +'"]').prop('checked', true)
+                                    $child.filter('[value="'+ val +'"]').attr('checked', 'checked')
                                 } else if ($child.isTag('select')) {
-                                    if (typeof $td.data('val') != 'undefined') $child.find('option[value="'+ $td.data('val') +'"]').attr('selected', 'selected')
+                                    $child.find('option[value="'+ $td.data('val') +'"]').attr('selected', 'selected')
                                 } else if ($pic.length) {
                                     if ($td.data('val')) $th.find('.pic-name').val($td.data('val'))
                                     $pic.html($td.html())
@@ -160,14 +160,15 @@
                 
                 function _doEdit($tr) {
                     $tr.removeClass('readonly').find('> td *').each(function() {
-                        var $this = $(this), $td = $this.closest('td'), toggle = $this.attr('data-toggle-old')
+                        var $this = $(this), $td = $this.closest('td'), val = $td.data('val'), toggle = $this.attr('data-toggle-old')
                         
+                        if (typeof val == 'undefined') val = $td.html()
+                        if ($td.data('notread')) return true
                         if ($this.isTag('select')) {
-                            if (typeof $td.data('val') != 'undefined') $this.val($td.data('val') +'')
-                            $this.prop('disabled', false).selectpicker('refresh')
+                            $this.val($td.data('val')).prop('disabled', false).selectpicker('refresh')
                         }   
                         if ($this.is(':checkbox') || $this.is(':radio'))
-                            $this.prop('disabled', false).closest('.icheckbox_minimal-purple').removeClass('disabled')
+                            $this.val($td.data('val')).prop('disabled', false).closest('.icheckbox_minimal-purple').removeClass('disabled')
                         if ($this.is(':radio'))
                             $this.prop('disabled', false).closest('.iradio_minimal-purple').removeClass('disabled')
                         if (toggle) {
@@ -187,8 +188,9 @@
                 }
                 function _doRead($tr) {
                     $tr.addClass('readonly').find('> td *').each(function() {
-                        var $this = $(this), toggle = $this.attr('data-toggle')
+                        var $this = $(this), $td = $this.closest('td'), toggle = $this.attr('data-toggle')
                         
+                        if ($td.data('notread')) return true
                         if ($this.isTag('select'))
                             $this.prop('disabled', true).selectpicker('refresh')
                         if ($this.is(':checkbox'))

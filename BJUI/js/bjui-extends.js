@@ -66,23 +66,24 @@
          */
         layoutH: function($refBox) {
             return this.each(function() {
-                var $this    = $(this)
-                var $target  = null
+                var $this     = $(this)
+                var $target   = null
+                var $fixedBox = null
+                var $unitBox  = null
                 
                 if ($refBox && $refBox.length) $this.data('bjui.layout', ($target = $refBox))
-                else $target = $this.data('bjui.layout') || $this.closest('div.layoutBox')
+                else $target  = $this.data('bjui.layout') || $this.closest('div.layoutBox')
                 
-                var iRefH    = $target.height()
-                var iLayoutH = parseInt($this.data('layoutH')) || 0
-                var iH       = 0
+                var iRefH     = $target.height()
+                var iLayoutH  = parseInt($this.data('layoutH')) || 0
+                var iH        = 0
                 
                 if (!iLayoutH) {
-                    var $unitBox   = $this.closest('div.bjui-layout')
-                    
+                    $unitBox = $this.closest('div.bjui-layout')
                     if (!$unitBox.length) $unitBox = $this.closest('div.unitBox')
+                    $fixedBox  = $unitBox.find('.bjui-tablefixed')
                     
                     var fixedH     = 0
-                    var $fixedBox  = $unitBox.find('.bjui-tablefixed')
                     var fixedBoxH  = 0
                     var fixedTh    = 0
                     
@@ -94,7 +95,7 @@
                         }
                     })
                     
-                    if ($fixedBox.length && (!$fixedBox.closest('.bjui-layout').length || $target.hasClass('bjui-layout'))) {
+                    if (!$fixedBox.hasClass('fixedH') && $fixedBox.length && (!$fixedBox.closest('.bjui-layout').length || $target.hasClass('bjui-layout'))) {
                         if ($fixedBox[0].scrollWidth > $fixedBox[0].clientWidth || $fixedBox[0].scrollWidth > $fixedBox[0].offsetWidth) {
                             fixedBoxH = $fixedBox[0].offsetHeight - $fixedBox[0].clientHeight
                         }
@@ -108,6 +109,10 @@
                     $this.removeAttr('data-layout-h').wrap('<div data-layout-h="'+ iLayoutH +'" style="overflow:auto;width:100%;height:'+ iH +'px"></div>')
                 } else {
                     $this.height(iH).css('overflow','auto')
+                }
+                if ($fixedBox && $fixedBox.length) {
+                    if ($this[0].scrollWidth != $this[0].offsetWidth)
+                        $fixedBox.tablefixed('resetWidth')
                 }
             })
         },

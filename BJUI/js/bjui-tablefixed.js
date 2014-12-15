@@ -27,11 +27,14 @@
         this.tools    = this.TOOLS()
     }
     
+    Tablefixed.SCROLLW  = 18
+    
     Tablefixed.DEFAULTS = {
         width: '100%'
     }
     
     Tablefixed.prototype.TOOLS = function() {
+        var that  = this
         var tools = {
             getLeft: function($obj) {
                 var width = 0
@@ -40,7 +43,7 @@
                     width += $(this).outerWidth()
                 })
                 
-                return width - 1
+                return width
             },
             getRight: function($obj) {
                 var width = 0
@@ -50,28 +53,6 @@
                 })
                 
                 return width - 1
-            },
-            getTop: function($obj) {
-                var height = 0
-                
-                $obj.parent().prevAll().each(function() {
-                    height += $(this).outerHeight()
-                })
-                
-                return height
-            },
-            getHeight: function($obj, $parent) {
-                var height = 0
-                var $head  = $obj.parent()
-                
-                $head.nextAll().andSelf().each(function() {
-                    height += $(this).outerHeight()
-                })
-                $parent.find('.fixedtableTbody').children().each(function() {
-                    height += $(this).outerHeight()
-                })
-                
-                return height
             },
             getCellNum: function($obj) {
                 return $obj.prevAll().andSelf().size()
@@ -137,12 +118,34 @@
         return tools
     }
     
+    Tablefixed.prototype.resetWidth = function() {
+        var $fixed = this.$element,
+            width  = $fixed.width(),
+            $table = $fixed.find('table'),
+            tableW = $table && $table.width(),
+            $ths   = $table.eq(0) && $table.eq(0).find('tr:first-child > th'),
+            $tds   = $table.eq(1) && $table.eq(1).find('tr:first-child > td')
+        
+        if ($table && ((width - tableW)  < Tablefixed.SCROLLW)) {
+            var fixedW = parseInt((width - tableW) / $ths.length)
+            
+            $table.width(width - Tablefixed.SCROLLW)
+            $ths.each(function(i) {
+                var tw = parseInt($(this).css('width'))
+                
+                $(this).width(tw + fixedW)
+                if ($tds.eq(i)) $tds.eq(i).width(tw + fixedW)
+            })
+        }
+    }
+    
     Tablefixed.prototype.init = function() {
         if (!this.$element.isTag('table')) return
         
         this.$container = this.$element.parent().addClass('bjui-resizeGrid')
         this.$fixed     = undefined
-        var width       = this.$container.width()
+        var width       = this.$container.innerWidth()
+        var height      = this.options.height
         
         if (typeof this.options.width == 'string' && this.options.width.indexOf('%')) {
             this.options.newWidth = width * (this.options.width.replace('%', '') / 100)
@@ -157,6 +160,8 @@
         this.initBody()
         this.resizeCol()
         this.resizeGrid()
+        
+        if (height) this.$fixed.height(height).addClass('fixedH')
     }
     
     Tablefixed.prototype.initHead = function() {
@@ -215,13 +220,11 @@
             var style = [], width = $th.innerWidth()
             
             style[0]  = parseInt(width)
-            //style[1]  = $th.attr('align')
-            //style[2]  = $th.attr('class')
             fixedW   += style[0]
             styles[styles.length] = style
         })
         
-        fixedW = parseInt((this.options.newWidth - fixedW) / thLen)
+        fixedW = parseInt((this.options.newWidth - Tablefixed.SCROLLW - fixedW) / thLen)
         var $ths = $thead.find('> tr:eq(0) > th')
         
         this.options.$ths = $ths
@@ -229,11 +232,8 @@
             var $th = $(this), style = styles[i], w = $th.attr('width')
             
             $th
-                //.addClass(style[1])
-                //.addClass(style[2])
                 .removeAttr('align')
                 .width(style[0] + fixedW)
-                //.attr('title', $th.text())
             
             style[0] = (style[0] + fixedW)
             if (w) {
@@ -248,7 +248,7 @@
             $th.html('<div class="fixedtableCol">'+ $th.html() +'</div>')
         })
         
-        $thead.wrap('<div class="fixedtableHeader"><div class="fixedtableThead"><table class="table table-bordered" style="width:'+ (this.options.newWidth - 20) + 'px; max-width:'+ (this.options.newWidth - 20) +'px;"></table></div></div>')
+        $thead.wrap('<div class="fixedtableHeader" style="width:'+ (this.options.newWidth - Tablefixed.SCROLLW) + 'px;overflow:hidden;"><div class="fixedtableThead"><table class="table table-bordered" style="width:'+ (this.options.newWidth - Tablefixed.SCROLLW) + 'px; max-width:'+ (this.options.newWidth - Tablefixed.SCROLLW) +'px;"></table></div></div>')
         this.$fixed.append('<div class="resizeMarker" style="display:none; height:300px; left:57px;"></div><div class="resizeProxy" style="left:377px; display:none; height:300px;"></div>')
     }
     
@@ -258,12 +258,14 @@
         var $tds      = $tbody.find('> tr:first-child > td')
         var styles    = this.options.styles
         
+        if (this.options.height) layoutStr = 'style="height:'+ (this.options.height - this.$fixed.find('.fixedtableHeader').height()) +'px; overflow-y:auto;"'
+        
         $tds.each(function(i) {
             if (i < styles.length) $(this).width(styles[i][0])
         })
         
         this.options.$tds = $tds
-        $tbody.wrap('<div class="fixedtableScroller"'+ layoutStr +'><div class="fixedtableTbody"><table style="width:'+ (this.options.newWidth - 20) +'px; max-width:'+ (this.options.newWidth - 20) +'px;"></table></div></div>')
+        $tbody.wrap('<div class="fixedtableScroller"'+ layoutStr +' style="width:'+ (this.options.newWidth) +'px;"><div class="fixedtableTbody"><table style="width:'+ (this.options.newWidth - Tablefixed.SCROLLW) +'px; max-width:'+ (this.options.newWidth - Tablefixed.SCROLLW) +'px;"></table></div></div>')
         
         if (!this.$element.attr('class')) $tbody.parent().addClass('table table-striped table-bordered table-hover')
         else $tbody.parent().addClass(this.$element.attr('class'))
@@ -309,9 +311,9 @@
                         $fixed.find('> .resizeProxy')
                             .show()
                             .css({
-                                left:   tools.getRight($resizeTh) + ofLeft,
-                                top:    tools.getTop($th),
-                                height: tools.getHeight($th, $fixed),
+                                left:   tools.getRight($resizeTh) + ofLeft + $fixed.position().left,
+                                top:    $fixed.position().top,
+                                height: $fixed.height(),
                                 cursor: 'col-resize'
                             })
                             .basedrag({
@@ -325,7 +327,6 @@
                                     var cellNum = tools.getCellNum($resizeTh)
                                     var oldW    = $resizeTh.width(), newW = $resizeTh.width() + move
                                     var $dcell  = $tds.eq(cellNum - 1)
-                                    var scrolW  = $fixed.find('> .fixedtableScroller').width()
                                     var tableW  = $fixed.find('> .fixedtableHeader .table').width()
                                     
                                     $resizeTh.width(newW)
@@ -333,6 +334,18 @@
                                     
                                     $fixed.find('.table').width(tableW + move)
                                     $fixed.find('.resizeMarker, .resizeProxy').hide()
+                                    
+                                    if ((tableW + move + Tablefixed.SCROLLW) < that.options.newWidth) {
+                                        $fixed.find('.fixedtableScroller').width(tableW + move + Tablefixed.SCROLLW)
+                                    } else {
+                                        var newW = $fixed.closest('.bjui-resizeGrid').innerWidth()
+                                        if ((tableW + move + Tablefixed.SCROLLW) < newW) newW = (tableW + move + Tablefixed.SCROLLW)
+                                        
+                                        $fixed.find('.fixedtableHeader').width(newW - Tablefixed.SCROLLW)
+                                        $fixed.find('.fixedtableScroller').width(newW)
+                                        $fixed.width(newW)
+                                    }
+                                    $fixed.data('resizeGrid', true)
                                 }
                             })
                         
@@ -340,9 +353,9 @@
                             .find('> .resizeMarker')
                             .show()
                             .css({
-                                left:   tools.getLeft($resizeTh) + 1 + ofLeft,
-                                top:    tools.getTop($th),
-                                height: tools.getHeight($th, $fixed)
+                                left:   tools.getLeft($resizeTh) + ofLeft + $fixed.position().left,
+                                top:    $fixed.position().top,
+                                height: $fixed.height()
                             })
                     })
                 } else {
@@ -356,11 +369,12 @@
         })
     }
     
-    Tablefixed.prototype.setOrderBy = function() {
+    Tablefixed.prototype.setOrderBy = function(options) {
         var $th       = this.$element,
             $orderBox = $th.find('.fixedtableCol'),
-            options   = this.options,
             $order    = $(FRAG.orderby.replace('#asc#', BJUI.regional.orderby.asc).replace('#desc#', BJUI.regional.orderby.desc))
+            
+        options   = options || this.options
         
         $th.addClass('orderby')
         if (options.orderDirection) $th.addClass(options.orderDirection)
@@ -379,15 +393,21 @@
         var that = this
         var _resizeGrid = function() {
             $('div.bjui-resizeGrid').each(function() {
-                var width  = $(this).innerWidth(), newWidth = width
+                var $this = $(this), width  = $(this).innerWidth(), newWidth = that.options.newWidth
+                var realWidth
                 
                 if (width) {
-                    if (typeof that.options.width == 'string' && that.options.width.indexOf('%')) {
-                        newWidth = width * (that.options.width.replace('%', '') / 100)
-                    } else {
-                        newWidth = parseInt(that.options.width) 
-                    }
-                    $(this).find('.table').width(newWidth - 20)
+                    $this.find('.bjui-tablefixed').each(function() {
+                        var $fixed = $(this)
+                        
+                        if (!$fixed.data('resizeGrid')) realWidth = width
+                        else realWidth = newWidth
+                        
+                        $fixed.width(realWidth)
+                        $fixed.find('.table').width(realWidth - Tablefixed.SCROLLW)
+                        $fixed.find('.fixedtableHeader').width(realWidth - Tablefixed.SCROLLW)
+                        $fixed.find('.fixedtableScroller').width(realWidth)
+                    })
                 }
             })
         }

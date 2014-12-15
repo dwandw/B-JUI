@@ -228,6 +228,7 @@
                 this.scrollCurrent()
                 $currentTab     = $tab
                 $.CurrentNavtab = $currentPanel = $panel
+                $.CurrentNavtab.data('id', $tab.data('tabid'))
             },
             closeTab: function(index, openTabid) {
                 this.getTabs().eq(index).remove()

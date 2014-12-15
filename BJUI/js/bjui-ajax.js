@@ -38,13 +38,16 @@
         var that  = this
         var tools = {
             getPagerForm: function($parent, args) {
-                var form     = $parent.find('#pagerForm').get(0)
+                var form     = $parent.isTag('form') ? $parent[0] : $parent.find('#pagerForm:first')
                 var pageInfo = $.extend({}, BJUI.pageInfo)
                 
-                if (form && args) {
+                if (form) {
                     for (var key in pageInfo) {
-                        if (!form[key]) $('<input type="hidden" name="'+ key +'">').appendTo($(form))
-                        if (args[key]) form[key].value = args[key]
+                        var val = ''
+                        
+                        if (args && args[key]) val = args[key]
+                        if (!form[pageInfo[key]]) $('<input type="hidden" name="'+ pageInfo[key] +'" value="'+ val +'">').appendTo($(form))
+                        else form[pageInfo[key]].value = val
                     }
                 }
                 
@@ -109,8 +112,9 @@
             enctype   = $form.attr('enctype'),
             $target   = $form.closest('.bjui-layout')
         
-        if (callback) callback = callback.toFunc()
+        that.options = options
         
+        if (callback) callback = callback.toFunc()
         if (!$target || !$target.length) {
             if (that.tools.getTarget() == Bjuiajax.NAVTAB) $target = $.CurrentNavtab
             else $target = $.CurrentDialog
@@ -311,6 +315,7 @@
             options.url = encodeURI(options.url)
         }
         
+        form = that.tools.getPagerForm($element)
         if (form[BJUI.pageInfo.pageCurrent]) form[BJUI.pageInfo.pageCurrent].value = 1
         
         if ($target && $target.length) {

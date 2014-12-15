@@ -1,0 +1,141 @@
+<div class="bjui-pageContent">
+    <div class="pageFormContent" data-layout-h="0">
+        <div class="bjui-doc">
+            <h3 class="page-header">可编辑表格</h3>
+            <blockquote>
+                <p>本节主要介绍框架的可编辑表格功能。</p>
+            </blockquote>
+            <blockquote class="point">
+                <p>可编辑表格不支持多行表头。</p>
+            </blockquote>
+            <h4>初始化</h4>
+            <ul>
+                <li>Data属性：table添加属性<code>data-toggle="tabledit"</code>，并在表头定义好需要的编辑控件即可。<br>
+                    <span class="label label-default">DOM示例：</span>　<a href="doc/table/myedit.html" data-toggle="dialog" data-id="myedit" data-title="我的可编辑表格" data-width="600" data-height="400">打开可编辑表格演示</a><br>
+                    <p>示例代码：</p>
+                    <pre class="brush: html">
+                        &lt;table class="table table-bordered table-hover table-striped table-top" data-toggle="tabledit">
+                            &lt;thead>
+                                &lt;tr>
+                                    &lt;th title="文本框">&lt;input type="text" name="test[#index#].a1" placeholder="文本框">&lt;/th>
+                                    &lt;th title="复选框">
+                                        &lt;input type="checkbox" name="test[#index#].a2" id="doc-test-a2-1[#index#]" data-toggle="icheck" value="k1" data-label="选项一">
+                                        &lt;input type="checkbox" name="test[#index#].a2" id="doc-test-a2-2[#index#]" data-toggle="icheck" value="k2" data-label="选项二">
+                                    &lt;/th>
+                                    &lt;th title="下拉菜单">
+                                        &lt;select name="test[#index#].a3" data-toggle="selectpicker">
+                                            &lt;option value="a">甲&lt;/option>
+                                            &lt;option value="b">乙&lt;/option>
+                                            &lt;option value="c">丙&lt;/option>
+                                        &lt;/select>
+                                    &lt;/th>
+                                    &lt;th title="功能按钮">&lt;button type="button" class="btn btn-default" data-toggle="dialog" data-url="doc/table/test.html" data-id="dialog-test" data-title="我的测试页面">打开测试&lt;/button>&lt;/th>
+                                    &lt;th title="" data-addtool="true" width="100">
+                                        &lt;a href="ajaxDone2.html" class="btn btn-red row-del" data-confirm-msg="确定要删除该行信息吗？">删&lt;/a>
+                                    &lt;/th>
+                                &lt;/tr>
+                            &lt;/thead>
+                            &lt;tbody>
+                                &lt;tr>
+                                    &lt;td>AAA&lt;/td>
+                                    &lt;td data-val="k2">&lt;/td>
+                                    &lt;td data-val="c">&lt;/td>
+                                    &lt;td data-original="true">--&lt;/td>
+                                    &lt;td>--&lt;/td>
+                                &lt;/tr>
+                            &lt;/tbody>
+                        &lt;/table>
+                    </pre>
+                </li>
+                <li>jQuery API：
+                    <pre class="brush: js">
+                        $(table).tabledit(options)
+                    </pre>
+                </li>
+            </ul>
+            <h4>参数（options）</h4>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>类型</th>
+                        <th>默认值</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>initnum</td>
+                        <td>int</td>
+                        <td>0</td>
+                        <td>[可选] 默认初始化行数。</td>
+                    </tr>
+                    <tr>
+                        <td>addtool</td>
+                        <td>boolean</td>
+                        <td>false</td>
+                        <td><code>适用于 thead -> th</code>[可选] 表头列显示添加行控件。</td>
+                    </tr>
+                    <tr>
+                        <td>val</td>
+                        <td>int</td>
+                        <td>null</td>
+                        <td><code>适用于 tbody -> td</code>[可选] 对应表头定义input的值（如：radio/checkbox/select/上传控件）。</td>
+                    </tr>
+                    <tr>
+                        <td>notread</td>
+                        <td>boolean</td>
+                        <td>false</td>
+                        <td><code>适用于 tbody -> td</code>[可选] 设定本单元格的元素没有只读状态（如：功能按钮）。</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+            <h4>关于添加可编辑行</h4>
+            <h5>初始化</h5>
+            <ul>
+                <li><p>DOM属性：a链接或按钮添加属性<code>data-toggle="tableditadd"</code>，再设定目标表格<code>(data-target)</code>后，点击可为编辑表格添加行。</p>
+                    <p>示例代码：</p>
+                    <pre class="brush: html">
+                        &lt;button type="button" class="btn-green" data-toggle="tableditadd" data-target="#tabledit-id" data-num="1" data-icon="plus">添加编辑行&lt;/button>
+                    </pre>
+                </li>
+                <li>jQuery API：
+                    <pre class="brush: js">
+                        $(selector).tabledit('add', target, num)
+                    </pre>
+                </li>
+            </ul>
+            <h5>参数</h5>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>类型</th>
+                        <th>默认值</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>target</td>
+                        <td>selector</td>
+                        <td>null</td>
+                        <td>[必选] 需要添加行的目标表格选择器。</td>
+                    </tr>
+                    <tr>
+                        <td>num</td>
+                        <td>int</td>
+                        <td>1</td>
+                        <td>[可选] 每次添加的行数。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="bjui-footBar">
+        <ul>
+            <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+        </ul>
+    </div>
+</div>

@@ -153,12 +153,14 @@
         if ($dialog) { //if dialog'id is exists
             var op = $dialog.data('options') || options
             
+            this.switchDialog($dialog)
+            
             if ($dialog.is(':hidden')) $dialog.show()
             if (op.url != options.url) {
                 $.extend(op, options)
                 $dialog.data('options', op)
+                
                 if (options.title) $dialog.find('> .dialogHeader > h1 > span.title').html(options.title)
-                this.switchDialog($dialog)
                 this.tools.reload($dialog)
             }
         } else { //open a new dialog
