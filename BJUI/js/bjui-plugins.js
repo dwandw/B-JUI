@@ -155,28 +155,10 @@
         })
         
         /* bootstrap - select */
-        var $selectpicker = $box.find('select[data-toggle="selectpicker"]')
-        
-        $selectpicker.each(function() {
-            var $element  = $(this)
-            var style     = $element.attr('data-style')
-            var width     = $element.attr('data-width')
-            var container = $element.attr('data-container')
-            
-            $element.addClass('show-tick')
-            if (!style) $element.attr('data-style', 'btn-default')
-            if (!width) $element.attr('data-width', 'auto')
-            if (!container) $element.attr('data-container', 'body')
-            
-            $element.selectpicker()
-        })
-        
-        /* bootstrap - select - linkage && Trigger validation */
-        $selectpicker.change(function() {
-            var $element    = $(this)
-            var $nextselect = $($element.data('nextselect'))
-            var refurl      = $element.data('refurl')
-            var _setEmpty   = function($select) {
+        var $selectpicker       = $box.find('select[data-toggle="selectpicker"]')
+        var bjui_select_linkage = function($obj, $next) {
+            var refurl    = $obj.data('refurl')
+            var _setEmpty = function($select) {
                 var $_nextselect = $($select.data('nextselect'))
                 
                 if ($_nextselect && $_nextselect.length) {
@@ -187,35 +169,63 @@
                 }
             }
             
-            if (($nextselect && $nextselect.length) && refurl) {
+            if (($next && $next.length) && refurl) {
+                var val = $obj.data('val'), nextVal = $next.data('val')
+                
+                if (typeof val == 'undefined') val = $obj.val()
                 $.ajax({
                     type     : 'POST', 
                     dataType : 'json', 
-                    url      : refurl.replace('{value}', encodeURIComponent($element.val())), 
+                    url      : refurl.replace('{value}', encodeURIComponent(val)), 
                     cache    : false,
                     data     : {},
                     success  : function(json) {
                         if (!json) return
                         
-                        var html = ''
+                        var html = '', selected = ''
                         
                         $.each(json, function(i) {
                             if (json[i] && json[i].length > 1) {
-                                html += '<option value="'+json[i][0]+'">' + json[i][1] + '</option>'
+                                if (typeof nextVal != 'undefined') selected = json[i][0] == nextVal ? ' selected' : ''
+                                html += '<option value="'+ json[i][0] +'"'+ selected +'>' + json[i][1] + '</option>'
                             }
                         })
                         
                         if (!html) {
-                            html = $nextselect.data('emptytxt') || '&nbsp;'
+                            html = $next.data('emptytxt') || '&nbsp;'
                             html = '<option>'+ html +'</option>'
                         }
                         
-                        $nextselect.html(html).selectpicker('refresh')
-                        _setEmpty($nextselect)
+                        $next.html(html).selectpicker('refresh')
+                        _setEmpty($next)
                     },
                     error   : BJUI.ajaxError
                 })
             }
+        }
+        
+        $selectpicker.each(function() {
+            var $element  = $(this)
+            var options   = $element.data()
+            var $next     = $(options.nextselect)
+            
+            $element.addClass('show-tick')
+            if (!options.style) $element.data('style', 'btn-default')
+            if (!options.width) $element.data('width', 'auto')
+            if (!options.container) $element.data('container', 'body')
+            
+            $element.selectpicker()
+            
+            if ($next && $next.length)
+                bjui_select_linkage($element, $next)
+        })
+        
+        /* bootstrap - select - linkage && Trigger validation */
+        $selectpicker.change(function() {
+            var $element    = $(this)
+            var $nextselect = $($element.data('nextselect'))
+            
+            bjui_select_linkage($element, $nextselect)
             
             /* Trigger validation */
             if ($element.attr('aria-required')) {

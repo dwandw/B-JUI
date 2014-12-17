@@ -7,7 +7,7 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                             <tr>
-                                <th width="80"></th>
+                                <th width="105"></th>
                                 <th>样例</th>
                                 <th>属性</th>
                             </tr>
@@ -61,6 +61,23 @@
                                         <option value="all">--城市--</option>
                                     </select>
                                     <select name="area" id="j_form_area" data-toggle="selectpicker" data-emptytxt="--区县--">
+                                        <option value="all">--区县--</option>
+                                    </select>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td align="right"><label class="label-control">联动(有初始值)：</label></td>
+                                <td>
+                                    <select name="province1" data-toggle="selectpicker" data-nextselect="#j_form_city1" data-refurl="ajax/city_{value}.html">
+                                        <option value="all">--省市--</option>
+                                        <option value="bj" selected>北京</option>
+                                        <option value="sh">上海</option>
+                                    </select>
+                                    <select name="city1" id="j_form_city1" data-toggle="selectpicker" data-nextselect="#j_form_area1" data-refurl="ajax/area_{value}.html" data-val="bj" data-emptytxt="--城市--">
+                                        <option value="all">--城市--</option>
+                                    </select>
+                                    <select name="area1" id="j_form_area1" data-toggle="selectpicker" data-val="朝阳" data-emptytxt="--区县--">
                                         <option value="all">--区县--</option>
                                     </select>
                                 </td>

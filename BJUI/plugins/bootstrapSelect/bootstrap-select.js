@@ -323,7 +323,7 @@ if (!Object.keys) {
         '</a>';
       };
 
-      this.$element.find('option').each(function () {
+      this.$element.find('option').each(function (_index) {
         var $this = $(this);
 
         // Get the class and text for the option
@@ -333,7 +333,7 @@ if (!Object.keys) {
             subtext = typeof $this.data('subtext') !== 'undefined' ? '<small class="muted text-muted">' + $this.data('subtext') + '</small>' : '',
             icon = typeof $this.data('icon') !== 'undefined' ? '<span class="' + that.options.iconBase + ' ' + $this.data('icon') + '"></span> ' : '',
             isDisabled = $this.is(':disabled') || $this.parent().is(':disabled'),
-            index = $this[0].index;
+            index = _index;//$this[0].index;
         if (icon !== '' && isDisabled) {
           icon = '<span>' + icon + '</span>';
         }
@@ -378,7 +378,7 @@ if (!Object.keys) {
       if (!this.multiple && this.$element.find('option:selected').length === 0 && !this.options.title) {
         this.$element.find('option').eq(0).prop('selected', true).attr('selected', 'selected');
       }
-
+      
       return $(_li.join(''));
     },
 
