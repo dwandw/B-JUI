@@ -107,6 +107,10 @@
         initLayout: function() {
             var iContentW = $(window).width() - (BJUI.ui.showSlidebar ? $('#bjui-sidebar').width() + 10 : 31) - 5
             var iContentH = $(window).height() - $('#bjui-header').height() - $('#bjui-hnav').outerHeight() - 31
+            var topH      = $('#bjui-hnav').height() + $('#bjui-header').outerHeight() + 5
+            var collH     = $('#bjui-hnav').find('.navbar-collapse').height()
+            
+            $('#bjui-leftside, #bjui-container, #bjui-splitBar, #bjui-splitBarProxy').css({top:topH})
             $('#bjui-container').width(iContentW)
             $('#bjui-container .tabsPageContent').height(iContentH - 31).find('[data-layout-h]').layoutH()
             $('#bjui-sidebar, #bjui-sidebar-s .collapse, #bjui-splitBar, #bjui-splitBarProxy').height(iContentH - 5)

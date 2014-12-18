@@ -93,7 +93,7 @@ $(function() {
         statusCode : {ok:200, error:300, timeout:301}, //[可选]
         pageInfo   : {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'}, //[可选]
         keys       : {statusCode:'statusCode', message:'message'}, //[可选]
-        ui         : {hideMode:'display'}, //[可选]hideMode:navtab组件切换的隐藏方式，支持的值有’display’，’offsets’负数偏移位置的值，默认值为’display’
+        ui         : {showSlidebar:true, hideMode:'display'}, //[可选]hideMode:navtab组件切换的隐藏方式，支持的值有’display’，’offsets’负数偏移位置的值，默认值为’display’
         debug      : true,    // [可选]调试模式 [true|false，默认false]
         theme      : 'purple' // 若有Cookie['bjui_theme'],优先选择Cookie['bjui_theme']。皮肤[五种皮肤:default, orange, purple, blue, green]
     })
@@ -120,6 +120,8 @@ function MainMenuClick(event, treeId, treeNode) {
         $(event.target).dialog({id:treeNode.tabid, url:treeNode.url, title:treeNode.name})
     else
         $(event.target).navtab({id:treeNode.tabid, url:treeNode.url, title:treeNode.name, fresh:treeNode.fresh})
+        
+    event.preventDefault()
 }
 </script>
 </head>
@@ -137,7 +139,6 @@ function MainMenuClick(event, treeId, treeNode) {
         <nav class="collapse navbar-collapse" id="bjui-navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li class="datetime"><div><span id="bjui-date"></span><br><i class="fa fa-clock-o"></i> <span id="bjui-clock"></span></div></li>
-                <li><a href="http://b-jui.com/doc/" target="_blank">B-JUI在线文档</a></li>
                 <li><a href="http://www.bootcss.com/" target="_blank">Bootstrap中文网</a></li>
                 <li><a href="http://www.j-ui.com/" target="_blank">DWZ(j-ui)官网</a></li>
                 <li><a href="#">消息 <span class="badge">4</span></a></li>

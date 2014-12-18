@@ -174,7 +174,7 @@
                 
                 if (typeof val == 'undefined') val = $obj.val()
                 $.ajax({
-                    type     : 'POST', 
+                    type     : 'POST',
                     dataType : 'json', 
                     url      : refurl.replace('{value}', encodeURIComponent(val)), 
                     cache    : false,
@@ -186,10 +186,16 @@
                         
                         $.each(json, function(i) {
                             if (json[i] && json[i].length > 1) {
-                                if (typeof nextVal != 'undefined') selected = json[i][0] == nextVal ? ' selected' : ''
+                                if (typeof nextVal != 'undefined') {
+                                    
+                                    selected = json[i][0] == nextVal ? ' selected' : ''
+                                }
                                 html += '<option value="'+ json[i][0] +'"'+ selected +'>' + json[i][1] + '</option>'
                             }
                         })
+                        
+                        $obj.removeAttr('data-val').removeData('val')
+                        $next.removeAttr('data-val').removeData('val')
                         
                         if (!html) {
                             html = $next.data('emptytxt') || '&nbsp;'
@@ -216,7 +222,7 @@
             
             $element.selectpicker()
             
-            if ($next && $next.length)
+            if ($next && $next.length && (typeof $next.data('val') != 'undefined'))
                 bjui_select_linkage($element, $next)
         })
         

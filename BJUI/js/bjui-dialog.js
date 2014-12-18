@@ -353,7 +353,7 @@
             
             if ($dialogs.length) $_current = that.$element.getMaxIndexObj($dialogs)
             else zindex = Dialog.ZINDEX
-            if ($_current) that.switchDialog($_current)
+            if ($_current && $_current.is(':visible')) that.switchDialog($_current)
         })
     }
     
