@@ -255,6 +255,7 @@
         ,
         spinnerBtn: '<ul class="bjui-spinner"><li class="up" data-add="1">&and;</li><li class="down">&or;</li></ul>',
         lookupBtn: '<a class="bjui-lookup" href="javascript:;" data-toggle="lookupbtn"><i class="fa fa-search"></i></a>',
+        dateBtn: '<a class="bjui-lookup" href="javascript:;" data-toggle="datepickerbtn"><i class="fa fa-calendar"></i></a>',
         navtabCM: '<ul id="bjui-navtabCM">' +
                   '    <li rel="reload">#refresh#</li>' +
                   '    <li rel="closeCurrent">#close#</li>' +

@@ -70,7 +70,13 @@
 .n-red .msg-wrap .n-icon{background-image:url("images/validator_simple.png")}
 .n-red .n-top .msg-wrap{bottom:100%}
 .n-red .n-bottom .msg-wrap{top:100%}
-.n-red .n-tip,.n-red .n-ok,.n-red .n-loading{background-color:#f8fdff;border-color:#ddd;color:#333;box-shadow:0 1px 3px #ccc;}
+.n-red .n-tip,.n-red .n-ok,.n-red .n-loading{background-color:#f8fdff;border-color:#ddd;color:#333;}
+.n-red .n-ok{color:#008800; background-color:#f5fdf5; border-color:#008800;}
+.n-red .msg-wrap.n-ok .n-arrow b{color:#008800;}
+.n-red .msg-wrap.n-ok .n-arrow i{color:#f5fdf5;}
+.n-red .n-tip{color:#db7c22; background-color:#fffcef; border-color:#ffbb76;}
+.n-red .msg-wrap.n-tip .n-arrow b{color:#ffbb76;}
+.n-red .msg-wrap.n-tip .n-arrow i{color:#fffcef;}
 .n-red .n-tip .n-arrow b,.n-red .n-ok .n-arrow b,.n-red .n-loading .n-arrow b{color:#ddd;text-shadow:0 0 2px #ccc}
 .n-red .n-tip .n-arrow i,.n-red .n-ok .n-arrow i,.n-red .n-loading .n-arrow i{color:#f8fdff}
 .n-red .n-tip .n-icon{display:none}

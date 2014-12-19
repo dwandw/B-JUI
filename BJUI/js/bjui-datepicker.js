@@ -79,6 +79,7 @@
         this.$element = $(element)
         this.options  = options
         this.tools    = this.TOOLS()
+        this.$dateBtn = null
                 
         //动态minDate、maxDate
         var now = new Date()
@@ -293,7 +294,27 @@
         }
         return tools
     }
+    
+    Datepicker.prototype.addBtn = function() {
+        var that     = this, $element = that.$element
+        
+        if (!this.$dateBtn && !this.options.addbtn) {
+            this.$dateBtn = $(FRAG.dateBtn)
+            this.$element.css({'paddingRight':'15px'}).wrap('<span></span>')
             
+            var $box   = this.$element.parent()
+            var height = this.$element.addClass('form-control').innerHeight()
+            
+            $box.css({'position':'relative', 'display':'inline-block'})
+            
+            $.each(that.options, function(key, val) {
+                if (key != 'toggle') that.$dateBtn.attr('data-'+ key, val)
+            })
+            this.$dateBtn.css({'height':height, 'lineHeight':height +'px'}).appendTo($box)
+            this.$dateBtn.on('selectstart', function() { return false })
+        }
+    }
+    
     Datepicker.prototype.init = function() {
         if (this.$element.val()) this.sDate = this.$element.val().trim()
         
@@ -537,10 +558,29 @@
     
     // DATEPICKER DATA-API
     // ==============
-
+    
+    $(document).on(BJUI.eventType.initUI, function(e) {
+        var $this = $(e.target).find('[data-toggle="datepicker"]')
+        
+        if (!$this.length) return
+        if ($this.data('nobtn')) return
+        
+        Plugin.call($this, 'addBtn')
+    })
+    
+    $(document).on('click.bjui.lookup.data-api', '[data-toggle="datepickerbtn"]', function(e) {
+        var $date = $(this).prev('[data-toggle="datepicker"]')
+        
+        if (!$date || !$date.is(':text')) return
+        Plugin.call($date, $date.data())
+        
+        e.preventDefault()
+    })
+    
     $(document).on('click.bjui.datepicker.data-api', '[data-toggle="datepicker"]', function(e) {
         var $this = $(this)
         
+        if ($this.data('onlybtn')) return
         if (!$this.is(':text')) return
         Plugin.call($this, $this.data())
         

@@ -188,8 +188,9 @@
             else $dialog.find('a.minimize').hide()
             if (options.max) that.maxsize($dialog)
             
-            $dialog.on('click', function() {
-                if ($current && $current[0] != $dialog[0]) that.switchDialog($dialog)
+            $dialog.on('click', function(e) {
+                if (!$(e.target).data('bjui.dialog'))
+                    if ($current && $current[0] != $dialog[0]) that.switchDialog($dialog)
             }).on('click', '.btn-close', function(e) {
                 that.close($dialog)
                 

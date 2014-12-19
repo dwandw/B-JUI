@@ -186,10 +186,7 @@
                         
                         $.each(json, function(i) {
                             if (json[i] && json[i].length > 1) {
-                                if (typeof nextVal != 'undefined') {
-                                    
-                                    selected = json[i][0] == nextVal ? ' selected' : ''
-                                }
+                                if (typeof nextVal != 'undefined') selected = json[i][0] == nextVal ? ' selected' : ''
                                 html += '<option value="'+ json[i][0] +'"'+ selected +'>' + json[i][1] + '</option>'
                             }
                         })
