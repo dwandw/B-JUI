@@ -32,21 +32,26 @@
                 url      : op.url,
                 data     : op.data || {},
                 cache    : false,
-                dataType : 'text',
+                dataType : 'html',
                 timeout  : BJUI.ajaxTimeout,
                 success  : function(response) {
                     var json = response.toJson()
                     
-                    if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {
-                        if (json[BJUI.keys.message]) $this.alertmsg('error', json[BJUI.keys.message])
-                    } else {
+                    if (!json[BJUI.keys.statusCode]) {
                         $this.html(response).initui()
                         if ($.isFunction(op.callback)) op.callback(response)
-                    }
-                    if (json[BJUI.keys.statusCode] == BJUI.statusCode.timeout) {
-                        $this.alertmsg('error', (json[BJUI.keys.message] || BJUI.regional.sessiontimeout),
-                            { okCall:function() { BJUI.loadLogin() } }
-                        )
+                    } else {
+                        if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {
+                            if (json[BJUI.keys.message]) $this.alertmsg('error', json[BJUI.keys.message])
+                        } else if (json[BJUI.keys.statusCode] == BJUI.statusCode.timeout) {
+                            if (!$this.children().not('.bjui-maskBackground, .bjui-maskProgress').length) {
+                                if ($this.closest('.bjui-dialog').length) $this.dialog('closeCurrent')
+                                if ($this.closest('.navtab-panel').length) $this.navtab('closeCurrent')
+                            }
+                            $('body').alertmsg('error', (json[BJUI.keys.message] || BJUI.regional.sessiontimeout),
+                                { okCall:function() { BJUI.loadLogin() } }
+                            )
+                        }
                     }
                 },
                 error      : BJUI.ajaxError,
@@ -272,11 +277,14 @@
             return (this.toLowerCase() === 'true') ? true : false
         },
         toJson: function() {
+            var json = this
+            
             try {
-                if (typeof this === 'string') return $.parseJSON(this)
-                else return this
+                if (typeof json == 'object') json = json.toString()
+                if (!json.trim().match("^\{(.+:.+,*){1,}\}$")) return this
+                else return JSON.parse(this)
             } catch (e) {
-                return {}
+                return this
             }
         },
         /**
