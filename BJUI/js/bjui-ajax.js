@@ -38,7 +38,7 @@
         var that  = this
         var tools = {
             getPagerForm: function($parent, args) {
-                var form     = $parent.isTag('form') ? $parent[0] : $parent.find('#pagerForm:first')
+                var form     = $parent.isTag('form') ? $parent[0] : $parent.find('#pagerForm:first')[0]
                 var pageInfo = $.extend({}, BJUI.pageInfo)
                 
                 if (form) {
