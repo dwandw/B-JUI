@@ -47,7 +47,7 @@
                         
                         if (args && args[key]) val = args[key]
                         if (!form[pageInfo[key]]) $('<input type="hidden" name="'+ pageInfo[key] +'" value="'+ val +'">').appendTo($(form))
-                        else form[pageInfo[key]].value = val
+                        else if (val) form[pageInfo[key]].value = val
                     }
                 }
                 
@@ -297,7 +297,7 @@
     }
     
     Bjuiajax.prototype.doSearch = function(options) {
-        var that = this, $element = that.$element, form = $element[0], $target = $element.closest('.bjui-layout')
+        var that = this, $element = that.$element, form = null, op = {pageCurrent:1}, $target = $element.closest('.bjui-layout')
         
         if (!options.url) options.url = $element.attr('action')
         if (!options.url) {
@@ -315,27 +315,28 @@
             options.url = encodeURI(options.url)
         }
         
-        form = that.tools.getPagerForm($element)
-        if (form[BJUI.pageInfo.pageCurrent]) form[BJUI.pageInfo.pageCurrent].value = 1
-        
         if ($target && $target.length) {
-            var data = $element.serializeJson()
+            form = that.tools.getPagerForm($target, op)
+            
+            var data = $element.serializeJson(), _data = {}
             
             if (options.clearQuery) {
-                var pageParams = $.extend({}, BJUI.pageInfo)
+                var pageInfo = BJUI.pageInfo
                 
-                for (var key in BJUI.pageInfo) {
-                    if (data[BJUI.pageInfo[key]]) pageParams[key] = data[BJUI.pageInfo[key]]
+                for (var key in pageInfo) {
+                    _data[pageInfo[key]] = data[pageInfo[key]]
                 }
-                data = pageParams
+                data = _data
             }
-            $target.ajaxUrl({ type:'POST', url:options.url, data:data })
+            $target.ajaxUrl({ type:$element.attr('method') || 'POST', url:options.url, data:data })
         } else {
             if (that.tools.getTarget() == Bjuiajax.NAVTAB) {
                 $target = $.CurrentNavtab
+                form    = that.tools.getPagerForm($target, op)
                 $element.navtab('reloadForm', options.clearQuery, options)
             } else {
                 $target = $.CurrentDialog
+                form    = that.tools.getPagerForm($target, op)
                 $element.dialog('reloadForm', options.clearQuery, options)
             }
         }

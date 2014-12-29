@@ -295,19 +295,19 @@
                 if (option.title) $dialog.find('> .dialogHeader > h1 > span.title').html(option.title)
                 options = $.extend({}, option, $dialog.data('options'))
             }
-            var $pagerForm = $dialog.find('#pagerForm')
+            var $pagerForm = $dialog.find('#pagerForm'), data = {}
             
             if ($pagerForm && $pagerForm.length) {
                 if (!option || !option.type) options.type = $pagerForm.attr('method') || 'POST'
                 options.data = $pagerForm.serializeJson()
                 
                 if (clearQuery) {
-                    var pageParams = $.extend({}, BJUI.pageInfo)
+                    var pageInfo = BJUI.pageInfo
                     
-                    for (var key in BJUI.pageInfo) {
-                        if (options.data[BJUI.pageInfo[key]]) pageParams[key] = options.data[BJUI.pageInfo[key]]
+                    for (var key in pageInfo) {
+                        data[pageInfo[key]] = options.data[pageInfo[key]]
                     }
-                    options.data = pageParams
+                    options.data = data
                 }
             }
             

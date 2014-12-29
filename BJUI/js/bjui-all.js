@@ -648,21 +648,26 @@
                 url      : op.url,
                 data     : op.data || {},
                 cache    : false,
-                dataType : 'text',
+                dataType : 'html',
                 timeout  : BJUI.ajaxTimeout,
                 success  : function(response) {
                     var json = response.toJson()
                     
-                    if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {
-                        if (json[BJUI.keys.message]) $this.alertmsg('error', json[BJUI.keys.message])
-                    } else {
+                    if (!json[BJUI.keys.statusCode]) {
                         $this.html(response).initui()
                         if ($.isFunction(op.callback)) op.callback(response)
-                    }
-                    if (json[BJUI.keys.statusCode] == BJUI.statusCode.timeout) {
-                        $this.alertmsg('error', (json[BJUI.keys.message] || BJUI.regional.sessiontimeout),
-                            { okCall:function() { BJUI.loadLogin() } }
-                        )
+                    } else {
+                        if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {
+                            if (json[BJUI.keys.message]) $this.alertmsg('error', json[BJUI.keys.message])
+                        } else if (json[BJUI.keys.statusCode] == BJUI.statusCode.timeout) {
+                            if (!$this.children().not('.bjui-maskBackground, .bjui-maskProgress').length) {
+                                if ($this.closest('.bjui-dialog').length) $this.dialog('closeCurrent')
+                                if ($this.closest('.navtab-panel').length) $this.navtab('closeCurrent')
+                            }
+                            $('body').alertmsg('error', (json[BJUI.keys.message] || BJUI.regional.sessiontimeout),
+                                { okCall:function() { BJUI.loadLogin() } }
+                            )
+                        }
                     }
                 },
                 error      : BJUI.ajaxError,
@@ -888,11 +893,14 @@
             return (this.toLowerCase() === 'true') ? true : false
         },
         toJson: function() {
+            var json = this
+            
             try {
-                if (typeof this === 'string') return $.parseJSON(this)
-                else return this
+                if (typeof json == 'object') json = json.toString()
+                if (!json.trim().match("^\{(.+:.+,*){1,}\}$")) return this
+                else return JSON.parse(this)
             } catch (e) {
-                return {}
+                return this
             }
         },
         /**
@@ -1884,20 +1892,19 @@
             if ($tab.hasClass('external')) {
                 this.openExternal(options.url, $panel)
             } else {
-                var $pagerForm = $panel.find('#pagerForm')
+                var $pagerForm = $dialog.find('#pagerForm'), data = {}
                 
                 if ($pagerForm && $pagerForm.length) {
                     if (!option || !option.type) options.type = $pagerForm.attr('method') || 'POST'
-                    
                     options.data = $pagerForm.serializeJson()
                     
                     if (clearQuery) {
-                        var pageParams = $.extend({}, BJUI.pageInfo)
+                        var pageInfo = BJUI.pageInfo
                         
-                        for (var key in BJUI.pageInfo) {
-                            if (options.data[BJUI.pageInfo[key]]) pageParams[key] = options.data[BJUI.pageInfo[key]]
+                        for (var key in pageInfo) {
+                            data[pageInfo[key]] = options.data[pageInfo[key]]
                         }
-                        options.data = pageParams
+                        options.data = data
                     }
                 }
                 
@@ -2268,19 +2275,19 @@
                 if (option.title) $dialog.find('> .dialogHeader > h1 > span.title').html(option.title)
                 options = $.extend({}, option, $dialog.data('options'))
             }
-            var $pagerForm = $dialog.find('#pagerForm')
+            var $pagerForm = $dialog.find('#pagerForm'), data = {}
             
             if ($pagerForm && $pagerForm.length) {
                 if (!option || !option.type) options.type = $pagerForm.attr('method') || 'POST'
                 options.data = $pagerForm.serializeJson()
                 
                 if (clearQuery) {
-                    var pageParams = $.extend({}, BJUI.pageInfo)
+                    var pageInfo = BJUI.pageInfo
                     
-                    for (var key in BJUI.pageInfo) {
-                        if (options.data[BJUI.pageInfo[key]]) pageParams[key] = options.data[BJUI.pageInfo[key]]
+                    for (var key in pageInfo) {
+                        data[pageInfo[key]] = options.data[pageInfo[key]]
                     }
-                    options.data = pageParams
+                    options.data = data
                 }
             }
             
@@ -2954,6 +2961,16 @@
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  * ======================================================================== */
 
+/* ========================================================================
+ * B-JUI: bjui-ajax.js v1.0
+ * @author K'naan (xknaan@163.com) 
+ * -- Modified from dwz.ajax.js (author:ZhangHuihua@msn.com)
+ * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-ajax.js
+ * ========================================================================
+ * Copyright 2014 K'naan.
+ * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
+ * ======================================================================== */
+
 +function ($) {
     'use strict';
     
@@ -2977,7 +2994,7 @@
         var that  = this
         var tools = {
             getPagerForm: function($parent, args) {
-                var form     = $parent.isTag('form') ? $parent[0] : $parent.find('#pagerForm:first')
+                var form     = $parent.isTag('form') ? $parent[0] : $parent.find('#pagerForm:first')[0]
                 var pageInfo = $.extend({}, BJUI.pageInfo)
                 
                 if (form) {
@@ -2986,7 +3003,7 @@
                         
                         if (args && args[key]) val = args[key]
                         if (!form[pageInfo[key]]) $('<input type="hidden" name="'+ pageInfo[key] +'" value="'+ val +'">').appendTo($(form))
-                        else form[pageInfo[key]].value = val
+                        else if (val) form[pageInfo[key]].value = val
                     }
                 }
                 
@@ -3236,7 +3253,7 @@
     }
     
     Bjuiajax.prototype.doSearch = function(options) {
-        var that = this, $element = that.$element, form = $element[0], $target = $element.closest('.bjui-layout')
+        var that = this, $element = that.$element, form = null, op = {pageCurrent:1}, $target = $element.closest('.bjui-layout')
         
         if (!options.url) options.url = $element.attr('action')
         if (!options.url) {
@@ -3254,27 +3271,28 @@
             options.url = encodeURI(options.url)
         }
         
-        form = that.tools.getPagerForm($element)
-        if (form[BJUI.pageInfo.pageCurrent]) form[BJUI.pageInfo.pageCurrent].value = 1
-        
         if ($target && $target.length) {
-            var data = $element.serializeJson()
+            form = that.tools.getPagerForm($target, op)
+            
+            var data = $element.serializeJson(), _data = {}
             
             if (options.clearQuery) {
-                var pageParams = $.extend({}, BJUI.pageInfo)
+                var pageInfo = BJUI.pageInfo
                 
-                for (var key in BJUI.pageInfo) {
-                    if (data[BJUI.pageInfo[key]]) pageParams[key] = data[BJUI.pageInfo[key]]
+                for (var key in pageInfo) {
+                    _data[pageInfo[key]] = data[pageInfo[key]]
                 }
-                data = pageParams
+                data = _data
             }
-            $target.ajaxUrl({ type:'POST', url:options.url, data:data })
+            $target.ajaxUrl({ type:$element.attr('method') || 'POST', url:options.url, data:data })
         } else {
             if (that.tools.getTarget() == Bjuiajax.NAVTAB) {
                 $target = $.CurrentNavtab
+                form    = that.tools.getPagerForm($target, op)
                 $element.navtab('reloadForm', options.clearQuery, options)
             } else {
                 $target = $.CurrentDialog
+                form    = that.tools.getPagerForm($target, op)
                 $element.dialog('reloadForm', options.clearQuery, options)
             }
         }

@@ -307,9 +307,6 @@
             
             $box.css({'position':'relative', 'display':'inline-block'})
             
-            $.each(that.options, function(key, val) {
-                if (key != 'toggle') that.$dateBtn.attr('data-'+ key, val)
-            })
             this.$dateBtn.css({'height':height, 'lineHeight':height +'px'}).appendTo($box)
             this.$dateBtn.on('selectstart', function() { return false })
         }
@@ -569,7 +566,7 @@
     })
     
     $(document).on('click.bjui.lookup.data-api', '[data-toggle="datepickerbtn"]', function(e) {
-        var $date = $(this).prev('[data-toggle="datepicker"]')
+        var $date = $(this).prevAll('[data-toggle="datepicker"]')
         
         if (!$date || !$date.is(':text')) return
         Plugin.call($date, $date.data())
