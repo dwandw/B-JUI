@@ -489,9 +489,8 @@
         } else {
             $tab = options.id ? this.tools.getTab(options.id) : this.tools.getTabs().eq(currentIndex)
             if ($tab) {
-                if (option.title) $tab.find('> a').attr('title', this.options.title).find(span$).html(this.options.title)
+                if (option.title) $tab.find('> a').attr('title', option.title).find('> span').html(option.title)
                 if (options.url) $tab.data('url', options.url)
-                this.tools.reload($tab, true)
             }
         }
         if ($tab) this.tools.reload($tab, true)

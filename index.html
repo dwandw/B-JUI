@@ -31,11 +31,10 @@
 <!--[if lte IE 9]>
 <script src="BJUI/other/jquery.iframe-transport.js"></script>    
 <![endif]-->
-<!-- BJUI.min 分模块压缩版 -->
-<!--  
-<script src="BJUI/js/b-jui.all.js"></script>
--->
+<!-- BJUI.all 分模块压缩版 -->
+<script src="BJUI/js/bjui-all.js"></script>
 <!-- 以下是B-JUI的分模块未压缩版，建议开发调试阶段使用下面的版本 -->
+<!--  
 <script src="BJUI/js/bjui-core.js"></script>
 <script src="BJUI/js/bjui-regional.zh-CN.js"></script>
 <script src="BJUI/js/bjui-frag.js"></script>
@@ -61,6 +60,7 @@
 <script src="BJUI/js/bjui-theme.js"></script>
 <script src="BJUI/js/bjui-initui.js"></script>
 <script src="BJUI/js/bjui-plugins.js"></script>
+-->
 <!-- plugins -->
 <!-- swfupload for uploadify && kindeditor -->
 <script src="BJUI/plugins/swfupload/swfupload.js"></script>
@@ -193,7 +193,7 @@ $(function(){
                         <h4 class="panel-title"><a data-toggle="collapse" data-parent="#bjui-accordionmenu" href="#bjui-collapse0" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;Demo演示</a></h4>
                     </div>
                     <div id="bjui-collapse0" class="panel-collapse panelContent collapse in">
-                        <div class="panel-body">
+                        <div class="panel-body" >
                             <ul id="bjui-tree0" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
                                 <li data-id="1" data-pid="0">表单元素</li>
                                 <li data-id="10" data-pid="1" data-url="form-button.html" data-tabid="form-button">按钮</li>
@@ -264,6 +264,8 @@ $(function(){
                                 <li data-id="61" data-pid="6" data-url="doc/table/paging.html" data-tabid="doc-table">分页组件</li>
                                 <li data-id="62" data-pid="6" data-url="doc/table/fixed.html" data-tabid="doc-table">固定表头</li>
                                 <li data-id="63" data-pid="6" data-url="doc/table/edit.html" data-tabid="doc-table">可编辑表格</li>
+                                <li data-id="7" data-pid="0">其他</li>
+                                <li data-id="70" data-pid="7" data-url="doc/other/contextmenu.html" data-tabid="doc-other">右键菜单</li>
                             </ul>
                         </div>
                     </div>
@@ -320,9 +322,9 @@ $(function(){
                                             <table class="table table-condensed table-striped table-hover" width="100%">
                                                 <thead>
                                                     <tr>
-                                                        <th>版本号</th>
-                                                        <th>发布日期</th>
-                                                        <th>在线DEMO</th>
+                                                        <th width="100">版本号</th>
+                                                        <th width="90">发布日期</th>
+                                                        <th width="120">在线DEMO</th>
                                                         <th>下载地址</th>
                                                         <th>描述</th>
                                                     </tr>
@@ -338,7 +340,7 @@ $(function(){
                                                     <tr>
                                                         <td>0.1 released</td>
                                                         <td>2014.08.01</td>
-                                                        <td>http://xknaan.com/</td>
+                                                        <td>- 无 -</td>
                                                         <td>http://git.oschina.net/xknaan/Bootstrap_for_DWZ</td>
                                                         <td>穿上Bootstrap衣服的DWZ</td>
                                                     </tr>
@@ -361,6 +363,54 @@ $(function(){
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <tr>
+                                                        <td>2014.12.30</td>
+                                                        <td>V1.0 内测版本</td>
+                                                        <td>新增自定义右键菜单，bjui-all.js改为压缩版，其他细节完善</td>
+                                                        <td><span class="label label-info">一般</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2014.12.29</td>
+                                                        <td>V1.0 内测版本</td>
+                                                        <td>[修复bug] 清空查询的分页参数bug</td>
+                                                        <td><span class="label label-info">一般</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2014.12.24</td>
+                                                        <td>V1.0 内测版本</td>
+                                                        <td>[修复bug] 分页/排序 隐藏域重复生成；修复IE下超时对话框bug</td>
+                                                        <td><span class="label label-info">一般</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2014.12.19</td>
+                                                        <td>V1.0 内测版本</td>
+                                                        <td>日期选择框添加日历按钮，更新三个插件文档，其他。。</td>
+                                                        <td><span class="label label-info">一般</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2014.12.18</td>
+                                                        <td>V1.0 内测版本</td>
+                                                        <td>新增单独JS: bjui-all.js。 dialog\横向导航等小调整。</td>
+                                                        <td><span class="label label-info">一般</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2014.12.17</td>
+                                                        <td>V1.0 内测版本</td>
+                                                        <td>修复 bootstrap-select 联动在IE下的bug，新增有初始值的联动。</td>
+                                                        <td><span class="label label-danger">重要</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2014.12.15</td>
+                                                        <td>V1.0 内测版本</td>
+                                                        <td>添加表格相关文档，一些小细节完善。</td>
+                                                        <td><span class="label label-info">一般</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2014.12.11</td>
+                                                        <td>V1.0 内测版本</td>
+                                                        <td>可编辑表格：修复select的初始化值。</td>
+                                                        <td><span class="label label-info">一般</span></td>
+                                                    </tr>
                                                     <tr>
                                                         <td>2014.12.09</td>
                                                         <td>V1.0 内测版本</td>

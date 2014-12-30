@@ -22,7 +22,8 @@ function S_NodeClick(event, treeId, treeNode) {
     var zTree = $.fn.zTree.getZTreeObj(treeId)
     
     zTree.checkNode(treeNode, !treeNode.checked, true, true)
-    return false
+    
+    event.preventDefault()
 }
 </script>
 <div class="bjui-pageContent">

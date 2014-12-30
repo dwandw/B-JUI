@@ -50,7 +50,7 @@
     }
     
     Contextmenu.prototype.init = function() {
-        var $this = this
+        var that  = this
         var op    = this.options
         
         if (!op.id) return
@@ -64,13 +64,13 @@
         var index = hash.length - 1
         
         this.$element.on('contextmenu', function(e) {
-            $this.display(index, this, e, op)
+            that.display(index, this, e, op)
             return false
         })
     }
     
     Contextmenu.prototype.display = function(index, trigger, e, options) {
-        var $this   = this
+        var that    = this
         var cur     = hash[index]
         var cp      = BJUI.regional[cur.id]
         var content = FRAG[cur.id]
@@ -83,7 +83,7 @@
         $menu.html(content)
         $.each(cur.bindings, function(id, func) {
             $('[rel="'+ id +'"]', $menu).on('click', function(e) {
-                $this.hide()
+                that.hide()
                 func($(trigger), $('#bjui-'+ cur.id))
             })
         })
@@ -97,7 +97,7 @@
         $menu.css({'left':posX, 'top':posY}).show()
         if (cur.shadow)
             $shadow.css({width:$menu.width(), height:$menu.height(), left:posX + 3, top:posY + 3}).show()
-        $(document).one('click', $this.hide)
+        $(document).one('click', that.hide)
         
         if ($.isFunction(cur.ctrSub))
             cur.ctrSub($(trigger), $('#bjui-'+ cur.id))
@@ -106,6 +106,54 @@
     Contextmenu.prototype.hide = function() {
         $menu.hide()
         $shadow.hide()
+    }
+    
+    /* Custom contextmenu */
+    Contextmenu.prototype.show = function(options) {
+        var that = this
+        
+        if (options.items && options.items.length) {
+            that.$element.on('contextmenu', function(e) {
+                that.custom(options.items, e)
+                return false
+            })
+        }
+    }
+    
+    Contextmenu.prototype.custom = function(items, e) {
+        $menu.empty().html('<ul></ul>')
+        
+        var that    = this
+        var options = that.options
+        var $ul     = $menu.find('> ul'), $li
+        
+        $.each(items, function(i, n) {
+            if (n.title == 'diver') {
+                $li = $('<li class="diver"></li>')
+            } else {
+                $li = $('<li>'+ n.title +'</li>')
+                if (n.func) {
+                    $li.on('click', function(evt) {
+                        that.hide()
+                        n.func(that.$element, $li)
+                    })
+                }
+            }
+            $li.appendTo($ul)
+        })
+        
+        var posX = e.pageX
+        var posY = e.pageY
+        
+        if ($(window).width() < posX + $menu.width())   posX -= $menu.width()
+        if ($(window).height() < posY + $menu.height()) posY -= $menu.height()
+
+        $menu.css({'left':posX, 'top':posY}).show()
+        
+        if (options.shadow)
+            $shadow.css({width:$menu.width(), height:$menu.height(), left:posX + 3, top:posY + 3}).show()
+        
+        $(document).one('click', that.hide)
     }
     
     // CONTEXTMENU PLUGIN DEFINITION

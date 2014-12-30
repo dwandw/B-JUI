@@ -7,7 +7,6 @@
 
 /* ========================================================================
  * B-JUI: bjui-dialog.js v1.0
- * reference: bjui-core.js, bjui-extends.js, bjui.frag.js, bjui-initui.js
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.dialog.js, dwz.dialogDrag.js, dwz.resize.js (author:Roger Wu)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-dialog.js

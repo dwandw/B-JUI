@@ -164,6 +164,8 @@ fieldset{border-color:#563d7c;}
 #bjui-contextmenu li:hover{background-color:#f8f6fa; border:1px solid #927ab5;}
 #bjui-contextmenu li.disabled{color:#999;}
 #bjui-contextmenu li.disabled:hover{cursor:default;}
+#bjui-contextmenu li.diver{border-top:1px solid #927ab5; border-bottom:1px solid #eae7ef; border-left:none; border-right:none;}
+#bjui-contextmenu li.diver:hover{background-color:transparent !important; cursor:default;}
 /* Calendar */
 #bjui-calendar{border:1px solid #927ab5;}
 #bjui-calendar > .main > a.close{color:#927ab5;}

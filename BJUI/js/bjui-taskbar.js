@@ -7,7 +7,7 @@
 
 /* ========================================================================
  * B-JUI: bjui-taskbar.js v1.0
- * reference: bjui-core.js, bjui-extends.js, bjui.frag.js, bjui-initui.js, bjui-dialog.js
+ * reference: bjui-dialog.js
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.taskBar.js (author:Roger Wu)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-taskbar.js

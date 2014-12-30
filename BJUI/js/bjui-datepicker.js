@@ -373,9 +373,10 @@
         })
         $(document).on(this.events.click_close, function(e) {
             var $target = $(e.target)
+            
             if (e.target == that.$element.get(0)) return
             if ($target.closest('#calendar').length) return
-            if ($target.data('toggle') == 'datepicker') 
+            if ($target.data('toggle') == 'datepicker' || $target.parent().data('toggle') == 'datepickerbtn' || $target.data('toggle') == 'datepickerbtn')
                 tools.closeCalendar(false)
             else
                 tools.closeCalendar(true)
@@ -565,7 +566,7 @@
         Plugin.call($this, 'addBtn')
     })
     
-    $(document).on('click.bjui.lookup.data-api', '[data-toggle="datepickerbtn"]', function(e) {
+    $(document).on('click.bjui.datepicker.data-api', '[data-toggle="datepickerbtn"]', function(e) {
         var $date = $(this).prevAll('[data-toggle="datepicker"]')
         
         if (!$date || !$date.is(':text')) return
