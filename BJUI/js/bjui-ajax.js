@@ -680,12 +680,13 @@
     
     $(document).on(BJUI.eventType.initUI, function(e) {
         var $box    = $(e.target).find('[data-toggle="autoajaxload"]')
-        var options = $box.data()
         
-        if ($box && $box.length) {
-            options.target = $box[0]
-            Plugin.call($box, 'doLoad', options)
-        }
+        $box.each(function() {
+            var $element = $(this), options = $element.data()
+            
+            options.target = this
+            Plugin.call($element, 'doLoad', options)
+        })
     })
     
     $(document).on('click.bjui.bjuiajax.data-api', '[data-toggle="refreshlayout"]', function(e) {

@@ -435,6 +435,7 @@
                             .css({position:'absolute', 'zIndex':zindex, 'min-width':options.width, height:options.height, overflow:'auto', background:'#FAFAFA', border:'1px #EEE solid'})
                             .hide()
                             .appendTo($('body'))
+                
                 $tree.appendTo($box).css('width','100%').data('fromObj', $this).removeClass('hide').show()
                 setPosition($box)
                 $box.show()
@@ -458,8 +459,8 @@
                 })
             }
             
-            //destory selectzTree
-            $this.on('destory.bjui.selectztree', function() {
+            //destroy selectzTree
+            $this.on('destroy.bjui.selectztree', function() {
                 $box.remove()
             })
         })
