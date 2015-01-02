@@ -96,7 +96,10 @@
                         var $fixed = $(this)
                         
                         if (!$fixed.closest('.bjui-layout').length || $target.hasClass('bjui-layout')) {
-                            fixedH = fixedH + $fixed.outerHeight() || 0
+                            var $copy = $fixed.clone().appendTo('body')
+                            
+                            fixedH += $copy.outerHeight() || 0
+                            $copy.remove()
                         }
                     })
                     

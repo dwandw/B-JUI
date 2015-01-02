@@ -174,7 +174,7 @@ th[align=right]{text-align:right;}
 #bjui-splitBarProxy{position:absolute; top:55px; left:205px; display:none; width:3px; overflow:hidden; border-style:solid; border-width:1px; cursor:col-resize;}
 #bjui-footer{position:absolute; bottom:0; left:0; padding:0 5px; width:100%; height:21px; text-align:center;}
 /* Pages */
-.bjui-pageHeader{position:relative; display:block; padding:8px; }
+.bjui-pageHeader{position:relative; display:block; padding:8px;}
 .bjui-pageHeader > form > .bjui-moreSearch{position:absolute; top:41px; left:0; z-index:900; display:none; padding:8px; width:100%; background:#f7f7f7; -webkit-box-shadow:0 3px 7px rgba(0,0,0,0.5);-moz-box-shadow:0 3px 7px rgba(0,0,0,0.5);box-shadow:0 3px 7px rgba(0,0,0,0.5);}
 .bjui-pageHeader > form > .bjui-moreSearch label{display:inline-block; margin-bottom:0; vertical-align:middle;}
 .bjui-pageHeader .showMoreSearch{font-size:24px; color:red; line-height:1;}
@@ -355,13 +355,13 @@ th[align=right]{text-align:right;}
 .bjui-alertBackground{position:absolute; top:0; left:0; z-index:1010; display:none; width:100%; height:100%; opacity:0.4; filter:alpha(opacity=40); background:#FFF;}
 .bjui-dialogBackground{position:absolute; top:0; left:0; z-index:900; display:none; width:100%; height:100%; opacity:0.4; filter:alpha(opacity=40); background:#FFF;}
 /* Contextmenu */
-#bjui-contextmenu{position:absolute; z-index:500; left:0; top:0; display:none;}
+#bjui-contextmenu{position:absolute; z-index:1000; left:0; top:0; display:none;}
 #bjui-contextmenu ul{margin:0; padding:1px; width:150px;}
 #bjui-contextmenu li{display:block; margin:0; padding:3px; text-align:left; cursor:default;}
 #bjui-contextmenu li:hover{font-weight:bold; cursor:pointer;}
 #bjui-contextmenu li.diver{margin-top:2px; margin-bottom:1px; padding:0px 3px;}
 #bjui-contextmenu li.diver:hover{background:transparent !important; cursor:default;}
-#bjui-contextmenuShadow{position:absolute; z-index:499; display:none; opacity:0.2; filter:alpha(opacity=20); background-color:#000;}
+#bjui-contextmenuShadow{position:absolute; z-index:999; display:none; opacity:0.2; filter:alpha(opacity=20); background-color:#000;}
 /* Calendar */
 #bjui-calendar{position:absolute; z-index:1001; display:none; margin:0; width:208px; border-radius:2px;}
 #bjui-calendar > .main{position:relative; margin:auto; padding:2px; text-align:center; background:#ffffff;}
