@@ -63,7 +63,7 @@ function S_NodeClick(event, treeId, treeNode) {
                             <td align="right">zTree选择[单选]：</td>
                             <td>
                                 <input type="text" name="menus" id="j_ztree_menus2" data-toggle="selectztree" size="18" data-tree="#j_select_tree2" readonly>
-                                <ul id="j_select_tree2" class="ztree hide" data-toggle="ztree" data-expand-all="true" data-check-enable="true" data-chk-style="radio" data-on-check="S_NodeCheck" data-on-click="S_NodeClick">
+                                <ul id="j_select_tree2" class="ztree hide" data-toggle="ztree" data-expand-all="true" data-check-enable="true" data-chk-style="radio" data-radio-type="all" data-on-check="S_NodeCheck" data-on-click="S_NodeClick">
                                     <li data-id="1" data-pid="0">表单元素</li>
                                     <li data-id="10" data-pid="1" data-url="form-button.html" data-tabid="form-button">按钮</li>
                                     <li data-id="11" data-pid="1" data-url="form-input.html" data-tabid="form-input">文本框</li>
@@ -88,7 +88,7 @@ function S_NodeClick(event, treeId, treeNode) {
             </fieldset>
         </div>
     </div>
-    <div class="data-footBar">
+    <div class="bjui-footBar">
         <ul>
             <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
         </ul>

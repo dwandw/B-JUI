@@ -368,7 +368,12 @@
         if ($target && $target.length) {
             $target
                 .data('url', options.url).data('type', type).data('data', options.data)
-                .ajaxUrl({ type:type, url:options.url, data:options.data || {} })
+                .ajaxUrl({ type:type, url:options.url, data:options.data || {}, callback:function(html) {
+                    $target.find('[data-layout-h]').addClass('bjui-layout-h')
+                    $(window).resize(function() {
+                        setTimeout(function() { $target.find('[data-layout-h]').layoutH() }, 20)
+                    })
+                } })
         }
     }
     

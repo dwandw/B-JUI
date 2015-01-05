@@ -185,10 +185,17 @@
                         var html = '', selected = ''
                         
                         $.each(json, function(i) {
-                            if (json[i] && json[i].length > 1) {
-                                if (typeof nextVal != 'undefined') selected = json[i][0] == nextVal ? ' selected' : ''
-                                html += '<option value="'+ json[i][0] +'"'+ selected +'>' + json[i][1] + '</option>'
+                            var value, label
+                            
+                            if (json[i] && json[i].length) {
+                                value = json[i][0]
+                                label = json[i][1]
+                            } else {
+                                value = json[i].value
+                                label = json[i].label
                             }
+                            if (typeof nextVal != 'undefined') selected = value == nextVal ? ' selected' : ''
+                            html += '<option value="'+ value +'"'+ selected +'>' + label + '</option>'
                         })
                         
                         $obj.removeAttr('data-val').removeData('val')

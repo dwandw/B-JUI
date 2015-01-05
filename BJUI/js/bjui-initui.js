@@ -135,7 +135,13 @@
         }
         
         $box.find('.bjui-pageHeader, .bjui-headBar, .bjui-footBar').attr('data-layout-fixed', true)
-        $box.find('[data-layout-h]').layoutH($box.data('bjui.layoutBox') || $box)
+        $box.find('[data-layout-h]').layoutH()
+        
+        /*$(window).resize(function() {
+            setTimeout(function() {
+                $box.find('[data-layout-h]').layoutH($box.data('.bjui-layout') || $box.data('bjui.layoutBox'))
+            }, 20)
+        })*/
     })
     
     /* ajaxStatus */

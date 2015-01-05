@@ -9,9 +9,9 @@ function pic_upload_success(file, data) {
     }
 }
 //护照有效日期  = 签发日期 + 10年
-$('#j_layout_issuedate').on('afterchange.bjui.datepicker', function(e) {
+$('#j_layout_issuedate').on('afterchange.bjui.datepicker', function(e, data) {
     var pattern = 'yyyy-MM-dd'
-    var start   = end = e.date
+    var start   = end = data.value
     
     end.setFullYear(start.getFullYear() + 10)
     end.setDate(start.getDate() - 1)

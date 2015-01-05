@@ -71,56 +71,50 @@
          */
         layoutH: function($refBox) {
             return this.each(function() {
-                var $this     = $(this)
-                var $target   = null
-                var $fixedBox = null
+                var $box      = $(this)
                 var $unitBox  = null
+                var $fixedBox = null
                 
-                if ($refBox && $refBox.length) $this.data('bjui.layout', ($target = $refBox))
-                else $target  = $this.data('bjui.layout') || $this.closest('div.layoutBox')
+                if (!$refBox || !$refBox.length) $refBox = $box.closest('.bjui-layout')
+                if (!$refBox || !$refBox.length) $refBox = $box.closest('div.layoutBox')
                 
-                var iRefH     = $target.height()
-                var iLayoutH  = parseInt($this.data('layoutH')) || 0
-                var iH        = 0
+                var refH = $refBox.height() || parseInt($refBox.css('height'))
+                var layH = $box.data('bjuiLayH') || parseInt($box.data('layoutH')) || 0
+                var bodH = 0
                 
-                if (!iLayoutH) {
-                    $unitBox = $this.closest('div.bjui-layout')
-                    if (!$unitBox.length) $unitBox = $this.closest('div.unitBox')
-                    $fixedBox  = $unitBox.find('.bjui-tablefixed')
+                if (!layH) {
+                    $unitBox  = $box.closest('div.bjui-layout')
+                    if (!$unitBox || !$unitBox.length) $unitBox = $box.closest('div.unitBox')
+                    
+                    $unitBox.find('.bjui-layout').find('[data-layout-fixed]').hide()
+                    $unitBox.find('.bjui-layout').find('.bjui-tablefixed').hide()
                     
                     var fixedH     = 0
                     var fixedBoxH  = 0
                     var fixedTh    = 0
                     
-                    $unitBox.find('[data-layout-fixed]').each(function(i) {
-                        var $fixed = $(this)
-                        
-                        if (!$fixed.closest('.bjui-layout').length || $target.hasClass('bjui-layout')) {
-                            var $copy = $fixed.clone().appendTo('body')
-                            
-                            fixedH += $copy.outerHeight() || 0
-                            $copy.remove()
-                        }
+                    $unitBox.find('[data-layout-fixed]:visible').each(function() {
+                        fixedH += $(this).outerHeight() || 0
                     })
                     
-                    if (!$fixedBox.hasClass('fixedH') && $fixedBox.length && (!$fixedBox.closest('.bjui-layout').length || $target.hasClass('bjui-layout'))) {
+                    $fixedBox = $unitBox.find('.bjui-tablefixed:visible')
+                    if (!$fixedBox.hasClass('fixedH') && $fixedBox.length) {
                         if ($fixedBox[0].scrollWidth > $fixedBox[0].clientWidth || $fixedBox[0].scrollWidth > $fixedBox[0].offsetWidth) {
                             fixedBoxH = $fixedBox[0].offsetHeight - $fixedBox[0].clientHeight
                         }
                         fixedTh = $fixedBox.find('.fixedtableHeader').outerHeight() || 0
                     }
-                    iH = iRefH - fixedH - fixedBoxH - fixedTh
+                    $unitBox.find('.bjui-layout').find('[data-layout-fixed]').show()
+                    $unitBox.find('.bjui-layout').find('.bjui-tablefixed').show()
+                    bodH = refH - fixedH - fixedBoxH - fixedTh
+                    $box.data('bjuiLayH', (fixedH + fixedBoxH + fixedTh))
                 } else {
-                    iH = iRefH - iLayoutH > 50 ? iRefH - iLayoutH : 50
+                    bodH = refH - layH > 50 ? refH - layH : 50
                 }
-                if ($this.isTag('table') && !$this.parent('[data-layout-h]').length) {
-                    $this.removeAttr('data-layout-h').wrap('<div data-layout-h="'+ iLayoutH +'" style="overflow:auto;width:100%;height:'+ iH +'px"></div>')
+                if ($box.isTag('table') && !$box.parent('[data-layout-h]').length) {
+                    $box.removeAttr('data-layout-h').wrap('<div data-bjui-lay-h="'+ $box.data('bjuiLayH') +'" data-layout-h="'+ layH +'" style="overflow:auto;width:100%;height:'+ bodH +'px"></div>')
                 } else {
-                    $this.height(iH).css('overflow','auto')
-                }
-                if ($fixedBox && $fixedBox.length) {
-                    if ($this[0].scrollWidth != $this[0].offsetWidth)
-                        $fixedBox.tablefixed('resetWidth')
+                    $box.height(bodH).css('overflow','auto')
                 }
             })
         },

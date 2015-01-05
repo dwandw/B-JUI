@@ -7,7 +7,7 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                             <tr>
-                                <th width="105"></th>
+                                <th width="125"></th>
                                 <th>样例</th>
                                 <th>属性</th>
                             </tr>
@@ -50,7 +50,7 @@
                                 <td>data-toggle="selectpicker" multiple</td>
                             </tr>
                             <tr>
-                                <td align="right"><label class="label-control">联动：</label></td>
+                                <td align="right"><label class="label-control">联动(二维数组)：</label></td>
                                 <td>
                                     <select name="province" data-toggle="selectpicker" data-nextselect="#j_form_city" data-refurl="ajax/city_{value}.html">
                                         <option value="all">--省市--</option>
@@ -64,7 +64,7 @@
                                         <option value="all">--区县--</option>
                                     </select>
                                 </td>
-                                <td></td>
+                                <td>数据格式：二维数组</td>
                             </tr>
                             <tr>
                                 <td align="right"><label class="label-control">联动(有初始值)：</label></td>
@@ -82,6 +82,23 @@
                                     </select>
                                 </td>
                                 <td></td>
+                            </tr>
+                            <tr>
+                                <td align="right"><label class="label-control">联动(标准json)：</label></td>
+                                <td>
+                                    <select name="province" data-toggle="selectpicker" data-nextselect="#j_form_city2" data-refurl="ajax/json_city_{value}.html">
+                                        <option value="all">--省市--</option>
+                                        <option value="bj">北京</option>
+                                        <option value="sh">上海</option>
+                                    </select>
+                                    <select name="city" id="j_form_city2" data-toggle="selectpicker" data-nextselect="#j_form_area2" data-refurl="ajax/json_area_{value}.html" data-emptytxt="--城市--">
+                                        <option value="all">--城市--</option>
+                                    </select>
+                                    <select name="area" id="j_form_area2" data-toggle="selectpicker" data-emptytxt="--区县--">
+                                        <option value="all">--区县--</option>
+                                    </select>
+                                </td>
+                                <td>数据格式：标准json</td>
                             </tr>
                             <tr>
                                 <td align="right"><label class="label-control">禁用：</label></td>

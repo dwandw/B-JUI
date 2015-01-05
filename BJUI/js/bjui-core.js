@@ -112,7 +112,10 @@
             
             $('#bjui-leftside, #bjui-container, #bjui-splitBar, #bjui-splitBarProxy').css({top:topH})
             $('#bjui-container').width(iContentW)
-            $('#bjui-container .tabsPageContent').height(iContentH - 31).find('[data-layout-h]').layoutH()
+            $('#bjui-container .tabsPageContent').height(iContentH - 31)
+            setTimeout(function() {
+                $('#bjui-container .tabsPageContent').find('[data-layout-h]:not(.data-layout-h)').layoutH()
+            }, 10)
             $('#bjui-sidebar, #bjui-sidebar-s .collapse, #bjui-splitBar, #bjui-splitBarProxy').height(iContentH - 5)
             $('#bjui-taskbar').css({top: iContentH + $('#bjui-header').height() + 5, width:$(window).width()})
         },

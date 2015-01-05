@@ -223,6 +223,8 @@
                     }
                 }
                 
+                $panel.find('.bjui-layout [data-layout-h]').layoutH()
+                
                 this.getMoreLi().removeClass('active').eq(iTabIndex).addClass('active')
                 currentIndex  = iTabIndex
                 this.scrollCurrent()
