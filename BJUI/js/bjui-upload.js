@@ -297,7 +297,7 @@
             options.uploader = decodeURI(options.uploader).replacePlh($element.closest('.unitBox'))
             
             if (!options.uploader.isFinishedTm()) {
-                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('Upload Plugin: The options uploader is incorrect: '+ options.uploader)
                 return
             }
@@ -511,7 +511,7 @@
                     options.uploader = decodeURI(options.uploader).replacePlh($element.closest('.unitBox'))
                     
                     if (!options.uploader.isFinishedTm()) {
-                        $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                        $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                         BJUI.debug('Upload Plugin: The options uploader is incorrect: '+ options.uploader)
                         return
                     }

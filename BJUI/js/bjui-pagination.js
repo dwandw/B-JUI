@@ -35,7 +35,6 @@
         nums  :  'li.j-num > a',
         jump  :  'li.jumpto',
         pageNumFrag : '<li class="#liClass#"><a href="javascript:;">#pageNum#</a></li>',
-        target      : '',  // refresh container('div') selector
         total       : 0,
         pageSize    : 10,
         pageNum     : 10,

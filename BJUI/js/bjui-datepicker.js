@@ -296,11 +296,11 @@
     }
     
     Datepicker.prototype.addBtn = function() {
-        var that     = this, $element = that.$element
+        var that = this, $element = that.$element
         
-        if (!this.$dateBtn && !this.options.addbtn) {
+        if (!this.$dateBtn && !this.options.addbtn && !$element.parent().hasClass('wrap_bjui_btn_box')) {
             this.$dateBtn = $(FRAG.dateBtn)
-            this.$element.css({'paddingRight':'15px'}).wrap('<span></span>')
+            this.$element.css({'paddingRight':'15px'}).wrap('<span class="wrap_bjui_btn_box"></span>')
             
             var $box   = this.$element.parent()
             var height = this.$element.addClass('form-control').innerHeight()

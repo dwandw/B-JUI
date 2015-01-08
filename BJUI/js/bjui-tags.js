@@ -285,7 +285,7 @@
             options.url = decodeURI(options.url).replacePlh($element.closest('.unitBox'))
             
             if (!options.url.isFinishedTm()) {
-                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('Tags Plugin: The query tags url is incorrect, url: '+ options.url)
                 return
             }

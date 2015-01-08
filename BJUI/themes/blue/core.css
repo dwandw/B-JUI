@@ -45,6 +45,7 @@ fieldset{border-color:#013969;}
 .table > thead > tr > th.orderby.asc a.order.asc{color:#0024ff;}
 .table > thead > tr > th.orderby.desc a.order.desc{color:#0024ff;}
 .table > thead > tr > th.orderby a.order:hover{color:#FFF!important; background:#0024ff;}
+.table > tbody > tr.selected > td{background-color:#aad7fd;}
 /* Main */
 #bjui-header{background:#587fa1 url(topbg.png);}
 #bjui-header > .navbar-header > .navbar-toggle:hover,

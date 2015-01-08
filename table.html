@@ -20,17 +20,6 @@
             <li><a href="javascript:;" class="showMoreSearch" data-toggle="moresearch" data-name="custom" title="更多选项"><i class="fa fa-angle-double-down"></i></a></li>
             <li><button type="submit" class="btn-default" data-icon="search">查询</button></li>
             <li><a class="btn btn-orange" href="javascript:;" data-toggle="reloadsearch" data-clear-query="true" data-icon="undo">清空查询</a></li>
-            <li class="pull-right">
-                <div class="btn-group">
-                    <button type="button" class="btn-default dropdown-toggle" data-toggle="dropdown" data-icon="copy">批量操作<span class="caret"></span></button>
-                    <ul class="dropdown-menu right" role="menu">
-                        <li><a href="book1.xlsx" data-toggle="doexport" data-confirm-msg="确定要导出信息吗？">导出<span style="color: green;">全部</span></a></li>
-                        <li><a href="book1.xlsx" data-toggle="doexportchecked" data-confirm-msg="确定要导出选中项吗？" data-idname="expids" data-group="ids">导出<span style="color: red;">选中</span></a></li>
-                        <li class="divider"></li>
-                        <li><a href="ajaxDone2.html" data-toggle="dodelchecked" data-confirm-msg="确定要删除选中项吗？" data-idname="delids" data-group="ids">删除选中</a></li>
-                    </ul>
-                </div>
-            </li>
         </ul>
         <div class="bjui-moreSearch">
             <label>职业：</label><input type="text" value="" name="profession" size="15" />
@@ -51,11 +40,22 @@
             <li class="left"><button type="button" class="btn-default">功能按钮1</button></li>
             <li class="left"><button type="button" class="btn-green">功能按钮2</button></li>
             <li><button type="button" class="btn-red">其他功能</button></li>
+            <li>
+                <div class="btn-group">
+                    <button type="button" class="btn-default dropdown-toggle" data-toggle="dropdown" data-icon="copy">复选框-批量操作<span class="caret"></span></button>
+                    <ul class="dropdown-menu right" role="menu">
+                        <li><a href="book1.xlsx" data-toggle="doexport" data-confirm-msg="确定要导出信息吗？">导出<span style="color: green;">全部</span></a></li>
+                        <li><a href="book1.xlsx" data-toggle="doexportchecked" data-confirm-msg="确定要导出选中项吗？" data-idname="expids" data-group="ids">导出<span style="color: red;">选中</span></a></li>
+                        <li class="divider"></li>
+                        <li><a href="ajaxDone2.html" data-toggle="doajaxchecked" data-confirm-msg="确定要删除选中项吗？" data-idname="delids" data-group="ids">删除选中</a></li>
+                    </ul>
+                </div>
+            </li>
             <li class="left"><button type="button" class="btn-orange">功能按钮3</button></li>
-            <li class="left"><button type="button" class="btn-blue">功能按钮4</button></li>
+            <li class="left"><button type="button" class="btn-blue" data-url="ajaxDone2.html?id={#bjui-selected}" data-toggle="doajax" data-confirm-msg="确定要删除选中项吗？" data-icon="remove" title="可以在控制台(network)查看被删除ID">删除选中行</button></li>
         </ul>
     </div>
-    <table class="table table-bordered table-hover table-striped table-top" data-layout-h="0">
+    <table class="table table-bordered table-hover table-striped table-top" data-layout-h="0" data-selected-multi="true">
         <thead>
             <tr>
                 <th data-order-field="operation" align="center">业务</th>
@@ -78,7 +78,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr data-id="1">
                 <td>联络</td>
                 <td>孙悟空</td>
                 <td>Sun</td>
@@ -100,7 +100,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="2">
                 <td>联络</td>
                 <td>唐僧</td>
                 <td>Tang</td>
@@ -122,7 +122,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="3">
                 <td>联络</td>
                 <td>猪八戒</td>
                 <td>Zhu</td>
@@ -144,7 +144,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="4">
                 <td>联络</td>
                 <td>沙和尚</td>
                 <td>Sha</td>
@@ -166,9 +166,9 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="5">
                 <td>住宿</td>
-                <td>罗汉1</td>
+                <td>罗汉0</td>
                 <td>Luo</td>
                 <td>Han1</td>
                 <td>男</td>
@@ -188,7 +188,29 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="6">
+                <td>住宿</td>
+                <td>罗汉1</td>
+                <td>Luo</td>
+                <td>Han2</td>
+                <td>男</td>
+                <td>1000-01-02</td>
+                <td>佛国</td>
+                <td>灵山</td>
+                <td>1000002</td>
+                <td>1010-01-02</td>
+                <td>9999-12-31</td>
+                <td>佛国</td>
+                <td>罗汉</td>
+                <td>--</td>
+                <td>2014-10-24 16:02</td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="6"></td>
+                <td>
+                    <a href="form.html?id=6" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
+                </td>
+            </tr>
+            <tr data-id="7">
                 <td>住宿</td>
                 <td>罗汉2</td>
                 <td>Luo</td>
@@ -210,7 +232,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="8">
                 <td>住宿</td>
                 <td>罗汉3</td>
                 <td>Luo</td>
@@ -232,7 +254,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="9">
                 <td>住宿</td>
                 <td>罗汉4</td>
                 <td>Luo</td>
@@ -254,7 +276,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="10">
                 <td>住宿</td>
                 <td>罗汉5</td>
                 <td>Luo</td>
@@ -276,7 +298,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="11">
                 <td>住宿</td>
                 <td>罗汉6</td>
                 <td>Luo</td>
@@ -298,7 +320,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="12">
                 <td>住宿</td>
                 <td>罗汉7</td>
                 <td>Luo</td>
@@ -320,7 +342,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="13">
                 <td>住宿</td>
                 <td>罗汉8</td>
                 <td>Luo</td>
@@ -342,7 +364,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="14">
                 <td>住宿</td>
                 <td>罗汉9</td>
                 <td>Luo</td>
@@ -364,7 +386,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="15">
                 <td>住宿</td>
                 <td>罗汉10</td>
                 <td>Luo</td>
@@ -386,7 +408,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="16">
                 <td>住宿</td>
                 <td>罗汉11</td>
                 <td>Luo</td>
@@ -408,7 +430,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="17">
                 <td>住宿</td>
                 <td>罗汉12</td>
                 <td>Luo</td>
@@ -430,7 +452,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="18">
                 <td>住宿</td>
                 <td>罗汉13</td>
                 <td>Luo</td>
@@ -452,7 +474,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="19">
                 <td>住宿</td>
                 <td>罗汉14</td>
                 <td>Luo</td>
@@ -474,7 +496,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="20">
                 <td>住宿</td>
                 <td>罗汉15</td>
                 <td>Luo</td>
@@ -496,7 +518,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="21">
                 <td>住宿</td>
                 <td>罗汉16</td>
                 <td>Luo</td>
@@ -518,7 +540,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="22">
                 <td>住宿</td>
                 <td>罗汉17</td>
                 <td>Luo</td>
@@ -540,7 +562,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="23">
                 <td>住宿</td>
                 <td>罗汉18</td>
                 <td>Luo</td>
@@ -562,7 +584,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="24">
                 <td>住宿</td>
                 <td>罗汉19</td>
                 <td>Luo</td>
@@ -584,7 +606,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="25">
                 <td>住宿</td>
                 <td>罗汉20</td>
                 <td>Luo</td>
@@ -606,7 +628,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="26">
                 <td>住宿</td>
                 <td>罗汉21</td>
                 <td>Luo</td>
@@ -628,7 +650,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="27">
                 <td>住宿</td>
                 <td>罗汉22</td>
                 <td>Luo</td>
@@ -650,7 +672,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="28">
                 <td>住宿</td>
                 <td>罗汉23</td>
                 <td>Luo</td>
@@ -672,7 +694,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="29">
                 <td>住宿</td>
                 <td>罗汉24</td>
                 <td>Luo</td>
@@ -694,7 +716,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="30">
                 <td>住宿</td>
                 <td>罗汉25</td>
                 <td>Luo</td>
@@ -716,7 +738,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="31">
                 <td>住宿</td>
                 <td>罗汉26</td>
                 <td>Luo</td>
@@ -738,7 +760,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="32">
                 <td>住宿</td>
                 <td>罗汉27</td>
                 <td>Luo</td>
@@ -760,7 +782,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="33">
                 <td>住宿</td>
                 <td>罗汉28</td>
                 <td>Luo</td>
@@ -782,7 +804,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="34">
                 <td>住宿</td>
                 <td>罗汉29</td>
                 <td>Luo</td>
@@ -804,7 +826,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="35">
                 <td>住宿</td>
                 <td>罗汉30</td>
                 <td>Luo</td>
@@ -826,7 +848,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="36">
                 <td>住宿</td>
                 <td>罗汉31</td>
                 <td>Luo</td>
@@ -848,7 +870,7 @@
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="37">
                 <td>住宿</td>
                 <td>罗汉32</td>
                 <td>Luo</td>
@@ -864,13 +886,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:32</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="32"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="37"></td>
                 <td>
-                    <a href="form.html?id=32" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=37" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="38">
                 <td>住宿</td>
                 <td>罗汉33</td>
                 <td>Luo</td>
@@ -886,13 +908,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:33</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="33"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="38"></td>
                 <td>
-                    <a href="form.html?id=33" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=38" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="39">
                 <td>住宿</td>
                 <td>罗汉34</td>
                 <td>Luo</td>
@@ -908,13 +930,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:34</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="34"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="39"></td>
                 <td>
-                    <a href="form.html?id=34" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=39" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="40">
                 <td>住宿</td>
                 <td>罗汉35</td>
                 <td>Luo</td>
@@ -930,13 +952,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:35</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="35"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="40"></td>
                 <td>
-                    <a href="form.html?id=35" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=40" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="41">
                 <td>住宿</td>
                 <td>罗汉36</td>
                 <td>Luo</td>
@@ -952,13 +974,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:36</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="36"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="41"></td>
                 <td>
-                    <a href="form.html?id=36" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=41" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="42">
                 <td>住宿</td>
                 <td>罗汉37</td>
                 <td>Luo</td>
@@ -974,13 +996,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:37</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="37"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="42"></td>
                 <td>
-                    <a href="form.html?id=37" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=42" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="43">
                 <td>住宿</td>
                 <td>罗汉38</td>
                 <td>Luo</td>
@@ -996,13 +1018,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:38</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="38"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="43"></td>
                 <td>
-                    <a href="form.html?id=38" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=43" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="44">
                 <td>住宿</td>
                 <td>罗汉39</td>
                 <td>Luo</td>
@@ -1018,13 +1040,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:39</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="39"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="44"></td>
                 <td>
-                    <a href="form.html?id=39" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=44" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="45">
                 <td>住宿</td>
                 <td>罗汉40</td>
                 <td>Luo</td>
@@ -1040,13 +1062,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:40</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="40"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="45"></td>
                 <td>
-                    <a href="form.html?id=40" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=45" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="46">
                 <td>住宿</td>
                 <td>罗汉41</td>
                 <td>Luo</td>
@@ -1062,13 +1084,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:41</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="41"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="46"></td>
                 <td>
-                    <a href="form.html?id=41" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=46" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="47">
                 <td>住宿</td>
                 <td>罗汉42</td>
                 <td>Luo</td>
@@ -1084,13 +1106,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:42</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="42"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="47"></td>
                 <td>
-                    <a href="form.html?id=42" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=47" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="48">
                 <td>住宿</td>
                 <td>罗汉43</td>
                 <td>Luo</td>
@@ -1106,13 +1128,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:43</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="43"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="48"></td>
                 <td>
-                    <a href="form.html?id=43" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=48" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="49">
                 <td>住宿</td>
                 <td>罗汉44</td>
                 <td>Luo</td>
@@ -1128,13 +1150,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:44</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="44"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="49"></td>
                 <td>
-                    <a href="form.html?id=44" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=49" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="50">
                 <td>住宿</td>
                 <td>罗汉45</td>
                 <td>Luo</td>
@@ -1150,13 +1172,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:45</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="45"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="50"></td>
                 <td>
-                    <a href="form.html?id=45" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=50" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="51">
                 <td>住宿</td>
                 <td>罗汉46</td>
                 <td>Luo</td>
@@ -1172,13 +1194,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:46</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="46"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="51"></td>
                 <td>
-                    <a href="form.html?id=46" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=51" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="52">
                 <td>住宿</td>
                 <td>罗汉47</td>
                 <td>Luo</td>
@@ -1194,13 +1216,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:47</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="47"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="52"></td>
                 <td>
-                    <a href="form.html?id=47" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=52" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="53">
                 <td>住宿</td>
                 <td>罗汉48</td>
                 <td>Luo</td>
@@ -1216,13 +1238,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:48</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="48"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="53"></td>
                 <td>
-                    <a href="form.html?id=48" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=53" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="54">
                 <td>住宿</td>
                 <td>罗汉49</td>
                 <td>Luo</td>
@@ -1238,13 +1260,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:49</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="49"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="54"></td>
                 <td>
-                    <a href="form.html?id=49" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=54" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="55">
                 <td>住宿</td>
                 <td>罗汉50</td>
                 <td>Luo</td>
@@ -1260,13 +1282,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:50</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="50"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="55"></td>
                 <td>
-                    <a href="form.html?id=50" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=55" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="56">
                 <td>住宿</td>
                 <td>罗汉51</td>
                 <td>Luo</td>
@@ -1282,13 +1304,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:51</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="51"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="56"></td>
                 <td>
-                    <a href="form.html?id=51" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=56" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="57">
                 <td>住宿</td>
                 <td>罗汉52</td>
                 <td>Luo</td>
@@ -1304,13 +1326,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:52</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="52"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="57"></td>
                 <td>
-                    <a href="form.html?id=52" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=57" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="58">
                 <td>住宿</td>
                 <td>罗汉53</td>
                 <td>Luo</td>
@@ -1326,13 +1348,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:53</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="53"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="58"></td>
                 <td>
-                    <a href="form.html?id=53" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=58" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="59">
                 <td>住宿</td>
                 <td>罗汉54</td>
                 <td>Luo</td>
@@ -1348,13 +1370,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:54</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="54"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="59"></td>
                 <td>
-                    <a href="form.html?id=54" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=59" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="60">
                 <td>住宿</td>
                 <td>罗汉55</td>
                 <td>Luo</td>
@@ -1370,13 +1392,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:55</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="55"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="60"></td>
                 <td>
-                    <a href="form.html?id=55" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=60" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="61">
                 <td>住宿</td>
                 <td>罗汉56</td>
                 <td>Luo</td>
@@ -1392,13 +1414,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:56</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="56"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="61"></td>
                 <td>
-                    <a href="form.html?id=56" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=61" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="62">
                 <td>住宿</td>
                 <td>罗汉57</td>
                 <td>Luo</td>
@@ -1414,13 +1436,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:57</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="57"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="62"></td>
                 <td>
-                    <a href="form.html?id=57" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=62" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="63">
                 <td>住宿</td>
                 <td>罗汉58</td>
                 <td>Luo</td>
@@ -1436,13 +1458,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:58</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="58"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="63"></td>
                 <td>
-                    <a href="form.html?id=58" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=63" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="64">
                 <td>住宿</td>
                 <td>罗汉59</td>
                 <td>Luo</td>
@@ -1458,13 +1480,13 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 16:59</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="59"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="64"></td>
                 <td>
-                    <a href="form.html?id=59" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=64" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>
-            <tr>
+            <tr data-id="65">
                 <td>住宿</td>
                 <td>罗汉60</td>
                 <td>Luo</td>
@@ -1480,9 +1502,9 @@
                 <td>罗汉</td>
                 <td>--</td>
                 <td>2014-10-24 17:00</td>
-                <td><input type="checkbox" name="ids" data-toggle="icheck" value="60"></td>
+                <td><input type="checkbox" name="ids" data-toggle="icheck" value="65"></td>
                 <td>
-                    <a href="form.html?id=60" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
+                    <a href="form.html?id=65" class="btn btn-green" data-toggle="navtab" data-reload-warn="本页已有打开的内容，确定将刷新本页内容，是否继续？">编辑</a>
                     <a href="ajaxDone2.html" class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除该行信息吗？">删</a>
                 </td>
             </tr>

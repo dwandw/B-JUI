@@ -88,6 +88,7 @@
                             if ($texts.eq(nexInd)) {
                                 $texts.eq(nexInd).focus()
                             }
+                            e.preventDefault()
                         }
                     })
                 })
@@ -135,6 +136,8 @@
                                 } else if ($pic.length) {
                                     if ($td.data('val')) $th.find('.pic-name').val($td.data('val'))
                                     $pic.html($td.html())
+                                } else if ($child.hasClass('wrap_bjui_btn_box')) {
+                                    $child.find('input[data-toggle]').attr('value', val +'')
                                 } else {
                                     $child.attr('value', val +'')
                                 }
@@ -173,8 +176,10 @@
                             $this.prop('disabled', false).closest('.iradio_minimal-purple').removeClass('disabled')
                         if (toggle) {
                             if (toggle == 'doreadonly') return true
-                            else
-                                $this.removeAttr('data-toggle-old').attr('data-toggle', toggle)
+                            else $this.removeAttr('data-toggle-old').attr('data-toggle', toggle)
+                            if (toggle == 'spinner') {
+                                $this.spinner('destroy').spinner()
+                            }
                         }
                         if ($this.is(':text') || $this.is('textarea'))
                             $this.off('keydown.readonly')

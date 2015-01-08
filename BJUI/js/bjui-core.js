@@ -47,6 +47,7 @@
         },
         pageInfo: {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'},
         ajaxTimeout: 3000,
+        alertTimeout: 6000, //alertmsg close timeout
         statusCode: {ok:200, error:300, timeout:301},
         keys: {statusCode:'statusCode', message:'message'},
         ui: {
@@ -79,7 +80,10 @@
             $.extend(BJUI.loginInfo, op.loginInfo)
             $.extend(BJUI.ui, op.ui)
             
+            if (op.JSPATH) this.JSPATH = op.JSPATH
+            if (op.PLUGINPATH) this.PLUGINPATH = op.PLUGINPATH
             if (op.ajaxTimeout) this.ajaxTimeout = op.ajaxTimeout
+            if (op.alertTimeout) this.alertTimeout = op.alertTimeout
             if (!op.ui.showSlidebar) $('#bjui-leftside').slidebar('hide')
             
             this.IS_DEBUG = op.debug || false

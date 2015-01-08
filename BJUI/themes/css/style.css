@@ -134,6 +134,8 @@ label.x150{display:inline-block; width:150px; padding-right:5px;}
 .table > tbody > tr > td.left{text-align:left;}
 .table > thead > tr > th.right,
 .table > tbody > tr > td.right{text-align:right;}
+.table > tbody > tr > td{height:30px;}
+.table.table-condensed > tbody > tr > td{height:auto;}
 .table.table-top{border-top:none;}
 th[align=left]{text-align:left;}
 th[align=center]{text-align:center;}

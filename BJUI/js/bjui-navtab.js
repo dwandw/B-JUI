@@ -220,6 +220,10 @@
                             $panel.one('bsTransitionEnd', function() { $panel.addClass('in') }).emulateTransitionEnd(100)
                         else
                             $panels.removeClass('fade')
+                            
+                        setTimeout(function() {
+                            if (!$panel.hasClass('in')) $panel.addClass('in')
+                        }, 110)
                     }
                 }
                 
@@ -351,7 +355,7 @@
             options.url = decodeURI(options.url).replacePlh($element.closest('.unitBox'))
             
             if (!options.url.isFinishedTm()) {
-                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('Navtab Plugin: The new navtab\'s url is incorrect, url: '+ options.url)
                 return
             }

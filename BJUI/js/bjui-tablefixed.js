@@ -269,6 +269,7 @@
         
         if (!this.$element.attr('class')) $tbody.parent().addClass('table table-striped table-bordered table-hover')
         else $tbody.parent().addClass(this.$element.attr('class'))
+        if (typeof this.$element.attr('data-selected-multi') != 'undefined') $tbody.parent().attr('data-selected-multi', this.$element.attr('data-selected-multi'))
         
         if (this.options.nowrap) {
             $tbody.find('> tr > td').each(function(i) {
@@ -470,6 +471,33 @@
         if (!$this.length) return
         
         Plugin.call($this, 'setOrderBy')
+    })
+    
+    /* selected tr */
+    $(document).on('click.bjui.tr.data-api', 'tr[data-id]', function(e) {
+        var $this     = $(this),
+            $table    = $this.closest('table'),
+            multi     = $table.data('selectedMulti'),
+            id        = $this.data('id'),
+            clsName   = 'selected',
+            $selected = $table.closest('.unitBox').find('#bjui-selected')
+        
+        $this.toggleClass(clsName)
+        if (multi) {
+            id = []
+            $this.siblings('.'+ clsName).add(($this.hasClass('selected') ? $this : '')).each(function() {
+                id.push($(this).data('id'))
+            })
+            id = id.join(',')
+        } else {
+            $this.siblings().removeClass(clsName)
+        }
+        if ($selected && $selected.length) {
+            $selected.val(id)
+        } else {
+            $selected = $('<input type="hidden" id="bjui-selected" value="'+ id +'">')
+            $selected.appendTo($table.closest('.unitBox'))
+        }
     })
     
 }(jQuery);

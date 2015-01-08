@@ -1,8 +1,8 @@
 <script type="text/javascript">
 //自动有效日期
-$(document).on('afterchange.bjui.datepicker', '.j_custom_issuedate', function(e) {
+$(document).on('afterchange.bjui.datepicker', '.j_custom_issuedate', function(e, data) {
     var pattern = 'yyyy-MM-dd'
-    var start   = end = e.date
+    var start   = end = data.value
     var $end    = $(this).closest('tr').find('.j_custom_indate')
     
     if ($end.length) {
@@ -44,10 +44,10 @@ $('#tabledit1').on('afterdelete.bjui.tabledit', function(e) {
                 <div class="btn-group">
                     <button type="button" class="btn-default dropdown-toggle" data-toggle="dropdown" data-icon="copy">批量操作<span class="caret"></span></button>
                     <ul class="dropdown-menu right" role="menu">
-                        <li><a href="doExport" target="dwzExport">导出<span style="color: green;">全部</span></a></li>
-                        <li><a href="doExport" target="checkedExport" idname="ids">导出<span style="color: red;">选中</span></a></li>
+                        <li><a href="book1.xlsx" data-toggle="doexport" data-confirm-msg="确定要导出信息吗？">导出<span style="color: green;">全部</span></a></li>
+                        <li><a href="book1.xlsx" data-toggle="doexportchecked" data-confirm-msg="确定要导出选中项吗？" data-idname="expids" data-group="ids">导出<span style="color: red;">选中</span></a></li>
                         <li class="divider"></li>
-                        <li><a href="doDel" target="checkedAjaxTodo" idname="ids">删除选中</a></li>
+                        <li><a href="ajaxDone2.html" data-toggle="doajaxchecked" data-confirm-msg="确定要删除选中项吗？" data-idname="delids" data-group="ids">删除选中</a></li>
                     </ul>
                 </div>
             </li>
@@ -75,7 +75,7 @@ $('#tabledit1').on('afterdelete.bjui.tabledit', function(e) {
                     <th title="签发地"><input type="text" name="customList[#index#].issueat" data-rule="required" value="北京" size="5"></th>
                     <th title="签证"><input type="checkbox" name="customList[#index#].visa" class="j-icheck" data-toggle="icheck" value="true"></th>
                     <th title="职业"><input type="text" name="customList[#index#].profession" data-rule="required" value="" size="10" data-toggle="lookup" data-url="table-edit-lookup.html" data-group="customList[#index#]" data-width="700" data-height="300"></th>
-                    <th title="手机"><input type="text" name="customList[#index#].mobile" data-rule="required" value="1111111" size="5"></th>
+                    <th title="手机"><input type="text" name="customList[#index#].mobile" data-toggle="spinner" data-rule="required" value="1111111" size="5"></th>
                     <th title="备注"><textarea name="customList[#index#].note" data-toggle="autoheight" rows="1"></textarea></th>
                     <th title="照片">
                         <div id="fileInput-custom-i[#index#]"
@@ -108,7 +108,7 @@ $('#tabledit1').on('afterdelete.bjui.tabledit', function(e) {
                     <td>五指山</td>
                     <td data-val="false">--</td>
                     <td>保镖、斗战圣佛</td>
-                    <td>--</td>
+                    <td>1</td>
                     <td>--</td>
                     <td></td>
                     <td data-noedit="true">

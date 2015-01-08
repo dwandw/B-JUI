@@ -142,7 +142,7 @@
             options.url = decodeURI(options.url).replacePlh(that.$element.closest('.unitBox'))
             
             if (!options.url.isFinishedTm()) {
-                that.$element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                that.$element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('Dialog Plugin: The new dialog\'s url is incorrect, url: '+ options.url)
                 return
             }
@@ -274,7 +274,7 @@
     }
     
     Dialog.prototype.reload = function(option) {
-        var options = $.extend({}, this.tools.getDefaults(), typeof option == 'object' && option)
+        var options = $.extend({}, /*this.tools.getDefaults(),*/ typeof option == 'object' && option)
         var $dialog = (options.id && $('body').data(options.id)) || this.getCurrent()
 
         if ($dialog) this.tools.reload($dialog, options)

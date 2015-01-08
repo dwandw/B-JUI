@@ -34,7 +34,7 @@
 <!-- BJUI.all 分模块压缩版 -->
 <script src="BJUI/js/bjui-all.js"></script>
 <!-- 以下是B-JUI的分模块未压缩版，建议开发调试阶段使用下面的版本 -->
-<!--  
+<!--   
 <script src="BJUI/js/bjui-core.js"></script>
 <script src="BJUI/js/bjui-regional.zh-CN.js"></script>
 <script src="BJUI/js/bjui-frag.js"></script>
@@ -89,14 +89,17 @@
 <script type="text/javascript">
 $(function() {
     BJUI.init({
-        loginInfo   : {url:'login_timeout.html', title:'登录', width:400, height:200}, // 弹出登录对话框
-        statusCode  : {ok:200, error:300, timeout:301}, //[可选]
-        ajaxTimeout : 5000, //[可选]全局Ajax请求超时时间(毫秒)
-        pageInfo    : {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'}, //[可选]
-        keys        : {statusCode:'statusCode', message:'message'}, //[可选]
-        ui          : {showSlidebar:true, hideMode:'display'}, //[可选]hideMode:navtab组件切换的隐藏方式，支持的值有’display’，’offsets’负数偏移位置的值，默认值为’display’
-        debug       : true,    // [可选]调试模式 [true|false，默认false]
-        theme       : 'purple' // 若有Cookie['bjui_theme'],优先选择Cookie['bjui_theme']。皮肤[五种皮肤:default, orange, purple, blue, green]
+        JSPATH       : 'BJUI/',         //[可选]框架路径
+        PLUGINPATH   : 'BJUI/plugins/', //[可选]插件路径
+        loginInfo    : {url:'login_timeout.html', title:'登录', width:400, height:200}, // 会话超时后弹出登录对话框
+        statusCode   : {ok:200, error:300, timeout:301}, //[可选]
+        ajaxTimeout  : 5000, //[可选]全局Ajax请求超时时间(毫秒)
+        alertTimeout : 3000, //[可选]信息提示[info/correct]自动关闭延时(毫秒)
+        pageInfo     : {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'}, //[可选]分页参数
+        keys         : {statusCode:'statusCode', message:'message'}, //[可选]
+        ui           : {showSlidebar:true, hideMode:'display'}, //[可选]hideMode:navtab组件切换的隐藏方式，支持的值有’display’，’offsets’负数偏移位置的值，默认值为’display’
+        debug        : true,    // [可选]调试模式 [true|false，默认false]
+        theme        : 'purple' // 若有Cookie['bjui_theme'],优先选择Cookie['bjui_theme']。皮肤[五种皮肤:default, orange, purple, blue, green]
     })
     //时钟
     var today = new Date(), time = today.getTime()
@@ -260,12 +263,16 @@ $(function(){
                                 <li data-id="56" data-pid="5" data-url="doc/form/select.html" data-tabid="doc-form">plugin:下拉选择框</li>
                                 <li data-id="57" data-pid="5" data-url="doc/form/validate.html" data-tabid="doc-form">plugin:表单验证</li>
                                 <li data-id="6" data-pid="0">表格相关</li>
-                                <li data-id="60" data-pid="6" data-url="doc/table/order.html" data-tabid="doc-table">字段排序</li>
-                                <li data-id="61" data-pid="6" data-url="doc/table/paging.html" data-tabid="doc-table">分页组件</li>
-                                <li data-id="62" data-pid="6" data-url="doc/table/fixed.html" data-tabid="doc-table">固定表头</li>
-                                <li data-id="63" data-pid="6" data-url="doc/table/edit.html" data-tabid="doc-table">可编辑表格</li>
+                                <li data-id="60" data-pid="6" data-url="doc/table/style.html" data-tabid="doc-table">表格样式</li>
+                                <li data-id="61" data-pid="6" data-url="doc/table/order.html" data-tabid="doc-table">字段排序</li>
+                                <li data-id="62" data-pid="6" data-url="doc/table/paging.html" data-tabid="doc-table">分页组件</li>
+                                <li data-id="63" data-pid="6" data-url="doc/table/selected.html" data-tabid="doc-table">行选中操作</li>
+                                <li data-id="64" data-pid="6" data-url="doc/table/fixed.html" data-tabid="doc-table">固定表头</li>
+                                <li data-id="65" data-pid="6" data-url="doc/table/edit.html" data-tabid="doc-table">可编辑表格</li>
                                 <li data-id="7" data-pid="0">其他</li>
                                 <li data-id="70" data-pid="7" data-url="doc/other/contextmenu.html" data-tabid="doc-other">右键菜单</li>
+                                <li data-id="8" data-pid="0">框架皮肤</li>
+                                <li data-id="80" data-pid="8" data-url="doc/theme/color.html" data-tabid="doc-theme">颜色值</li>
                             </ul>
                         </div>
                     </div>
@@ -363,6 +370,12 @@ $(function(){
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <tr>
+                                                        <td>2015.01.05</td>
+                                                        <td>V1.0 内测版本</td>
+                                                        <td>优化layoutH，selectpicker联动支持json数据。</td>
+                                                        <td><span class="label label-info">一般</span></td>
+                                                    </tr>
                                                     <tr>
                                                         <td>2015.01.02</td>
                                                         <td>V1.0 内测版本</td>

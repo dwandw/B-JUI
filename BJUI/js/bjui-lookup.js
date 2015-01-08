@@ -56,7 +56,7 @@
         } else {
             options.url = decodeURI(options.url).replacePlh(that.$element.closest('.unitBox'))
             if (!options.url.isFinishedTm()) {
-                that.$element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                that.$element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('Lookup Plugin: The lookup\'s url is incorrect, url:'+ options.url)
                 return false
             }
@@ -73,11 +73,11 @@
     }
     
     Lookup.prototype.addBtn = function() {
-        var that     = this, $element = that.$element
+        var that = this, $element = that.$element
         
-        if (!this.$lookBtn) {
+        if (!this.$lookBtn && !$element.parent().hasClass('wrap_bjui_btn_box')) {
             this.$lookBtn = $(FRAG.lookupBtn)
-            this.$element.css({'paddingRight':'15px'}).wrap('<span></span>')
+            this.$element.css({'paddingRight':'15px'}).wrap('<span class="wrap_bjui_btn_box"></span>')
             
             var $box   = this.$element.parent()
             var height = this.$element.addClass('form-control').innerHeight()

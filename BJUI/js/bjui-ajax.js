@@ -188,6 +188,12 @@
     Bjuiajax.prototype.divCallback = function(json, $target) {
         var that = this
         
+        if (json.tabid)
+            setTimeout(function() { that.$element.navtab('reloadFlag', json.tabid) }, 100)
+        if (json.dialogid)
+            setTimeout(function() { that.$element.dialog('refresh', json.dialogid) }, 100)
+        if (json.divid)
+            setTimeout(function() { that.$element.bjuiajax('refreshDiv', json.divid) }, 100)
         if (that.options.reload) {
             var form = that.tools.getPagerForm($target)
             var url  = null, type = null
@@ -226,6 +232,10 @@
         
         if (json.tabid)
             setTimeout(function() { that.$element.navtab('reloadFlag', json.tabid) }, 100)
+        if (json.dialogid)
+            setTimeout(function() { that.$element.dialog('refresh', json.dialogid) }, 100)
+        if (json.divid)
+            setTimeout(function() { that.$element.bjuiajax('refreshDiv', json.divid) }, 100)
         if (json.closeCurrent && !json.forward)
             that.$element.navtab('closeCurrentTab')
         else if (that.options.reload)
@@ -249,8 +259,12 @@
     Bjuiajax.prototype.dialogCallback = function(json) {
         var that = this
         
+        if (json.tabid)
+            setTimeout(function() { that.$element.navtab('reloadFlag', json.tabid) }, 100)
         if (json.dialogid)
             setTimeout(function() { that.$element.dialog('refresh', json.dialogid) }, 100)
+        if (json.divid)
+            setTimeout(function() { that.$element.bjuiajax('refreshDiv', json.divid) }, 100)
         if (json.closeCurrent && !json.forward)
             that.$element.dialog('closeCurrent')
         else if (that.options.reload)
@@ -307,7 +321,7 @@
             options.url = decodeURI(options.url).replacePlh($element.closest('.unitBox'))
             
             if (!options.url.isFinishedTm()) {
-                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('The submit form action is incorrect: '+ options.url)
                 return false
             }
@@ -352,7 +366,7 @@
             options.url = decodeURI(options.url).replacePlh($element.closest('.unitBox'))
             
             if (!options.url.isFinishedTm()) {
-                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('The ajax link incorrect: '+ options.url)
                 return false
             }
@@ -387,7 +401,22 @@
             
             $target
                 .data('url', url).data('type', type).data('data', data)
-                .ajaxUrl({ type:type, url:url, data:data })
+                .ajaxUrl({ type:type, url:url, data:data, callback:function(html) {
+                    $target.find('[data-layout-h]').addClass('bjui-layout-h')
+                    $(window).resize(function() {
+                        setTimeout(function() { $target.find('[data-layout-h]').layoutH() }, 20)
+                    })
+                } })
+        }
+    }
+    
+    Bjuiajax.prototype.refreshDiv = function(divid) {
+        if (divid && typeof divid == 'string') {
+            var arr = divid.split(',')
+            
+            for (var i = 0; i < arr.length; i++) {
+                this.refreshLayout({target: '#'+ arr[i]})
+            }
         }
     }
     
@@ -401,7 +430,7 @@
             options.url = decodeURI(options.url).replacePlh($element.closest('.unitBox'))
             
             if (!options.url.isFinishedTm()) {
-                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('The ajax url is incorrect: '+ options.url)
                 return
             }
@@ -486,7 +515,7 @@
             options.url = decodeURI(options.url).replacePlh($element.closest('.unitBox'))
             
             if (!options.url.isFinishedTm()) {
-                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('The ajax url is incorrect: '+ options.url)
                 return
             }
@@ -542,7 +571,7 @@
             options.url = decodeURI(options.url).replacePlh($element.closest('.unitBox'))
             
             if (!options.url.isFinishedTm()) {
-                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('The ajax url is incorrect: '+ options.url)
                 return
             }

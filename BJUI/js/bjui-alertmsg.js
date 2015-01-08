@@ -90,13 +90,13 @@
                 if ($box && $box.length) $box.remove()
                 $box = $newbox
                 $box.css({top:-$box.outerHeight()}).show().animate({top:'0px'}, 500)
-
+                
                 if (timer) {
                     clearTimeout(timer)
                     timer = null
                 }
                 if (options.types.info == type || options.types.correct == type) {
-                    timer = setTimeout(function() { $tools.close() }, 6000)
+                    timer = setTimeout(function() { $tools.close() }, BJUI.alertTimeout)
                 } else {
                     $alertbg.show()
                 }

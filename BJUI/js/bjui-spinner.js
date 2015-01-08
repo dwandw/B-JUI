@@ -82,34 +82,42 @@
             BJUI.debug('Spinner Plugin: Parameter is non-numeric type!')
             return
         }
-        if (!this.$spinner)
+        
+        this.addBtn()
+    }
+    
+    Spinner.prototype.addBtn = function() {
+        var that = this, $element = that.$element
+        
+        if (!this.$lookBtn && !$element.parent().hasClass('wrap_bjui_btn_box')) {
             this.$spinner = $(FRAG.spinnerBtn)
             
-        $element.css({'paddingRight':'13px'}).wrap('<span></span>')
-        
-        var $box = $element.parent()
-        
-        $box.css('position', 'relative')
-        this.$spinner.css({'height':this.height}).appendTo($box)
-        this.$spinner.on('selectstart', function() { return false })
-        
-        var timer = null
-        
-        this.$spinner.find('li').on('click', function(e) {
-            that.tools.changeVal($(this))
-        }).on('mousedown', function() {
-            var $btn = $(this)
+            $element.css({'paddingRight':'13px'}).wrap('<span class="wrap_bjui_btn_box"></span>')
             
-            timer = setInterval(function() {
-                that.tools.changeVal($btn)
-            }, 150)
-        }).on('mouseup', function() { clearTimeout(timer) })
+            var $box = $element.parent()
+        
+            $box.css('position', 'relative')
+            this.$spinner.css({'height':this.height}).appendTo($box)
+            this.$spinner.on('selectstart', function() { return false })
+            
+            var timer = null
+            
+            that.$spinner.find('li').on('click', function(e) {
+                that.tools.changeVal($(this))
+            }).on('mousedown', function() {
+                var $btn = $(this)
+                
+                timer = setInterval(function() {
+                    that.tools.changeVal($btn)
+                }, 150)
+            }).on('mouseup', function() { clearTimeout(timer) })
+        }
     }
     
     Spinner.prototype.destroy = function() {
-        if (this.$spinner) {
-            this.$element.upwrap()
-            $spinner.remove()
+        if (this.$element.parent().hasClass('wrap_bjui_btn_box')) {
+            this.$element.parent().find('.bjui-spinner').remove()
+            this.$element.unwrap()
         }
     }
     

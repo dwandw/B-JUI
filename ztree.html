@@ -78,6 +78,8 @@ function changeZtree(t) {
 }
 //单击事件
 function ZtreeClick(event, treeId, treeNode) {
+    event.preventDefault()
+    
     var $detail = $('#ztree-detail')
     
     if ($detail.attr('tid') == treeNode.tId) return
@@ -346,7 +348,8 @@ function M_AddDiyDom(treeId, treeNode) {
                             <td>onClick</td>
                             <td>function(event, treeId, treeNode, clickFlag)</td>
                             <td>null</td>
-                            <td>用于捕获节点被点击的事件回调函数</td>
+                            <td>用于捕获节点被点击的事件回调函数，<br>请为该函数添加<code>event.preventDefault()</code>以阻止a链接的默认事件
+                            </td>
                         </tr>
                         <tr>
                             <td>beforeDrag</td>

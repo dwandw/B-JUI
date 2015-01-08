@@ -41,7 +41,7 @@
             options.url = decodeURI(options.url).replacePlh(this.$element.closest('.unitBox'))
             
             if (!options.url.isFinishedTm()) {
-                this.$element.alertmsg('error', (options.warn || FRAG.alertPlhMsg))
+                this.$element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('Ajaxtab Plugin: The new ajaxtab\'s url is incorrect, url: '+ options.url)
                 return
             }
