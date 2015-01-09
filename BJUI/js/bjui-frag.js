@@ -101,7 +101,7 @@
                 '    <div class="dialogHeader" onselectstart="return false;" oncopy="return false;" onpaste="return false;" oncut="return false;">' +
                 '        <a class="close" href="#close" title="#close#"><i class="fa fa-times-circle"></i></a>' +
                 '        <a class="maximize" href="#maximize" title="#maximize#"><i class="fa fa-plus-circle"></i></a>' +
-                '        <a class="restore" href="#restore" title="#restore#"><i class="fa fa-circle"></i></a>' +
+                '        <a class="restore" href="#restore" title="#restore#"><i class="fa fa-minus-circle"></i></a>' +
                 '        <a class="minimize" href="#minimize" title="#minimize#"><i class="fa fa-minus-circle"></i></a>' +
                 '        <h1><span><i class="fa fa-th-large"></i></span> <span class="title">#title#</span></h1>' +
                 '    </div>' +
