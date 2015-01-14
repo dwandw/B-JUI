@@ -215,6 +215,7 @@ th[align=right]{text-align:right;}
 .bjui-headBar > .pagination-box > ul > li.jumpto .goto,
 .bjui-footBar > .pagination-box > ul > li.jumpto .goto{margin-left:-1px; height:25px; line-height:17px;}
 .bjui-pageContent{position:relative;}
+.bjui-pageContent p{line-height: 1.5;}
 .bjui-pageFormContent{position:relative; display:block; padding:10px 5px; overflow:auto;}
 .bjui-searchBar{height:24px;}
 .bjui-searchBar > li{float:left; margin-right:8px;}
