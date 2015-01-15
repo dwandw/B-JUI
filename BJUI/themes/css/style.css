@@ -153,12 +153,14 @@ th[align=right]{text-align:right;}
 #bjui-header > nav > .nav > li > .dropdown-menu > li > a.theme_orange{color:#FF6600;}
 #bjui-header > nav > .nav > li > .dropdown-menu > li > a.theme_purple{color:#7e00ff;}
 #bjui-header > nav > .nav > li > .dropdown-menu > li > a.theme_blue{color:blue;}
+#bjui-header > nav > .nav > li > .dropdown-menu > li > a.theme_red{color:#fc5555;}
 #bjui-header > nav > .nav > li > .dropdown-menu > li > a.theme_green{color:green;}
 #bjui-header > nav > .nav > li > a.theme{font-size:20px; line-height:18px; border-right-width:0px;}
 #bjui-header > nav > .nav > li > a.theme.default{background-color:#929292;}
 #bjui-header > nav > .nav > li > a.theme.orange{background-color:#FF6600;}
 #bjui-header > nav > .nav > li > a.theme.purple{background-color:#c000ff;}
 #bjui-header > nav > .nav > li > a.theme.blue{background-color:#008aff;}
+#bjui-header > nav > .nav > li > a.theme.red{background-color:#fc5555;}
 #bjui-header > nav > .nav > li > a.theme.green{background-color:#1ca61c;}
 #bjui-leftside{position:absolute; top:55px; left:0; z-index:1;}
 #bjui-sidebar{position:absolute; top:0; left:5px; width:200px; overflow:hidden; background:#f7f7f7; border-style:solid; border-width:1px 1px 0 1px;}
