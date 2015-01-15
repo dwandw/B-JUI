@@ -257,6 +257,10 @@
 
         // Helper events
         helper.on(_click + ' mousedown mouseup mouseover mouseout ' + _touch, function(event) {
+          if (helper.hasClass('readonly')) {
+              event.stopPropagation();
+              return false;
+          }
           var type = event[_type],
 
             // mousedown|mouseup

@@ -68,6 +68,7 @@
             url         : $form.attr('action'),
             data        : $form.serializeArray(),
             dataType    : 'json',
+            timeout     : BJUI.ajaxTimeout,
             files       : $form.find(':file'),
             iframe      : true,
             processData : false,
@@ -87,6 +88,7 @@
             contentType : false,
             processData : false,
             dataType    : 'json',
+            timeout     : BJUI.ajaxTimeout,
             cache       : false,
             success     : successFn,
             error       : $.proxy(this.ajaxError, this)
@@ -99,6 +101,7 @@
             url         : $form.attr('action'),
             data        : $form.serializeArray(),
             dataType    : 'json',
+            timeout     : BJUI.ajaxTimeout,
             cache       : false,
             success     : successFn,
             error       : $.proxy(this.ajaxError, this)
@@ -174,13 +177,15 @@
         
         that.ajaxDone(json)
         
-        if ($target && $target.length) {
-            that.divCallback(json, $target)
-        } else {
-            if (that.tools.getTarget() == Bjuiajax.NAVTAB) {
-                that.navtabCallback(json)
+        if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
+            if ($target && $target.length) {
+                that.divCallback(json, $target)
             } else {
-                that.dialogCallback(json)
+                if (that.tools.getTarget() == Bjuiajax.NAVTAB) {
+                    that.navtabCallback(json)
+                } else {
+                    that.dialogCallback(json)
+                }
             }
         }
     }
@@ -445,6 +450,7 @@
                 url      : options.url,
                 data     : options.data || {},
                 dataType : 'json',
+                timeout  : BJUI.ajaxTimeout,
                 cache    : false,
                 success  : function(data, textStatus, jqXHR) {
                     callback ? callback.apply(that, [data]) : $.proxy(that.ajaxCallback(data), that)
@@ -608,6 +614,7 @@
                 type     : options.type || 'POST',
                 url      : options.url,
                 dataType : 'json',
+                timeout  : BJUI.ajaxTimeout,
                 cache    : false,
                 success  : function(data, textStatus, jqXHR) {
                     callback ? callback.apply(that, [data]) : $.proxy(that.ajaxCallback(data), that)

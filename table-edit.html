@@ -33,14 +33,14 @@ $('#tabledit1').on('afterdelete.bjui.tabledit', function(e) {
         <input type="hidden" name="numPerPage" value="${model.numPerPage}">
         <input type="hidden" name="orderField" value="${param.orderField}">
         <input type="hidden" name="orderDirection" value="${param.orderDirection}">
-        <ul class="bjui-searchBar">
-            <li><label>姓名：</label><input type="text" value="" name="name" size="10" /></li>
-            <li><label>护照号：</label><input type="text" value="" name="passportno" size="8" /></li>
-            <li><label>出生日期:</label><input type="text" value="" name="birthday" size="10" /></li>
-            <li><button type="submit" class="btn-default" data-icon="search">查询</button></li>
-            <li><a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true)" data-icon="undo">清空查询</a></li>
-            <li><div class="alert alert-info search-inline"><i class="fa fa-info-circle"></i> 双击行可编辑</div></li>
-            <li class="pull-right">
+        <div class="bjui-searchBar">
+            <label>姓名：</label><input type="text" value="" name="name" size="10">&nbsp;
+            <label>护照号：</label><input type="text" value="" name="passportno" size="8">&nbsp;
+            <label>出生日期:</label><input type="text" value="" name="birthday" size="10">&nbsp;
+            <button type="submit" class="btn-default" data-icon="search">查询</button>&nbsp;
+            <a class="btn btn-orange" href="javascript:;" onclick="$(this).navtab('reloadForm', true)" data-icon="undo">清空查询</a>&nbsp;
+            <div class="alert alert-info search-inline"><i class="fa fa-info-circle"></i> 双击行可编辑</div>&nbsp;
+            <div class="pull-right">
                 <div class="btn-group">
                     <button type="button" class="btn-default dropdown-toggle" data-toggle="dropdown" data-icon="copy">批量操作<span class="caret"></span></button>
                     <ul class="dropdown-menu right" role="menu">
@@ -50,10 +50,10 @@ $('#tabledit1').on('afterdelete.bjui.tabledit', function(e) {
                         <li><a href="ajaxDone2.html" data-toggle="doajaxchecked" data-confirm-msg="确定要删除选中项吗？" data-idname="delids" data-group="ids">删除选中</a></li>
                     </ul>
                 </div>
-            </li>
-            <li><button type="button" class="btn-green" data-toggle="tableditadd" data-target="#tabledit1" data-num="1" data-icon="plus">添加编辑行</button></li>
-            <li><button type="button" class="btn-green" onclick="$(this).tabledit('add', $('#tabledit1'), 2)">添加编辑行2</button></li>
-        </ul>
+            </div>
+            <button type="button" class="btn-green" data-toggle="tableditadd" data-target="#tabledit1" data-num="1" data-icon="plus">添加编辑行</button>&nbsp;
+            <button type="button" class="btn-green" onclick="$(this).tabledit('add', $('#tabledit1'), 2)">添加编辑行2</button>
+        </div>
     </form>
 </div>
 <div class="bjui-pageContent">
@@ -98,7 +98,7 @@ $('#tabledit1').on('afterdelete.bjui.tabledit', function(e) {
                     <td>孙悟空</td>
                     <td>Sun</td>
                     <td>Wukong</td>
-                    <td data-val="true">男</td>
+                    <td data-val="02">男</td>
                     <td>0100-01-01</td>
                     <td>花果山</td>
                     <td>灵山</td>

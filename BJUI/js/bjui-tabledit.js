@@ -167,13 +167,16 @@
                         
                         if (typeof val == 'undefined') val = $td.html()
                         if ($td.data('notread')) return true
-                        if ($this.isTag('select')) {
-                            $this.val($td.data('val')).prop('disabled', false).selectpicker('refresh')
-                        }   
-                        if ($this.is(':checkbox') || $this.is(':radio'))
-                            $this.val($td.data('val')).prop('disabled', false).closest('.icheckbox_minimal-purple').removeClass('disabled')
-                        if ($this.is(':radio'))
-                            $this.prop('disabled', false).closest('.iradio_minimal-purple').removeClass('disabled')
+                        if ($this.isTag('select'))
+                            $this.val($td.attr('data-val')).selectpicker('refresh').nextAll('.bootstrap-select').removeClass('readonly').find('button').removeClass('disabled')
+                        if ($this.is(':checkbox')) {
+                            $this.val($td.attr('data-val')).closest('.icheckbox_minimal-purple').removeClass('disabled')
+                            $this.closest('.icheckbox_minimal-purple').find('ins').removeClass('readonly')
+                        }
+                        if ($this.is(':radio')) {
+                            $this.val($td.attr('data-val')).closest('.iradio_minimal-purple').removeClass('disabled')
+                            $this.closest('.iradio_minimal-purple').find('ins').removeClass('readonly')
+                        }
                         if (toggle) {
                             if (toggle == 'doreadonly') return true
                             else $this.removeAttr('data-toggle-old').attr('data-toggle', toggle)
@@ -197,15 +200,18 @@
                         
                         if ($td.data('notread')) return true
                         if ($this.isTag('select'))
-                            $this.prop('disabled', true).selectpicker('refresh')
-                        if ($this.is(':checkbox'))
-                            $this.prop('disabled', true).closest('.icheckbox_minimal-purple').addClass('disabled')
-                        if ($this.is(':radio'))
-                            $this.prop('disabled', true).closest('.iradio_minimal-purple').addClass('disabled')
+                            $this.nextAll('.bootstrap-select').addClass('readonly').find('button').addClass('disabled')
+                        if ($this.is(':checkbox')) {
+                            $this.closest('.icheckbox_minimal-purple').addClass('disabled')
+                            $this.closest('.icheckbox_minimal-purple').find('ins').addClass('readonly')
+                        }
+                        if ($this.is(':radio')) {
+                            $this.closest('.iradio_minimal-purple').addClass('disabled')
+                            $this.closest('.iradio_minimal-purple').find('ins').addClass('readonly')
+                        }
                         if (toggle) {
                             if (toggle == 'doedit' || toggle == 'doreadonly') return true
-                            else
-                                $this.removeAttr('data-toggle').attr('data-toggle-old', toggle)
+                            else $this.removeAttr('data-toggle').attr('data-toggle-old', toggle)
                         }
                         if ($this.is(':text') || $this.is('textarea'))
                             $this.on('keydown.readonly', function(e) { e.preventDefault() })

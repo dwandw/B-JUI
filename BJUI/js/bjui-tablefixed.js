@@ -147,6 +147,7 @@
         var width       = this.$container.innerWidth()
         var height      = this.options.height
         
+        if (this.$container.hasClass('tab-pane')) width = this.$container.parent().innerWidth() - 20
         if (typeof this.options.width == 'string' && this.options.width.indexOf('%')) {
             this.options.newWidth = width * (this.options.width.replace('%', '') / 100)
         } else {
@@ -154,14 +155,14 @@
         }
         
         this.options.styles = []
-        this.$element.wrap('<div class="bjui-tablefixed"></div>')
+        this.$element.wrap('<div class="bjui-tablefixed clearfix"></div>')
         this.$fixed = this.$element.parent()
         this.initHead()
         this.initBody()
         this.resizeCol()
         this.resizeGrid()
         
-        if (height) this.$fixed.height(height).addClass('fixedH')
+        if (height && !this.$fixed.closest('.tab-content').length) this.$fixed.height(height).addClass('fixedH')
     }
     
     Tablefixed.prototype.initHead = function() {
@@ -485,7 +486,7 @@
         $this.toggleClass(clsName)
         if (multi) {
             id = []
-            $this.siblings('.'+ clsName).add(($this.hasClass('selected') ? $this : '')).each(function() {
+            $this.siblings('.'+ clsName).add(($this.hasClass(clsName) ? $this : '')).each(function() {
                 id.push($(this).data('id'))
             })
             id = id.join(',')

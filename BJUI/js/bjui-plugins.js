@@ -125,17 +125,19 @@
         })
         
         /* moreSearch */
-        $box.find('a[data-toggle="moresearch"]').each(function() {
+        $box.find('[data-toggle="moresearch"]').each(function() {
             var $element = $(this),
                 $parent  = $element.closest('.bjui-pageHeader'),
                 $more    = $parent && $parent.find('.bjui-moreSearch'),
                 name     = $element.data('name')
-                
+            
+            if (!$element.attr('title')) $element.attr('title', '更多查询条件')
             $element.click(function(e) {
                 if (!$more.length) {
                     BJUI.debug('Not created \'moresearch\' box[class="bjui-moreSearch"]!')
                     return
                 }
+                $more.css('top', $parent.outerHeight() - 1)
                 if ($more.is(':visible')) {
                     $element.html('<i class="fa fa-angle-double-down"></i>')
                     if (name) $('body').data('moresearch.'+ name, false)
@@ -149,7 +151,7 @@
             })
             
             if (name && $('body').data('moresearch.'+ name)) {
-                $more.fadeIn()
+                $more.css('top', $parent.outerHeight() - 1).fadeIn()
                 $element.html('<i class="fa fa-angle-double-up"></i>')
             }
         })

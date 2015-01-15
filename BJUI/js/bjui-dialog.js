@@ -210,8 +210,10 @@
                 e.preventDefault()
                 e.stopPropagation()
             }).on('dblclick', '.dialogHeader > h1', function(e) {
-                if ($dialog.find('> .dialogHeader > a.restore').is(':hidden')) $dialog.find('a.maximize').trigger('click')
-                else $dialog.find('> .dialogHeader > a.restore').trigger('click')
+                if (options.maxable) {
+                    if ($dialog.find('> .dialogHeader > a.restore').is(':hidden')) $dialog.find('a.maximize').trigger('click')
+                    else $dialog.find('> .dialogHeader > a.restore').trigger('click')
+                }
             }).on('mousedown.bjui.dialog.drag', '.dialogHeader > h1', function(e) {
                 that.switchDialog($dialog)
                 

@@ -667,6 +667,7 @@ if (!Object.keys) {
     },
 
     isDisabled: function () {
+      if (this.$newElement.hasClass('readonly')) return true;
       return this.$element.is(':disabled');
     },
 

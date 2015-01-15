@@ -101,7 +101,7 @@
                 '    <div class="dialogHeader" onselectstart="return false;" oncopy="return false;" onpaste="return false;" oncut="return false;">' +
                 '        <a class="close" href="#close" title="#close#"><i class="fa fa-times-circle"></i></a>' +
                 '        <a class="maximize" href="#maximize" title="#maximize#"><i class="fa fa-plus-circle"></i></a>' +
-                '        <a class="restore" href="#restore" title="#restore#"><i class="fa fa-minus-circle"></i></a>' +
+                '        <a class="restore" href="#restore" title="#restore#"><i class="fa fa-history"></i></a>' +
                 '        <a class="minimize" href="#minimize" title="#minimize#"><i class="fa fa-minus-circle"></i></a>' +
                 '        <h1><span><i class="fa fa-th-large"></i></span> <span class="title">#title#</span></h1>' +
                 '    </div>' +
@@ -270,7 +270,7 @@
                   '    <li rel="closeAll">#closeall#</li>' +
                   '</ul>'
         ,
-        externalFrag: '<iframe src="{url}" style="width:100%;height:{height};" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>',
+        externalFrag: '<iframe src="{url}" data-layout-h="0" style="width:100%;height:{height};" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>',
         uploadTemp: '<div id="{fileId}" class="item">' +
                     '    <div class="info">' + 
                     '        <span class="up_filename">{fileName}</span><span class="up_confirm" title="#upConfirm#"><i class="fa fa-play-circle-o"></i></span><span class="up_pause" title="#upPause#"><span class="glyphicon glyphicon-pause"></span></span><span class="up_cancel" title="#upCancel#"><i class="fa fa-times-circle-o"></i></span>' +

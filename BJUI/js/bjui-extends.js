@@ -54,10 +54,16 @@
                         }
                     }
                 },
-                error      : BJUI.ajaxError,
+                error      : function(xhr, ajaxOptions, thrownError) {
+                    $this.bjuiajax('ajaxError', xhr, ajaxOptions, thrownError)
+                    if (!$this.closest('.bjui-layout').length) {
+                        if ($this.closest('.navtab-panel').length) $this.navtab('closeCurrentTab')
+                        else $this.dialog('closeCurrent')
+                    }
+                },
                 statusCode : {
                     503: function(xhr, ajaxOptions, thrownError) {
-                        alert(FRAG.statusCode_503.replace('#statusCode_503#', BJUI.regional.statusCode_503) || thrownError)
+                        $this.alertmsg('error', FRAG.statusCode_503.replace('#statusCode_503#', BJUI.regional.statusCode_503) || thrownError)
                     }
                 }
             })

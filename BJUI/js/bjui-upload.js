@@ -59,15 +59,18 @@
         jpg  :[ 'image/jpeg' ],
         png  :[ 'image/png' ],
         gif  :[ 'image/gif' ],
+        swf  :[ 'application/x-shockwave-flash' ],
         doc  :[ 'application/msword' ],
-        xls  :[ 'application/msexcel' ],
+        xls  :[ 'application/vnd.ms-excel' ],
         docx :[ 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ],
         xlsx :[ 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ],
         ppt  :[ 'application/vnd.ms-powerpoint' ],
         pptx :[ 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ],
-        mp3  :[ 'audio/mp3' ],
+        mp3  :[ 'audio/mpeg' ],
         mp4  :[ 'video/mp4' ],
-        pdf  :[ 'application/pdf' ]
+        pdf  :[ 'application/pdf' ],
+        txt  :[ 'text/plain' ],
+        xml  :[ 'text/xml' ]
     }
     
     Upload.prototype.TOOLS = function() {
@@ -112,6 +115,7 @@
                     var mime = this.getMimetype(types[i])
                     
                     if (mime) result.push(mime)
+                    else result.push('.'+ types[i])
                 }
                 return result.join(',')
             },

@@ -551,7 +551,7 @@
     }
     
     Navtab.prototype.openExternal = function(url, $panel) {
-        var ih = panels.height()
+        var ih = $panel.closest('.navtab-panel').height()
         
         $panel.html(FRAG.externalFrag.replaceAll('{url}', url).replaceAll('{height}', ih +'px'))
     }

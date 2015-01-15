@@ -165,7 +165,12 @@
             var options = $.extend({}, Lookup.DEFAULTS, $this.data(), typeof option == 'object' && option)
             var data    = $this.data('bjui.lookup')
             
-            if (!data) $this.data('bjui.lookup', (data = new Lookup(this, options)))
+            if (!data) {
+                $this.data('bjui.lookup', (data = new Lookup(this, options)))
+            } else if ($this.data('newurl')) {
+                data.options.url = $this.data('newurl')
+                $this.data('bjui.dialog', null)
+            }
             if (typeof property == 'string' && $.isFunction(data[property])) {
                 [].shift.apply(args)
                 if (!args) data[property]()
@@ -203,10 +208,10 @@
     $(document).on('click.bjui.lookup.data-api', '[data-toggle="lookupbtn"]', function(e) {
         var $this = $(this)
         
-        if ($this.attr('href') && !$this.data('url')) $this.data('url', $this.attr('href'))
-        if (!$this.data('title')) $this.data('title', $this.text())
+        if ($this.attr('href') && !$this.data('url')) $this.attr('data-url', $this.attr('href'))
+        if (!$this.data('title')) $this.attr('data-title', $this.text())
         
-        Plugin.call($this, $this.data())
+        Plugin.call($this)
         
         e.preventDefault()
     })
