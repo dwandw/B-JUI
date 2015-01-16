@@ -612,6 +612,22 @@
             }, 'json')
         })
 
+        /* ========================================================================
+         * @description ECharts
+         * @author 小策一喋 <xvpindex@qq.com>
+         * @Blog http://www.topjui.com
+         * ======================================================================== */
+        var $echarts = $box.find('[data-toggle="echarts"]')
+        $echarts.each(function(){
+            var $element  = $(this)
+            var options   = $element.data()
+            $element.attr('id', options.id)
+            var myChart = echarts.init(document.getElementById(options.id))
+            $.get(options.url, function(chartData){
+                myChart.setOption(chartData)
+            }, 'json')
+        })
+
 
     })
     
