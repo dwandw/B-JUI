@@ -604,9 +604,11 @@
          * @Blog http://www.topjui.com
          * ======================================================================== */
         var $highcharts = $box.find('[data-toggle="highcharts"]')
+        
         $highcharts.each(function(){
             var $element  = $(this)
             var options   = $element.data()
+            
             $.get(options.url, function(chartData){
                 $element.highcharts(chartData)
             }, 'json')
@@ -618,17 +620,17 @@
          * @Blog http://www.topjui.com
          * ======================================================================== */
         var $echarts = $box.find('[data-toggle="echarts"]')
+        
         $echarts.each(function(){
-            var $element  = $(this)
-            var options   = $element.data()
-            $element.attr('id', options.id)
-            var myChart = echarts.init(document.getElementById(options.id))
+            var $element = $(this)
+            var options  = $element.data()
+            var myChart  = echarts.init($element[0])
+            
             $.get(options.url, function(chartData){
                 myChart.setOption(chartData)
             }, 'json')
         })
-
-
+        
     })
     
 }(jQuery);
