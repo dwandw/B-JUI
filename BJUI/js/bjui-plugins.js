@@ -597,6 +597,22 @@
             $(this).validator({ignore: ':input'})
             $(this).validator('destroy')
         })
+
+        /* ========================================================================
+         * @description highCharts
+         * @author 小策一喋 <xvpindex@qq.com>
+         * @Blog http://www.topjui.com
+         * ======================================================================== */
+        var $highcharts = $box.find('[data-toggle="highcharts"]')
+        $highcharts.each(function(){
+            var $element  = $(this)
+            var options   = $element.data()
+            $.get(options.url, function(chartData){
+                $element.highcharts(chartData)
+            }, 'json')
+        })
+
+
     })
     
 }(jQuery);

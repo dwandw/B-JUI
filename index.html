@@ -31,10 +31,10 @@
 <!--[if lte IE 9]>
 <script src="BJUI/other/jquery.iframe-transport.js"></script>    
 <![endif]-->
-<!-- BJUI.all 分模块压缩版 -->
-<script src="BJUI/js/bjui-all.js"></script>
+<!-- BJUI.all 分模块压缩版
+<script src="BJUI/js/bjui-all.js"></script> -->
 <!-- 以下是B-JUI的分模块未压缩版，建议开发调试阶段使用下面的版本 -->
-<!-- 
+
 <script src="BJUI/js/bjui-core.js"></script>
 <script src="BJUI/js/bjui-regional.zh-CN.js"></script>
 <script src="BJUI/js/bjui-frag.js"></script>
@@ -60,7 +60,7 @@
 <script src="BJUI/js/bjui-theme.js"></script>
 <script src="BJUI/js/bjui-initui.js"></script>
 <script src="BJUI/js/bjui-plugins.js"></script>
--->
+
 <!-- plugins -->
 <!-- swfupload for uploadify && kindeditor -->
 <script src="BJUI/plugins/swfupload/swfupload.js"></script>
@@ -81,6 +81,9 @@
 <script src="BJUI/plugins/icheck/icheck.min.js"></script>
 <!-- dragsort -->
 <script src="BJUI/plugins/dragsort/jquery.dragsort-0.5.1.min.js"></script>
+<!-- highcharts -->
+<script src="BJUI/plugins/highcharts/highcharts.js"></script>
+<script src="BJUI/plugins/highcharts/highcharts-3d.js"></script>
 <!-- other plugins -->
 <script src="BJUI/plugins/other/jquery.autosize.js"></script>
 <link href="BJUI/plugins/uploadify/css/uploadify.css" rel="stylesheet">
@@ -211,6 +214,13 @@ $(function(){
                                 <li data-id="3" data-pid="0">弹出窗口</li>
                                 <li data-id="30" data-pid="3" data-url="dialog.html" data-tabid="dialog">弹出窗口</li>
                                 <li data-id="31" data-pid="3" data-url="alert.html" data-tabid="alert">信息提示</li>
+
+                                <li data-id="4" data-pid="0">图形报表</li>
+                                <li data-id="40" data-pid="4" data-url="chart.html" data-tabid="chart">综合图表</li>
+                                <li data-id="40" data-pid="4" data-url="chart-3dpie.html" data-tabid="chart-3dpie">3D饼图</li>
+                                <li data-id="41" data-pid="4" data-url="chart-line.html" data-tabid="chart-line">折线图</li>
+                                <li data-id="42" data-pid="4" data-url="chart-3dcolumn.html" data-tabid="chart-3dcolumn">3D柱状图</li>
+
                                 <li data-id="5" data-pid="0">框架组件</li>
                                 <li data-id="51" data-pid="5" data-url="tabs.html" data-tabid="tabs">选项卡</li>
                                 <li data-id="6" data-pid="0">其他插件</li>
@@ -273,6 +283,8 @@ $(function(){
                                 <li data-id="70" data-pid="7" data-url="doc/other/contextmenu.html" data-tabid="doc-other">右键菜单</li>
                                 <li data-id="8" data-pid="0">框架皮肤</li>
                                 <li data-id="80" data-pid="8" data-url="doc/theme/color.html" data-tabid="doc-theme">颜色值</li>
+                                <li data-id="9" data-pid="0">图形报表</li>
+                                <li data-id="90" data-pid="9" data-url="doc/chart/chart.html" data-tabid="doc-charts">图表调用</li>
                             </ul>
                         </div>
                     </div>
