@@ -624,9 +624,7 @@
         $echarts.each(function(){
             var $element = $(this)
             var options  = $element.data()
-            var theme = "default"
-
-            if (options.theme) theme = options.theme
+            var theme = options.theme ? options.theme : 'default'
 
             require.config({
                 paths: {
