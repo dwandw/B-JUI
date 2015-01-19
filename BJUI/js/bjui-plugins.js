@@ -624,11 +624,30 @@
         $echarts.each(function(){
             var $element = $(this)
             var options  = $element.data()
-            var myChart  = echarts.init($element[0])
-            
-            $.get(options.url, function(chartData){
-                myChart.setOption(chartData)
-            }, 'json')
+            var theme = "default"
+
+            if (options.theme) theme = options.theme
+
+            require.config({
+                paths: {
+                    echarts: BJUI.PLUGINPATH + 'echarts'
+                }
+            })
+
+            require(
+                [
+                    'echarts',
+                    'echarts/theme/' + theme,
+                    'echarts/chart/' + options.type
+                ],
+                function (ec,theme) {
+                    var myChart = ec.init($element[0],theme);
+
+                    $.get(options.url, function(chartData){
+                        myChart.setOption(chartData)
+                    }, 'json')
+                }
+            )
         })
         
     })
