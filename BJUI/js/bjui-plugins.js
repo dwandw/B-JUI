@@ -625,6 +625,7 @@
             var $element = $(this)
             var options  = $element.data()
             var theme = options.theme ? options.theme : 'default'
+            var typeArr = options.type.split(',')
 
             require.config({
                 paths: {
@@ -636,7 +637,8 @@
                 [
                     'echarts',
                     'echarts/theme/' + theme,
-                    'echarts/chart/' + options.type
+                    'echarts/chart/' + typeArr[0],
+                    typeArr[1] ? 'echarts/chart/' + typeArr[1] : 'echarts'
                 ],
                 function (ec,theme) {
                     var myChart = ec.init($element[0],theme);
