@@ -19,80 +19,104 @@
                     <tr>
                         <td>id</td>
                         <td>string</td>
-                        <td>navtab</td>
-                        <td>弹窗的ID，如果指定重复，将覆盖现有的ID相同弹窗。</td>
+                        <td>dialog</td>
+                        <td>[必选] 弹窗的ID，如果指定重复，将覆盖现有的ID相同弹窗。</td>
                     </tr>
                     <tr>
                         <td>title</td>
                         <td>string</td>
-                        <td>New tab</td>
-                        <td>弹窗打开后显示的名称。</td>
+                        <td>New Dialog</td>
+                        <td>[可选] 弹窗打开后显示的名称，可从data-title属性获取或直接获取触发DOM的text值。</td>
                     </tr>
                     <tr>
                         <td>url</td>
                         <td>string</td>
                         <td>undefined</td>
-                        <td><span class="badge"><i>D-Url</i></span> 请求数据的url，a链接触发时可以将url定义在href属性。</td>
+                        <td>[可选] <code>url参数或target参数必选一项</code> <span class="badge"><i>D-Url</i></span> 请求数据的url，a链接触发时可以将url定义在href属性。</td>
                     </tr>
                     <tr>
                         <td>type</td>
                         <td>string</td>
                         <td>GET</td>
-                        <td>Http请求方式，可选‘GET/POST’。</td>
+                        <td>[可选] Http请求方式，可选‘GET/POST’。</td>
                     </tr>
                     <tr>
                         <td>data</td>
                         <td>object</td>
                         <td>{}</td>
-                        <td>请求url时，需要发送的data数据。</td>
+                        <td>[可选] 请求url时，需要发送的data数据。</td>
                     </tr>
                     <tr>
                         <td>width</td>
                         <td>int</td>
                         <td>500</td>
-                        <td>弹窗的宽度。</td>
+                        <td>[可选] 弹窗的宽度。</td>
                     </tr>
                     <tr>
                         <td>height</td>
                         <td>int</td>
                         <td>300</td>
-                        <td>弹窗的高度。</td>
+                        <td>[可选] 弹窗的高度。</td>
                     </tr>
                     <tr>
                         <td>max</td>
                         <td>boolean</td>
                         <td>false</td>
-                        <td>打开弹窗时直接最大化。</td>
+                        <td>[可选] 打开弹窗时直接最大化。</td>
                     </tr>
                     <tr>
                         <td>mask</td>
                         <td>boolean</td>
                         <td>false</td>
-                        <td>是否模态窗口。</td>
+                        <td>[可选] 是否模态窗口。</td>
                     </tr>
                     <tr>
                         <td>resizable</td>
                         <td>boolean</td>
                         <td>true</td>
-                        <td>可以调整弹窗的大小。</td>
+                        <td>[可选] 可以调整弹窗的大小。</td>
                     </tr>
                     <tr>
                         <td>drawable</td>
                         <td>boolean</td>
                         <td>true</td>
-                        <td>可以拖动弹窗。</td>
+                        <td>[可选] 可以拖动弹窗。</td>
                     </tr>
                     <tr>
                         <td>maxable</td>
                         <td>boolean</td>
                         <td>true</td>
-                        <td>是否显示最大化按钮。</td>
+                        <td>[可选] 是否显示最大化按钮。</td>
                     </tr>
                     <tr>
                         <td>minable</td>
                         <td>boolean</td>
                         <td>true</td>
-                        <td>是否显示最小化按钮（模态弹窗无效）。</td>
+                        <td>[可选] 是否显示最小化按钮（模态弹窗无效）。</td>
+                    </tr>
+                    <tr>
+                        <td>target</td>
+                        <td>selector</td>
+                        <td>null</td>
+                        <td>[可选] 从指定的jQuery容器中加载内容到dialog，请为该容器添加属性<code>data-noinit="true"</code>以阻止容器中的内容提前初始化，为容器添加Class[<code>hide</code>]以隐藏待加载内容。</td>
+                    </tr>
+                    <tr>
+                        <td>onLoad</td>
+                        <td>function($dialog)</td>
+                        <td>null</td>
+                        <td>[可选] dialog加载完成后的事件回调，回调函数的参数<code>$dialog</code>为该dialog的jQuery对象。</td>
+                    </tr>
+                    <tr>
+                        <td>beforeClose</td>
+                        <td>function($dialog)</td>
+                        <td>null</td>
+                        <td>[可选] <b>返回值: boolean</b>。 dialog关闭前的事件回调，返回true则关闭，返回false不关闭。</td>
+                    </tr>
+                    <tr>
+                        <td>onClose</td>
+                        <td>function()</td>
+                        <td>null</td>
+                        <td>[可选] dialog关闭后的事件回调。</td>
                     </tr>
                 </tbody>
             </table>

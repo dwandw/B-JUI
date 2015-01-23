@@ -1,3 +1,17 @@
+<script type="text/javascript">
+var doc_dialog_test_count = 0
+
+function doc_dialog_beforeClose($dialog) {
+    if (doc_dialog_test_count == 3) return true
+    for (var i = 0; i < 4; i++) {
+        $dialog.alertmsg('confirm', '你确定要把我关掉？你不确定3次我是不会消失的。', {okCall: function() { doc_dialog_test_count++ }})
+    }
+    return (doc_dialog_test_count < 3 ? false : true)
+}
+function doc_dialog_onClose() {
+    $(this).alertmsg('info', '你刚刚关闭了一个dialog。')
+}
+</script>
 <div class="bjui-pageContent">
     <div class="pageFormContent" data-layout-h="0">
         <div class="bjui-doc">
@@ -5,9 +19,7 @@
             <blockquote>
                 <p>创建一个dialog有以下两种方式：</p>
             </blockquote>
-            <a href="doc/dialog/mydialog.html" data-toggle="dialog" data-id="A1">A1</a>
-            <a href="doc/dialog/mydialog.html" data-toggle="dialog" data-id="A2">A2</a>
-            <a href="javascript:;" onclick="$(this).dialog('close', 'A2')">关闭A2</a>
+            
             <ul>
                 <li>Data属性：DOM添加属性<code>data-toggle="dialog"</code>后，单击触发。<br>
                     <span class="label label-default">DOM示例1：</span>　<a href="doc/dialog/mydialog.html" data-toggle="dialog" data-id="mydialog1" data-title="我的业务弹窗1">打开dialog</a><br>
@@ -17,6 +29,40 @@
                     <span class="label label-default">DOM示例2：</span>　<button type="button" class="btn-green" data-toggle="dialog" data-id="mydialog2" data-url="doc/dialog/mydialog.html" data-title="我的业务弹窗2">打开dialog</button>
                     <pre class="brush: html">
                         <button type="button" class="btn-green" data-toggle="dialog" data-id="mydialog2" data-url="mydialog.html" data-title="我的业务弹窗2">打开dialog</button>
+                    </pre>
+                    <span class="label label-default">其他示例[加载容器中的内容]：</span>　<button type="button" class="btn-green" data-toggle="dialog" data-id="mydialog3" data-target="#doc-dialog-target" data-title="加载容器中的内容">打开dialog</button>
+                    <div id="doc-dialog-target" data-noinit="true" class="hide">
+                        <p><input type="checkbox" id="doc-dialog-checkbox" data-toggle="icheck" data-label="测试Checkbox"></p>
+                        <p><label>文本框：</label><input type="text" placeholder="文本框1" size="25"></p>
+                        <p><label>下拉框：</label><select data-toggle="selectpicker"><option value="1">选项一</option><option value="2">选项二</option></select></p>
+                    </div>
+                    <p>
+                        <pre class="brush: html">
+                            &lt;button type="button" class="btn-green" data-toggle="dialog" data-id="mydialog3" data-target="#doc-dialog-target" data-title="加载容器中的内容">打开dialog&lt;/button>&lt;/p>
+                            &lt;div id="doc-dialog-target" data-noinit="true" class="hide">
+                                &lt;p>&lt;input type="checkbox" id="doc-dialog-checkbox" data-toggle="icheck" data-label="测试Checkbox">&lt;/p>
+                                &lt;p>&lt;label>文本框：&lt;/label>&lt;input type="text" placeholder="文本框1" size="25">&lt;/p>
+                                &lt;p>&lt;label>下拉框：&lt;/label>&lt;select data-toggle="selectpicker">&lt;option value="1">选项一&lt;/option>&lt;option value="2">选项二&lt;/option>&lt;/select>&lt;/p>
+                            &lt;/div>
+                        </pre>
+                    </p>
+                    <span class="label label-default">其他示例[回调函数]：</span>　<button type="button" class="btn-green" data-toggle="dialog" data-id="mydialog4" data-target="#doc-dialog-target" data-title="回调函数示例" data-before-close="doc_dialog_beforeClose" data-on-close="doc_dialog_onClose">打开dialog</button>
+                    <pre class="brush: js; html-script: true">
+                        &lt;script type="text/javascript">
+                            var doc_dialog_test_count = 0
+    
+                            function doc_dialog_beforeClose($dialog) {
+                                if (doc_dialog_test_count == 3) return true
+                                for (var i = 0; i < 4; i++) {
+                                    $dialog.alertmsg('confirm', '你确定要把我关掉？你不确定3次我是不会消失的。', {okCall: function() { doc_dialog_test_count++ }})
+                                }
+                                return (doc_dialog_test_count < 3 ? false : true)
+                            }
+                            function doc_dialog_onClose() {
+                                $(this).alertmsg('info', '你刚刚关闭了一个dialog。')
+                            }
+                        &lt;/script>
+                        &lt;button type="button" class="btn-green" data-toggle="dialog" data-id="mydialog4" data-target="#doc-dialog-target" data-title="回调函数示例" data-before-close="doc_dialog_beforeClose" data-on-close="doc_dialog_onClose">打开dialog&lt;/button>
                     </pre>
                 </li>
                 <li>jQuery API：<br>

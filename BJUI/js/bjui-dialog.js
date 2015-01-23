@@ -57,21 +57,24 @@
     }
     
     Dialog.DEFAULTS = {
-        id        : 'dialog',
-        title     : 'New Dialog',
-        url       : undefined,
-        type      : 'GET',
-        data      : {},
-        width     : 500,
-        height    : 300,
-        minW      : 65,
-        minH      : 40,
-        max       : false,
-        mask      : false,
-        resizable : true,
-        drawable  : true,
-        maxable   : true,
-        minable   : true
+        id          : 'dialog',
+        title       : 'New Dialog',
+        url         : undefined,
+        type        : 'GET',
+        data        : {},
+        width       : 500,
+        height      : 300,
+        minW        : 65,
+        minH        : 40,
+        max         : false,
+        mask        : false,
+        resizable   : true,
+        drawable    : true,
+        maxable     : true,
+        minable     : true,
+        onLoad      : null,
+        beforeClose : null,
+        onClose     : null
     }
     
     Dialog.ZINDEX = 30
@@ -104,16 +107,28 @@
                 $('body').find('> .bjui-dialog-container').not($dialog).removeClass(shadow)
             },
             reload: function($dialog, options) {
-                var $dialogContent = $dialog.find('> .dialogContent')
+                var $dialogContent = $dialog.find('> .dialogContent'), onLoad
                 
-                options = $.extend($dialog.data('options'), options || {})
+                options = $.extend({}, $dialog.data('options'), options || {})
+                onLoad  = options.onLoad ? options.onLoad.toFunc() : null
                 
                 $dialog.trigger(BJUI.eventType.beforeLoadDialog)
-                $dialogContent.ajaxUrl({
-                    type:options.type || 'GET', url:options.url, data:options.data || {}, callback:function(response) {
-                        $dialog.trigger('show.bjui.dialog', $dialog)
-                    }
-                })
+                
+                if (options.url) {
+                    $dialogContent.ajaxUrl({
+                        type:options.type || 'GET', url:options.url, data:options.data || {}, callback:function(response) {
+                            if (onLoad) onLoad.apply(that, [$dialog])
+                        }
+                    })
+                } else if (options.target) {
+                    var html = $(options.target).html() || $dialog.data('bjui.dialog.target')
+                    
+                    $(options.target).empty()
+                    $dialog.data('bjui.dialog.target', html)
+                    $dialogContent.trigger(BJUI.eventType.beforeAjaxLoad).html(html).initui()
+                    
+                    if (onLoad) onLoad.apply(that, [$dialog])
+                }
             },
             resizeContent:function($dialog, width, height) {
                 var $dialogContent = $dialog.find('> .dialogContent')
@@ -135,19 +150,24 @@
         var $body   = $('body')
         var $dialog = $body.data(this.options.id)
         
-        if (!(options.url)) {
-            BJUI.debug('Dialog Plugin: Error trying to open a dialog, url is undefined!')
-            return
-        } else {
-            options.url = decodeURI(options.url).replacePlh(that.$element.closest('.unitBox'))
-            
-            if (!options.url.isFinishedTm()) {
-                that.$element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
-                BJUI.debug('Dialog Plugin: The new dialog\'s url is incorrect, url: '+ options.url)
+        
+        if (!options.target || !$(options.target).length) {
+            if (!(options.url)) {
+                BJUI.debug('Dialog Plugin: Error trying to open a dialog, url is undefined!')
                 return
+            } else {
+                options.url = decodeURI(options.url).replacePlh(that.$element.closest('.unitBox'))
+                
+                if (!options.url.isFinishedTm()) {
+                    that.$element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
+                    BJUI.debug('Dialog Plugin: The new dialog\'s url is incorrect, url: '+ options.url)
+                    return
+                }
+                
+                options.url = encodeURI(options.url)
             }
-            
-            options.url = encodeURI(options.url)
+        } else {
+            options.url = undefined
         }
         if ($dialog) { //if dialog'id is exists
             var op = $dialog.data('options') || options
@@ -155,7 +175,7 @@
             this.switchDialog($dialog)
             
             if ($dialog.is(':hidden')) $dialog.show()
-            if (op.url != options.url) {
+            if (!op.url || op.url != options.url) {
                 $.extend(op, options)
                 $dialog.data('options', op)
                 
@@ -276,7 +296,7 @@
     }
     
     Dialog.prototype.reload = function(option) {
-        var options = $.extend({}, /*this.tools.getDefaults(),*/ typeof option == 'object' && option)
+        var options = $.extend({}, typeof option == 'object' && option)
         var $dialog = (options.id && $('body').data(options.id)) || this.getCurrent()
 
         if ($dialog) this.tools.reload($dialog, options)
@@ -337,18 +357,26 @@
     }
     
     Dialog.prototype.close = function(dialog) {
-        var that    = this
-        var $dialog = (typeof dialog == 'string') ? $('body').data(dialog) : dialog
-        var $mask   = $dialog.data('bjui.dialog.mask')
-        var options = $dialog.data('options')
+        var that        = this
+        var $dialog     = (typeof dialog == 'string') ? $('body').data(dialog) : dialog
+        var $mask       = $dialog.data('bjui.dialog.mask')
+        var options     = $dialog.data('options')
+        var target      = $dialog.data('bjui.dialog.target')
+        var beforeClose = options.beforeClose ? options.beforeClose.toFunc() : null
+        var onClose     = options.onClose ? options.onClose.toFunc() : null
+        var canClose    = true
         
         if (!$dialog || !options) return
+        if (beforeClose) canClose = beforeClose.apply(that, [$dialog])
+        if (!canClose) return
+        if (options.target && target) $(options.target).html(target) 
         if ($mask && $mask.length) $mask.remove()
         else if ($.fn.taskbar) this.$element.taskbar('closeDialog', options.id)
         
         $dialog.animate({top:-$dialog.outerHeight(), opacity:0.1}, 'normal', function() {
             $('body').removeData(options.id)
             $dialog.trigger(BJUI.eventType.beforeCloseDialog).remove()
+            if (onClose) onClose.apply(that)
             
             var $dialogs  = $('body').find('> .bjui-dialog-container')
             var $_current = undefined

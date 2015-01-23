@@ -165,7 +165,7 @@ th[align=right]{text-align:right;}
 #bjui-leftside{position:absolute; top:55px; left:0; z-index:1;}
 #bjui-sidebar{position:absolute; top:0; left:5px; width:200px; overflow:hidden; background:#f7f7f7; border-style:solid; border-width:1px 1px 0 1px;}
 #bjui-sidebar-s{position:absolute; top:0; left:0; display:none; width:24px;}
-#bjui-sidebar > .toggleCollapse{display:block; height:25px; overflow:hidden;}
+#bjui-sidebar > .toggleCollapse{display:block; height:25px; overflow:hidden; border-radius:2px 2px 0 0;}
 #bjui-sidebar > .toggleCollapse h2{float:left; margin:0; padding:0; padding-left:8px; width:150px; font-size:14px; font-weight:bold; line-height:26px;}
 #bjui-sidebar > .toggleCollapse div{float:right; display:block; width:25px; height:25px; overflow:hidden; text-indent:3px; cursor:pointer;}
 #bjui-sidebar > .toggleCollapse div i{font-size:18px; font-weight:bold; line-height:25px;}

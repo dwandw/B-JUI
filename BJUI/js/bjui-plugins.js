@@ -508,9 +508,9 @@
         
         /* Kindeditor */
         $box.find('[data-toggle="kindeditor"]').each(function() {
-            var $editor         = $(this), options = $editor.data()
+            var $editor = $(this), options = $editor.data()
             
-            if (options.items)                     options.items = options.items.split(',')
+            if (options.items)                     options.items = options.items.replaceAll('\'', '').replaceAll(' ', '').split(',')
             if (options.afterUpload)         options.afterUpload = options.afterUpload.toFunc()
             if (options.afterSelectFile) options.afterSelectFile = options.afterSelectFile.toFunc()
             if (options.confirmSelect)     options.confirmSelect = options.confirmSelect.toFunc()
@@ -548,7 +548,7 @@
                 hr : ['class', '.page-break-after'],
                 'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : []
             }
-            
+            alert(1)
             KindEditor.create($editor, {
                 pasteType                : options.pasteType,
                 minHeight                : options.minHeight || 260,
@@ -556,13 +556,13 @@
                 items                    : options.items || KindEditor.options.items,
                 uploadJson               : options.uploadJson,
                 fileManagerJson          : options.fileManagerJson,
-                allowFileManager         : true,
-                fillDescAfterUploadImage : true, //上传图片成功后转到属性页，为false则直接插入图片[设为true方便自定义函数(X_afterSelect)]
+                allowFileManager         : options.allowFileManager || true,
+                fillDescAfterUploadImage : options.fillDescAfterUploadImage || true, //上传图片成功后转到属性页，为false则直接插入图片[设为true方便自定义函数(X_afterSelect)]
                 afterUpload              : options.afterUpload,
                 afterSelectFile          : options.afterSelectFile,
                 X_afterSelect            : options.confirmSelect,
                 htmlTags                 : htmlTags,
-                cssPath                  : BJUI.JSPATH + 'plugins/kindeditor_4.1.10/editor-content.css',
+                cssPath                  : BJUI.PLUGINPATH + 'kindeditor_4.1.10/editor-content.css',
                 afterBlur                : function() { this.sync() }
             })
         })
