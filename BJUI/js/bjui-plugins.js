@@ -641,7 +641,7 @@
                     typeArr[1] ? 'echarts/chart/' + typeArr[1] : 'echarts'
                 ],
                 function (ec,theme) {
-                    var myChart = ec.init($element[0],theme);
+                    var myChart = ec.init($element[0],theme)
 
                     $.get(options.url, function(chartData){
                         myChart.setOption(chartData)
