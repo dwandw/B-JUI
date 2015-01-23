@@ -222,9 +222,10 @@
         /*替换占位符为对应选择器的值*/ //{^(.|\#)[A-Za-z0-9_-\s]*}
         replacePlh: function($box) {
             $box = $box || $(document)
-            return this.replace(RegExp('{.*}', 'g'), function($1) {
+            return this.replace(/{\/?[^}]*}/g, function($1) {
                 var $input = $box.find($1.replace(/[{}]+/g, ''))
-                return $input.val() ? $input.val() : $1
+                
+                return $input && $input.val() ? $input.val() : $1
             })
         },
         replaceMsg: function(holder) {

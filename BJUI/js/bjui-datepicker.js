@@ -322,6 +322,7 @@
         var minDate   = tools.getMinDate(), maxDate = tools.getMaxDate()
         var yearstart = minDate.getFullYear(), yearend = maxDate.getFullYear()
         
+        $year.empty()
         for (var y = yearstart; y <= yearend; y++) {
             $year.append('<option value="'+ y +'"'+ (dw.year == y ? ' selected' : '') +'>'+ y +'</option>')
         }
