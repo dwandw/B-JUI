@@ -548,7 +548,7 @@
                 hr : ['class', '.page-break-after'],
                 'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : []
             }
-            alert(1)
+            
             KindEditor.create($editor, {
                 pasteType                : options.pasteType,
                 minHeight                : options.minHeight || 260,
