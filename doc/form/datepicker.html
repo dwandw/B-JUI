@@ -8,7 +8,7 @@
             <h4>初始化</h4>
             <ul>
                 <li>Data属性：input添加属性<code>data-toggle="datepicker"</code>。
-                    <span class="label label-default">DOM示例：</span>　<input type="text" data-toggle="datepicker"><br>
+                    <span class="label label-default">DOM示例：</span>　<input type="text" class="doc_datepicker" data-toggle="datepicker"><br>
                     <p>示例代码：</p>
                     <pre class="brush: html">
                         &lt;input type="text" data-toggle="datepicker">
@@ -94,24 +94,12 @@
             </table>
             <p>这样监听datepicker的事件：<code>mydate - selector</code>表示触发日期选择的input选择器</p>
             <pre class="brush: js">
-                $(document).on('afterchange.bjui.datepicker', 'mydate - selector', function(e, data) {
+                $('mydate - selector').on('afterchange.bjui.datepicker', function(e, data) {
                     var mydate = data.value
                     
                     // do something...
                 })
             </pre>
-            <blockquote class="point">
-                <p>如果事件代码写在页片中，为防止页片刷新之类的导致document重复绑定事件，需要在on事件前先调用off方法解除已绑定事件。代码如下：</p>
-                <pre class="brush: js">
-                    $(document)
-                        .off('afterchange.bjui.datepicker', '.mydate-birthday')
-                        .on('afterchange.bjui.datepicker', '.mydate-birthday', function(e, data) {
-                            var mydate = data.value
-                            
-                            // do something...
-                    })
-                </pre>
-            </blockquote>
         </div>
     </div>
     <div class="bjui-footBar">

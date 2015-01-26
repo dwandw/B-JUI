@@ -1,3 +1,18 @@
+<script type="text/javascript">
+function doc_navtab_onLoad($navtab) {
+    $navtab.alertmsg('info', 'onLoad回调：不填写工号是不能关闭本navtab的。')
+}
+function doc_navtab_beforeClose($navtab) {
+    var code = $navtab.find('#doc-mytab-code').val()
+    
+    if (code) return true
+    $navtab.alertmsg('error', 'beforeClose回调：关闭navtab前请先填入你的工号。')
+    return false
+}
+function doc_navtab_onClose() {
+    $(this).alertmsg('info', 'onClose回调：你刚刚关闭了一个navtab。')
+}
+</script>
 <div class="bjui-pageContent">
     <div class="pageFormContent" data-layout-h="0">
         <div class="bjui-doc">
@@ -14,6 +29,22 @@
                     <span class="label label-default">DOM示例2：</span>　<button type="button" class="btn-green" data-toggle="navtab" data-id="mynavtab" data-reload-warn="已打开业务页面，确认将重新载入?" data-url="doc/navtab/mytab.html?d=2" data-title="我的业务页面">打开navtab</button>
                     <pre class="brush: html">
                         <button type="button" class="btn-green" data-toggle="navtab" data-id="mynavtab" data-reload-warn="已打开业务页面，确认将重新载入?" data-url="mytab.html?d=2" data-title="我的业务页面">打开navtab</button>
+                    </pre>
+                    <span class="label label-default">其他示例[回调函数]：</span>　<button type="button" class="btn-green" data-toggle="navtab" data-id="mynavtab" data-reload-warn="已打开业务页面，确认将重新载入?" data-url="doc/navtab/mytab.html?d=3" data-title="navtab回调函数示例" data-on-load="doc_navtab_onLoad" data-before-close="doc_navtab_beforeClose" data-on-close="doc_navtab_onClose">打开navtab</button>
+                    <pre class="brush: js; html-script: true">
+                        &lt;script type="text/javascript">
+                            function doc_navtab_beforeClose($navtab) {
+                                var code = $navtab.find('#doc-mytab-code').val()
+                                
+                                if (code) return true
+                                $navtab.alertmsg('error', '关闭navtab前请先填入你的工号。')
+                                return false
+                            }
+                            function doc_navtab_onClose() {
+                                $(this).alertmsg('info', '你刚刚关闭了一个navtab。')
+                            }
+                        &lt;/script>
+                        &lt;button type="button" class="btn-green" data-toggle="navtab" data-id="mynavtab" data-reload-warn="已打开业务页面，确认将重新载入?" data-url="doc/navtab/mytab.html?d=3" data-title="navtab回调函数示例" data-before-close="doc_navtab_beforeClose" data-on-close="doc_navtab_onClose">打开navtab&lt;/button>
                     </pre>
                 </li>
                 <li>jQuery API：<br>

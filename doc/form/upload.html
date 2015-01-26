@@ -12,8 +12,8 @@
                     
                     $(this).bjuiajax('ajaxDone', json)
                     if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
-                        $('#doc_pic').val(json.pic)
-                        $('#doc_span_pic').html('已上传图片：<img src="'+ json.pic +'" width="100">')
+                        $('#doc_pic').val(json.filename)
+                        $('#doc_span_pic').html('已上传图片：<img src="'+ json.filename +'" width="100">')
                     }
                 }
             </script>
@@ -21,7 +21,7 @@
                 <li>Data属性：div添加属性<code>data-toggle="upload"</code>后可触发上传组件。<br>
                     <span class="label label-default">DOM示例：</span>
                         <div style="display:inline-block; vertical-align:middle;">
-                            <div id="doc_pic_up" data-toggle="upload" data-uploader="doc/form/ajaxPic.html" 
+                            <div id="doc_pic_up" data-toggle="upload" data-uploader="ajaxUpload.html" 
                                 data-file-size-limit="1024000000"
                                 data-file-type-exts="*.jpg;*.png;"
                                 data-multi="true"
@@ -39,8 +39,8 @@
                                 
                                 $(this).bjuiajax('ajaxDone', json)
                                 if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
-                                    $('#doc_pic').val(json.pic)
-                                    $('#doc_span_pic').html('已上传图片：&lt;img src="'+ json.pic +'" width="100">')
+                                    $('#doc_pic').val(json.filename)
+                                    $('#doc_span_pic').html('已上传图片：&lt;img src="'+ json.filename +'" width="100">')
                                 }
                             }
                         &lt;/script>
@@ -62,10 +62,6 @@
                     </pre>
                 </li>
             </ul>
-            <div id="A12"></div>
-            <script type="text/javascript">
-                $('#A12').upload({uploader:"doc/form/ajaxPic.html"})
-            </script>
             <h4>参数（options）</h4>
             <table class="table table-bordered table-striped table-hover">
                 <thead>
@@ -154,6 +150,33 @@
                         <td>string</td>
                         <td>null</td>
                         <td>[可选] <code>HTML5专用</code>上传按钮的图标。</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4>回调函数的JSON参数</h4>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>类型</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>statusCode</td>
+                        <td>int</td>
+                        <td><strong>必选。</strong>状态码(ok = 200, error = 300, timeout = 301)，可以在BJUI.init时配置三个参数的默认值。</td>
+                    </tr>
+                    <tr>
+                        <td>message</td>
+                        <td>string</td>
+                        <td><strong>可选。</strong>提示信息内容。</td>
+                    </tr>
+                    <tr>
+                        <td>filename</td>
+                        <td>string</td>
+                        <td><strong>可选。</strong>上传成功后的文件名称或路径。</td>
                     </tr>
                 </tbody>
             </table>

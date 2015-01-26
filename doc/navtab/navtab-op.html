@@ -19,50 +19,68 @@
                     <tr>
                         <td>id</td>
                         <td>string</td>
-                        <td>navtab</td>
-                        <td>标签的ID，如果指定重复，将覆盖现有的ID相同标签。</td>
+                        <td>undefined</td>
+                        <td>[必选] 标签的ID，如果指定重复，将覆盖现有的ID相同标签。</td>
                     </tr>
                     <tr>
                         <td>title</td>
                         <td>string</td>
                         <td>New tab</td>
-                        <td>标签打开后显示的名称。</td>
+                        <td>[可选] 标签打开后显示的名称。</td>
                     </tr>
                     <tr>
                         <td>url</td>
                         <td>string</td>
                         <td>undefined</td>
-                        <td><span class="badge"><i>D-Url</i></span> 请求数据的url，a链接触发时可以将url定义在href属性。</td>
+                        <td>[必选] <span class="badge"><i>D-Url</i></span> 请求数据的url，a链接触发时可以将url定义在href属性。</td>
                     </tr>
                     <tr>
                         <td>external</td>
                         <td>boolean</td>
                         <td>false</td>
-                        <td>是否以iframe方式加载外部页面。</td>
+                        <td>[可选] 是否以iframe方式加载外部页面。</td>
                     </tr>
                     <tr>
                         <td>type</td>
                         <td>string</td>
                         <td>GET</td>
-                        <td>Http请求方式，可选‘GET/POST’。</td>
+                        <td>[可选] Http请求方式，可选‘GET/POST’。</td>
                     </tr>
                     <tr>
                         <td>data</td>
                         <td>object</td>
                         <td>{}</td>
-                        <td>请求url时，需要发送的data数据。</td>
+                        <td>[可选] 请求url时，需要发送的data数据。</td>
                     </tr>
                     <tr>
                         <td>fresh</td>
                         <td>boolean</td>
                         <td>false</td>
-                        <td>是否保持该navtab的新生状态，表现在重复打开该navtab时，是否重新载入内容。</td>
+                        <td>[可选] 是否保持该navtab的新生状态，表现在重复打开该navtab时，是否重新载入内容。</td>
                     </tr>
                     <tr>
                         <td>reloadWarn</td>
-                        <td>boolean</td>
-                        <td>false</td>
-                        <td>是否保持该navtab的新生状态，表现在重复打开该navtab时，是否重新载入内容。</td>
+                        <td>string</td>
+                        <td>null</td>
+                        <td>[可选] 当准备在已存在的navtab上加载内容时的确认提示信息。</td>
+                    </tr>
+                    <tr>
+                        <td>onLoad</td>
+                        <td>function($navtab)</td>
+                        <td>null</td>
+                        <td>[可选] navtab加载完成后的事件回调，回调函数的参数<code>$navtab</code>为该navtab内容区的jQuery对象。</td>
+                    </tr>
+                    <tr>
+                        <td>beforeClose</td>
+                        <td>function($navtab)</td>
+                        <td>null</td>
+                        <td>[可选] <b>返回值: boolean</b>。 navtab关闭前的事件回调，返回true则关闭，返回false不关闭。</td>
+                    </tr>
+                    <tr>
+                        <td>onClose</td>
+                        <td>function()</td>
+                        <td>null</td>
+                        <td>[可选] navtab关闭后的事件回调。</td>
                     </tr>
                 </tbody>
             </table>

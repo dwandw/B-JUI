@@ -43,9 +43,9 @@
                     $ilabel.attr('data-icheck', name)
                 })
                 .iCheck({
-                    checkboxClass: 'icheckbox_minimal-purple',
-                    radioClass: 'iradio_minimal-purple',
-                    increaseArea: '20%' // optional
+                    checkboxClass : 'icheckbox_minimal-purple',
+                    radioClass    : 'iradio_minimal-purple',
+                    increaseArea  : '20%' // optional
                 })
                 .on('ifChanged', function() {
                     /* Trigger validation */
@@ -59,7 +59,7 @@
         /* i-check check all */
         $icheck.filter('.checkboxCtrl').on('ifChanged', function(e) {
             var checked = e.target.checked == true ? 'check' : 'uncheck'
-            var group = $(this).data('group')
+            var group   = $(this).data('group')
             
             $box.find(':checkbox[name="'+ group +'"]').iCheck(checked)
         })
@@ -111,16 +111,18 @@
         
         /* form validate */
         $box.find('form[data-toggle="validate"]').each(function() {
+            var $element = $(this), alertmsg = (typeof $element.data('alertmsg') == 'undefined') ? true : $element.data('alertmsg')
+            
             $(this)
                 .validator({
                     valid: function(form) {
                         $(form).bjuiajax('ajaxForm', $(form).data())
                     },
-                    validClass: 'ok',
-                    theme: 'red_right_effect'
+                    validClass : 'ok',
+                    theme      : 'red_right_effect'
                 })
                 .on('invalid.form', function(e, form, errors) {
-                    $(form).alertmsg('error', FRAG.validateErrorMsg.replace('#validatemsg#', BJUI.regional.validatemsg).replaceMsg(errors.length))
+                    if (alertmsg) $(form).alertmsg('error', FRAG.validateErrorMsg.replace('#validatemsg#', BJUI.regional.validatemsg).replaceMsg(errors.length))
                 })
         })
         
@@ -307,16 +309,16 @@
             $.fn.zTree.init($this, setting, op.nodes)
             
             var IDMark_A = '_a'
-            var zTree = $.fn.zTree.getZTreeObj($this.attr('id'))
+            var zTree    = $.fn.zTree.getZTreeObj($this.attr('id'))
             
             if (op.expandAll) zTree.expandAll(true)
             
             // add button, del button
             function _addHoverDom(treeId, treeNode) {
                 var level = treeNode.level
-                var $obj = $('#'+ treeNode.tId + IDMark_A)
-                var $add = $('#diyBtn_add_'+ treeNode.id)
-                var $del = $('#diyBtn_del_'+ treeNode.id)
+                var $obj  = $('#'+ treeNode.tId + IDMark_A)
+                var $add  = $('#diyBtn_add_'+ treeNode.id)
+                var $del  = $('#diyBtn_del_'+ treeNode.id)
                 
                 if (!$add.length) {
                     if (level < op.maxAddLevel) {
@@ -606,8 +608,8 @@
         var $highcharts = $box.find('[data-toggle="highcharts"]')
         
         $highcharts.each(function(){
-            var $element  = $(this)
-            var options   = $element.data()
+            var $element = $(this)
+            var options  = $element.data()
             
             $.get(options.url, function(chartData){
                 $element.highcharts(chartData)
@@ -624,8 +626,8 @@
         $echarts.each(function(){
             var $element = $(this)
             var options  = $element.data()
-            var theme = options.theme ? options.theme : 'default'
-            var typeArr = options.type.split(',')
+            var theme    = options.theme ? options.theme : 'default'
+            var typeArr  = options.type.split(',')
 
             require.config({
                 paths: {

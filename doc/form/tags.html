@@ -125,7 +125,7 @@
             </table>
             <p>这样监听tags的事件：<code>mytags - selector</code>表示触发自动完成标签的input选择器</p>
             <pre class="brush: js">
-                $(document).on('aftercreated.bjui.tags', 'mytags - selector', function(e, data) {
+                $('mytags - selector').on('aftercreated.bjui.tags', function(e, data) {
                     var value = data.value // 当前创建的标签值
                     var item  = data.item  // 当前选定项的值(object，具体值由返回JSON决定)
                     var tags  = data.tags  // 所有已生成标签的值，以英文逗号(,)分隔
@@ -133,20 +133,6 @@
                     // do something...
                 })
             </pre>
-            <blockquote class="point">
-                <p>如果事件代码写在页片中，为防止页片刷新之类的导致document重复绑定事件，需要在on事件前先调用off方法解除已绑定事件。代码如下：</p>
-                <pre class="brush: js">
-                    $(document)
-                        .off('aftercreated.bjui.tags', '.mydate-type')
-                        .on('aftercreated.bjui.tags', '.mytags-type', function(e, data) {
-                            var value = data.value // 当前创建的标签值
-                            var item  = data.item  // 当前选定项的值(object，具体值由返回JSON决定)
-                            var tags  = data.tags  // 所有已生成标签的值，以英文逗号(,)分隔
-                            
-                            // do something...
-                    })
-                </pre>
-            </blockquote>
         </div>
     </div>
     <div class="bjui-footBar">

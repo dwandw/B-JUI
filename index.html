@@ -105,7 +105,7 @@ $(function() {
         keys         : {statusCode:'statusCode', message:'message'}, //[可选]
         ui           : {showSlidebar:true, hideMode:'display'}, //[可选]hideMode:navtab组件切换的隐藏方式，支持的值有’display’，’offsets’负数偏移位置的值，默认值为’display’
         debug        : true,    // [可选]调试模式 [true|false，默认false]
-        theme        : 'purple' // 若有Cookie['bjui_theme'],优先选择Cookie['bjui_theme']。皮肤[五种皮肤:default, orange, purple, blue, green]
+        theme        : 'purple' // 若有Cookie['bjui_theme'],优先选择Cookie['bjui_theme']。皮肤[五种皮肤:default, orange, purple, blue, red, green]
     })
     //时钟
     var today = new Date(), time = today.getTime()
@@ -254,13 +254,14 @@ $(function(){
                                 <li data-id="100" data-pid="99" data-url="doc/base/filelist.html" data-tabid="doc-file">文件详解</li>
                                 <li data-id="1" data-pid="0">框架介绍</li>
                                 <li data-id="10" data-pid="1" data-url="doc/base/structure.html" data-tabid="doc-base">页面结构</li>
-                                <li data-id="11" data-pid="1" data-url="doc/base/navtab.html" data-tabid="doc-base">标签工作区(navtab)</li>
-                                <li data-id="12" data-pid="1" data-url="doc/base/dialog.html" data-tabid="doc-base">弹窗工作区(dialog)</li>
-                                <li data-id="13" data-pid="1" data-url="doc/base/idname.html" data-tabid="doc-base">元素ID命名规范</li>
-                                <li data-id="14" data-pid="1" data-url="doc/base/data.html" data-tabid="doc-base">data属性</li>
-                                <li data-id="15" data-pid="1" data-url="doc/base/api.html" data-tabid="doc-base">jQuery API调用</li>
-                                <li data-id="16" data-pid="1" data-url="doc/base/event.html" data-tabid="doc-base">事件</li>
-                                <li data-id="17" data-pid="1" data-url="doc/base/url.html" data-tabid="doc-base">URL动态赋值</li>
+                                <li data-id="11" data-pid="1" data-url="doc/base/init.html" data-tabid="doc-base">框架初始化</li>
+                                <li data-id="12" data-pid="1" data-url="doc/base/navtab.html" data-tabid="doc-base">标签工作区(navtab)</li>
+                                <li data-id="13" data-pid="1" data-url="doc/base/dialog.html" data-tabid="doc-base">弹窗工作区(dialog)</li>
+                                <li data-id="14" data-pid="1" data-url="doc/base/idname.html" data-tabid="doc-base">元素ID命名规范</li>
+                                <li data-id="15" data-pid="1" data-url="doc/base/data.html" data-tabid="doc-base">data属性</li>
+                                <li data-id="16" data-pid="1" data-url="doc/base/api.html" data-tabid="doc-base">jQuery API调用</li>
+                                <li data-id="17" data-pid="1" data-url="doc/base/event.html" data-tabid="doc-base">事件</li>
+                                <li data-id="18" data-pid="1" data-url="doc/base/url.html" data-tabid="doc-base">URL动态赋值</li>
                                 <li data-id="2" data-pid="0">标签navtab</li>
                                 <li data-id="20" data-pid="2" data-url="doc/navtab/navtab.html" data-tabid="doc-navtab">创建navtab</li>
                                 <li data-id="21" data-pid="2" data-url="doc/navtab/navtab-op.html" data-tabid="doc-navtab">参数及方法</li>
@@ -345,7 +346,9 @@ $(function(){
                     </div>
                     <div class="bjui-pageFormContent" data-layout-h="150">
                         <div style="position: absolute;top:10px;right:0;width:300px;">
+                            <!--  
                             <iframe width="100%" height="550" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=0&uid=2838273614&verifier=75a3b95b&dpc=1"></iframe>
+                            -->
                         </div>
                         <div style="margin-right:300px; overflow: hidden;">
                             <div class="row" style="padding: 0 8px;">
@@ -388,7 +391,9 @@ $(function(){
                                         <div class="panel-heading"><h3 class="panel-title">更新日志</h3></div>
                                         
                                         <div class="panel-body">
-                                            <script src='http://git.oschina.net/xknaan/B-JUI/widget_preview'></script> 
+                                            <!--  
+                                            <script src='http://git.oschina.net/xknaan/B-JUI/widget_preview'></script>
+                                            --> 
                                             <table class="table table-condensed table-striped table-hover" width="100%">
                                                 <thead>
                                                     <tr>
@@ -550,7 +555,9 @@ $(function(){
         </div>
     </div>
     <footer id="bjui-footer">Copyright &copy; 2013 - 2014 <a href="http://xknaan.com" target="_blank">K'naan</a>(xknaan@163.com)　<a href="http://b-jui.com/" target="_blank">B-JUI 前端框架</a>　
+        <!--  
         <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1252983288'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/stat.php%3Fid%3D1252983288%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+        -->
     </footer>
 </body>
 </html>

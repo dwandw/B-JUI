@@ -120,7 +120,7 @@
                 if ($box.isTag('table') && !$box.parent('[data-layout-h]').length) {
                     $box.removeAttr('data-layout-h').wrap('<div data-bjui-lay-h="'+ $box.data('bjuiLayH') +'" data-layout-h="'+ layH +'" style="overflow:auto;width:100%;height:'+ bodH +'px"></div>')
                 } else {
-                    $box.height(bodH).css('overflow','auto')
+                    $box.animate({ height:bodH }, 'fast').css('overflow','auto')
                 }
             })
         },

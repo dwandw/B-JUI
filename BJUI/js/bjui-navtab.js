@@ -72,12 +72,15 @@
     }
     
     Navtab.DEFAULTS = {
-        id       : undefined,
-        title    : 'New tab',
-        url      : undefined,
-        type     : 'GET',
-        data     : {},
-        fresh    : false
+        id          : undefined,
+        title       : 'New tab',
+        url         : undefined,
+        type        : 'GET',
+        data        : {},
+        fresh       : false,
+        onLoad      : null,
+        beforeClose : null,
+        onClose     : null
     }
     
     Navtab.prototype.TOOLS = function() {
@@ -118,10 +121,11 @@
             },
             indexTabId: function(tabid) {
                 if (!tabid) return -1
+                if (tabid == 'main') return 0
                 var iOpenIndex = -1
                 
                 this.getTabs().each(function(index) {
-                    if ($(this).data('tabid') == tabid) {
+                    if ($(this).data('options') && $(this).data('options').id == tabid) {
                         iOpenIndex = index
                         return
                     }
@@ -169,9 +173,7 @@
                     this.scrollTab(-this.getTabsW(0, iEnd + 1) + this.getScrollBarW())
             },
             scrollTab: function(iLeft, isNext) {
-                var $tools = this
-                
-                $tabs.animate({ left: iLeft }, 200, function() { $tools.ctrlScrollBtn() })
+                $tabs.animate({ left: iLeft }, 200, function() { that.tools.ctrlScrollBtn() })
             },
             scrollCurrent: function() { // auto scroll current tab
                 var iW = this.tabsW(this.getTabs())
@@ -208,7 +210,7 @@
                 if ($tab.data('reloadFlag')) {
                     $panels.hide()
                     $panel.removeClass('fade').show()
-                    that.refresh($tab.data('tabid'))
+                    that.refresh($tab.data('options').id)
                 } else {
                     if (BJUI.ui.hideMode == 'offsets') {
                         $panels.css({position: 'absolute', top:'-100000px', left:'-100000px'}).eq(iTabIndex).css({position: '', top:'', left:''})
@@ -234,16 +236,30 @@
                 this.scrollCurrent()
                 $currentTab     = $tab
                 $.CurrentNavtab = $currentPanel = $panel
-                $.CurrentNavtab.data('id', $tab.data('tabid'))
             },
             closeTab: function(index, openTabid) {
-                this.getTabs().eq(index).remove()
-                this.getPanels().eq(index).trigger(BJUI.eventType.beforeCloseNavtab).remove()
-                this.getMoreLi().eq(index).remove()
+                var $tab        = this.getTabs().eq(index)
+                var $more       = this.getMoreLi().eq(index)
+                var $panel      = this.getPanels().eq(index)
+                var options     = $tab.data('options')
+                var beforeClose = options.beforeClose ? options.beforeClose.toFunc() : null
+                var onClose     = options.onClose ? options.onClose.toFunc() : null
+                var canClose    = true
                 
+                if (beforeClose) canClose = beforeClose.apply(that, [$panel])
+                if (!canClose) {
+                    that.tools.switchTab(index)
+                    return
+                }
+                $tab.remove()
+                $more.remove()
+                $panel.trigger(BJUI.eventType.beforeCloseNavtab).remove()
+                
+                if (onClose) onClose.apply(that)
                 if (currentIndex >= index) currentIndex--
                 if (openTabid) {
                     var openIndex = this.indexTabId(openTabid)
+                    
                     if (openIndex > 0) currentIndex = openIndex
                 }
                 
@@ -253,17 +269,9 @@
             closeOtherTab: function(index) {
                 index = index || currentIndex
                 
-                if (index > 0) {
-                    var str$ = ':eq('+ index +')'
-                    
-                    this.getTabs().not(str$).filter(':gt(0)').remove()
-                    this.getPanels().not(str$).filter(':gt(0)').trigger(BJUI.eventType.beforeCloseNavtab).remove()
-                    this.getMoreLi().not(str$).filter(':gt(0)').remove()
-                    currentIndex = 1
-                    this.scrollCurrent()
-                } else {
-                    that.closeAllTab()
-                }
+                this.getTabs().each(function(i) {
+                    if (i > 0 && index != i) $(this).find('> .close').trigger('click')
+                })
             },
             loadUrlCallback: function($panel) {
                 $panel.find(':button.btn-close').click(function() { that.closeCurrentTab() })
@@ -271,33 +279,28 @@
             reload: function($tab, flag, type) {
                 flag = flag || $tab.data('reloadFlag')
                 
-                var url = $tab.data('url')
-                var $tools = this
+                var options = $tab.data('options')
                 
-                if (flag && url) {
+                if (flag) {
                     $tab.data('reloadFlag', false)
-                    var $panel = this.getPanel($tab.data('tabid'))
+                    var $panel = that.tools.getPanel(options.id)
                     
                     if ($tab.hasClass('external')) {
-                        that.openExternal(url, $panel)
+                        that.openExternal(options.url, $panel)
                     } else {
-                        //get pagerForm parameters
-                        var $pagerForm = $panel.find('#pagerForm')
-                        var args = $pagerForm.size() > 0 ? $pagerForm.serializeArray() : {}
-                        
-                        $tools.reloadTab($panel, {type:(type || $pagerForm.attr('method') || 'GET'), url:url, data:args})
+                        that.tools.reloadTab($panel, options)
                     }
                 }
             },
-            reloadTab: function($panel, op) {
-                var $tools = this
+            reloadTab: function($panel, options) {
+                var onLoad = options.onLoad ? options.onLoad.toFunc() : null
                 
                 $panel
                     .trigger(BJUI.eventType.beforeLoadNavtab)
-                    .data('bjui.layoutBox', $panel.closest('div.layoutBox'))
                     .ajaxUrl({
-                        type:(op.type || 'GET'), url:op.url, data:op.data, callback:function(response) {
-                            $tools.loadUrlCallback($panel)
+                        type:(options.type || 'GET'), url:options.url, data:options.data, callback:function(response) {
+                            that.tools.loadUrlCallback($panel)
+                            if (onLoad) onLoad.apply(that, [$panel])
                         }
                     })
             }
@@ -312,18 +315,24 @@
             id: 'navtabCM',
             bindings: {
                 reload: function(t, m) {
-                    that.tools.reload(t, true)
+                    if (!t.data('tabid')) that.tools.reload(t, true)
                 },
                 closeCurrent: function(t, m) {
-                    var tabId = t.data('tabid')
-                    
-                    if (tabId) that.closeTab(tabId)
-                    else that.closeCurrentTab()
+                    if (!t.data('tabid')) {
+                        var tabId = t.data('options').id
+                        
+                        if (tabId) that.closeTab(tabId)
+                        else that.closeCurrentTab()
+                    }
                 },
                 closeOther: function(t, m) {
-                    var index = that.tools.indexTabId(t.data('tabid'))
-                    
-                    that.tools.closeOtherTab(index > 0 ? index : currentIndex)
+                    if (t.data('tabid') == 'main') {
+                        that.closeAllTab()
+                    } else {
+                        var index = that.tools.indexTabId(t.data('options').id)
+                        
+                        that.tools.closeOtherTab(index > 0 ? index : currentIndex)
+                    }
                 },
                 closeAll: function(t, m) {
                     that.closeAllTab()
@@ -362,33 +371,22 @@
             
             options.url = encodeURI(options.url)
         }
+        if (!options.id) {
+            BJUI.debug('Navtab Plugin: Error trying to open a navtab, the id is undefined!')
+            return
+        }
         
         var iOpenIndex = tools.indexTabId(this.options.id)
         
         if (iOpenIndex >= 0) {
             var $tab   = tools.getTabs().eq(iOpenIndex)
             var $panel = tools.getPanels().eq(iOpenIndex)
+            var op     = $tab.data('options') || options
             
-            if (options.fresh || $tab.data('url') != options.url) {
-                $tab.data('url', options.url)
-                
-                var $pagerForm = $panel.find('#pagerForm')
-                var type = options.type || $pagerForm.attr('method')
-                var _reload = function() {
-                    $tab.find('> a').attr('title', options.title).find('> span').html(options.title)
-                    tools.reload($tab, true, type)
-                }
-                
-                if (options.reloadWarn) {
-                    this.$element.alertmsg('confirm', options.reloadWarn, {
-                        okCall: function() {
-                            _reload()
-                        }
-                    })
-                } else {
-                    _reload()
-                }
+            if (op.fresh || options.fresh || op.url != options.url) {
+                that.reload(options)
             }
+            
             currentIndex = iOpenIndex
         } else {
             var tabFrag = '<li><a href="javascript:" title="#title#"><span>#title#</span></a><span class="close">&times;</span></li>'
@@ -405,7 +403,7 @@
                 this.openExternal(options.url, $panel)
             } else {
                 $tab.removeClass('external')
-                tools.reloadTab($panel, {url:options.url, data:options.data})
+                tools.reloadTab($panel, options)
             }
             
             currentIndex = tools.getTabs().length - 1
@@ -425,7 +423,7 @@
             $more.on('click', function() {
                 that.switchTab(options.id)
             })
-            $tab.data('tabid', options.id).data('url', options.url)
+            $tab.data('options', options)
         }
         
         tools.switchTab(currentIndex)
@@ -445,12 +443,9 @@
     }
     
     Navtab.prototype.closeAllTab = function() {
-        this.tools.getTabs().filter(':gt(0)').remove()
-        this.tools.getPanels().filter(':gt(0)').trigger(BJUI.eventType.beforeCloseNavtab).remove()
-        this.tools.getMoreLi().filter(':gt(0)').remove()
-        currentIndex = 0
-        this.tools.scrollCurrent()
-        this.tools.switchTab(currentIndex)
+        this.tools.getTabs().find('> .close').each(function() {
+            $(this).trigger('click')
+        })
     }
     
     Navtab.prototype.reloadFlag = function(tabids) {
@@ -487,23 +482,33 @@
     }
     
     Navtab.prototype.reload = function(option) {
-        var options = $.extend({}, this.tools.getDefaults(), typeof option == 'object' && option)
-        var $tab
+        var that    = this
+        var options = $.extend({}, typeof option == 'object' && option)
+        var $tab    = options.id ? this.tools.getTab(options.id) : this.tools.getTabs().eq(currentIndex)
         
-        if (typeof option == 'string') {
-            $tab = this.tools.getTab(option)
-        } else {
-            $tab = options.id ? this.tools.getTab(options.id) : this.tools.getTabs().eq(currentIndex)
-            if ($tab) {
-                if (option.title) $tab.find('> a').attr('title', option.title).find('> span').html(option.title)
-                if (options.url) $tab.data('url', options.url)
+        if ($tab) {
+            var op = $tab.data('options') || options
+            var _reload = function() {
+                if (options.title != op.title) $tab.find('> a').attr('title', options.title).find('> span').html(options.title)
+                
+                $tab.data('options', $.extend({}, op, options))
+                that.tools.reload($tab, true)
+            }
+            
+            if (options.reloadWarn) {
+                this.$element.alertmsg('confirm', options.reloadWarn, {
+                    okCall: function() {
+                        _reload()
+                    }
+                })
+            } else {
+                _reload()
             }
         }
-        if ($tab) this.tools.reload($tab, true)
     }
     
     Navtab.prototype.reloadForm = function(clearQuery, option) {
-        var options = $.extend({}, this.tools.getDefaults(), typeof option == 'object' && option)
+        var options = $.extend({}, typeof option == 'object' && option)
         var $tab, $panel
         
         if (typeof option == 'string') {
@@ -514,29 +519,25 @@
             $panel = options.id ? this.tools.getPanel(options.id) : this.tools.getPanels().eq(currentIndex)
         }
         if ($tab && $panel) {
-            if (option && option.title) $tab.find('> a').attr('title', this.options.title).find('> span').html(this.options.title)
-            if (!options.url) options.url = $tab.data('url')
-            if ($tab.hasClass('external')) {
-                this.openExternal(options.url, $panel)
-            } else {
-                var $pagerForm = $panel.find('#pagerForm'), data = {}
+            if (!$tab.hasClass('external')) {
+                var $pagerForm = $panel.find('#pagerForm'), data = {}, pageData = {}
                 
                 if ($pagerForm && $pagerForm.length) {
+                    pageData = $pagerForm.serializeJson()
                     if (!option || !option.type) options.type = $pagerForm.attr('method') || 'POST'
-                    
-                    options.data = $pagerForm.serializeJson()
                     if (clearQuery) {
                         var pageInfo = BJUI.pageInfo
                         
                         for (var key in pageInfo) {
-                            data[pageInfo[key]] = options.data[pageInfo[key]]
+                            data[pageInfo[key]] = pageData[pageInfo[key]]
                         }
-                        options.data = data
+                    } else {
+                        data = pageData
                     }
+                    options.data = $.extend({}, options.data || {}, data)
                 }
-                
-                this.tools.reloadTab($panel, {type:options.type, url:options.url, data:options.data})
             }
+            this.reload(options)
         }
     }
     
@@ -602,7 +603,6 @@
         var options = $this.data()
         
         if (!options.url)   options.url   = $this.attr('href')
-        if (!options.id)    options.id    = 'navtab'
         if (!options.title) options.title = $this.text()
         
         Plugin.call($this, options)

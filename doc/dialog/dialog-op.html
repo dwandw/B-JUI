@@ -101,6 +101,18 @@
                         <td>[可选] 从指定的jQuery容器中加载内容到dialog，请为该容器添加属性<code>data-noinit="true"</code>以阻止容器中的内容提前初始化，为容器添加Class[<code>hide</code>]以隐藏待加载内容。</td>
                     </tr>
                     <tr>
+                        <td>fresh</td>
+                        <td>boolean</td>
+                        <td>false</td>
+                        <td>[可选] 是否保持该dialog的新生状态，表现在重复打开该dialog时，是否重新载入内容。</td>
+                    </tr>
+                    <tr>
+                        <td>reloadWarn</td>
+                        <td>string</td>
+                        <td>null</td>
+                        <td>[可选] 当准备在已存在的dialog上加载内容时的确认提示信息。</td>
+                    </tr>
+                    <tr>
                         <td>onLoad</td>
                         <td>function($dialog)</td>
                         <td>null</td>

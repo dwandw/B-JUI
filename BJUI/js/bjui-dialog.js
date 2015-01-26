@@ -72,6 +72,7 @@
         drawable    : true,
         maxable     : true,
         minable     : true,
+        fresh       : false,
         onLoad      : null,
         beforeClose : null,
         onClose     : null
@@ -109,7 +110,7 @@
             reload: function($dialog, options) {
                 var $dialogContent = $dialog.find('> .dialogContent'), onLoad
                 
-                options = $.extend({}, $dialog.data('options'), options || {})
+                options = options || $dialog.data('options')
                 onLoad  = options.onLoad ? options.onLoad.toFunc() : null
                 
                 $dialog.trigger(BJUI.eventType.beforeLoadDialog)
@@ -148,8 +149,7 @@
     Dialog.prototype.open = function() {
         var that    = this, options = that.options
         var $body   = $('body')
-        var $dialog = $body.data(this.options.id)
-        
+        var $dialog = $body.data(options.id)
         
         if (!options.target || !$(options.target).length) {
             if (!(options.url)) {
@@ -169,18 +169,13 @@
         } else {
             options.url = undefined
         }
-        if ($dialog) { //if dialog'id is exists
+        if ($dialog) { //if the dialog id already exists
             var op = $dialog.data('options') || options
             
             this.switchDialog($dialog)
-            
             if ($dialog.is(':hidden')) $dialog.show()
-            if (!op.url || op.url != options.url) {
-                $.extend(op, options)
-                $dialog.data('options', op)
-                
-                if (options.title) $dialog.find('> .dialogHeader > h1 > span.title').html(options.title)
-                this.tools.reload($dialog)
+            if (op.fresh || options.fresh || !op.url || op.url != options.url) {
+                that.reload(options)
             }
         } else { //open a new dialog
             var dr     = BJUI.regional.dialog
@@ -206,6 +201,8 @@
             if (options.minable) $dialog.find('a.minimize').show()
             else $dialog.find('a.minimize').hide()
             if (options.max) that.maxsize($dialog)
+            if (options.mask) this.addMask($dialog)
+            else if (options.minable && $.fn.taskbar) this.$element.taskbar({id:options.id, title:options.title})
             
             $dialog.on('click', function(e) {
                 if (!$(e.target).data('bjui.dialog'))
@@ -265,20 +262,18 @@
             this.tools.reload($dialog, options)
         }
         
-        if (options.mask) {
-            var $mask = $dialog.data('bjui.dialog.mask')
-            
-            if (!$mask || !$mask.length) {
-                $mask = $(FRAG.dialogMask)
-                $mask.appendTo($body).css('zIndex', zindex - 1).show()
-                $dialog.data('bjui.dialog.mask', $mask)
-            }
-            $dialog.find('> .dialogHeader > a.minimize').hide()
-        } else { //add a task to task bar
-            if (options.minable && $.fn.taskbar) this.$element.taskbar({id:options.id, title:options.title})
-        }
-        
         $.CurrentDialog = $current = $dialog
+    }
+    
+    Dialog.prototype.addMask = function($dialog) {
+        var $mask = $dialog.data('bjui.dialog.mask')
+        
+        if (!$mask || !$mask.length) {
+            $mask = $(FRAG.dialogMask)
+            $mask.appendTo('body').css('zIndex', zindex - 1).show()
+            $dialog.data('bjui.dialog.mask', $mask)
+        }
+        $dialog.find('> .dialogHeader > a.minimize').hide()
     }
     
     Dialog.prototype.refresh = function(id) {
@@ -296,10 +291,66 @@
     }
     
     Dialog.prototype.reload = function(option) {
+        var that    = this
         var options = $.extend({}, typeof option == 'object' && option)
-        var $dialog = (options.id && $('body').data(options.id)) || this.getCurrent()
+        var $dialog = (options.id && $('body').data(options.id)) || that.getCurrent()
 
-        if ($dialog) this.tools.reload($dialog, options)
+        if ($dialog) {
+            var op = $dialog.data('options') || options
+            var _reload = function() {
+                var $dialogContent = $dialog.find('> .dialogContent')
+                
+                if (options.width != op.width) {
+                    if (!options.max) {
+                        $dialog.animate({ width:options.width}, 'normal', function() { $dialogContent.width(options.width) })
+                    } else {
+                        $dialog.width(options.width)
+                        $dialogContent.width(options.width)
+                    }
+                }
+                if (options.height != op.height) {
+                    if (!options.max) {
+                        $dialog.animate({ height:options.height }, 'normal', function() {
+                            $dialogContent.height(options.height - $dialog.find('> .dialogHeader').outerHeight() - 6).find('[data-layout-h]').layoutH($dialogContent)
+                        })
+                    } else {
+                        $dialog.height(options.height)
+                        $dialogContent.height(options.height - $dialog.find('> .dialogHeader').outerHeight() - 6)
+                    }
+                }
+                if (options.maxable != op.maxable) {
+                    if (options.maxable) $dialog.find('a.maximize').show()
+                    else $dialog.find('a.maximize').hide()
+                } 
+                if (options.minable != op.minable) {
+                    if (options.minable) $dialog.find('a.minimize').show()
+                    else $dialog.find('a.minimize').hide()
+                }
+                if (options.max != op.max && options.max) setTimeout(that.maxsize($dialog), 10)
+                if (options.mask != op.mask) {
+                    if (options.mask) {
+                        that.addMask($dialog)
+                        if ($.fn.taskbar) that.$element.taskbar('closeDialog', op.id)
+                    } else if (options.minable && $.fn.taskbar) {
+                        that.$element.taskbar({id:op.id, title:options.title || op.title})
+                    }
+                }
+                if (options.title != op.title) $dialog.find('> .dialogHeader > h1 > span.title').html(options.title)
+                
+                $dialog.data('options', $.extend({}, op, options))
+                that.tools.reload($dialog, options)
+            }
+            
+            if (options.reloadWarn) {
+                $dialog.alertmsg('confirm', options.reloadWarn, {
+                    okCall: function() {
+                        _reload()
+                    }
+                })
+            } else {
+                _reload()
+            }
+        }
     }
     
     Dialog.prototype.reloadForm = function(clearQuery, option) {
@@ -368,7 +419,10 @@
         
         if (!$dialog || !options) return
         if (beforeClose) canClose = beforeClose.apply(that, [$dialog])
-        if (!canClose) return
+        if (!canClose) {
+            that.switchDialog($dialog)
+            return
+        }
         if (options.target && target) $(options.target).html(target) 
         if ($mask && $mask.length) $mask.remove()
         else if ($.fn.taskbar) this.$element.taskbar('closeDialog', options.id)
