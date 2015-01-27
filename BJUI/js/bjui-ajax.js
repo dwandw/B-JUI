@@ -41,6 +41,7 @@
                 var form     = $parent.isTag('form') ? $parent[0] : $parent.find('#pagerForm:first')[0]
                 var pageInfo = $.extend({}, BJUI.pageInfo)
                 
+                if ($parent.data('bjui.clientPaging')) args = $parent.data('bjui.clientPaging')
                 if (form) {
                     for (var key in pageInfo) {
                         var val = ''
@@ -300,7 +301,7 @@
         if ($target && $target.length) {
             form = that.tools.getPagerForm($target, op)
             if (form) {
-                $target.ajaxUrl({ type:'POST', url:$(form).attr('action'), data:$(form).serializeArray() })
+                that.reloadDiv($target, {type:$(form).attr('method') || 'POST', url:$(form).attr('action'), data:$(form).serializeArray()})
             }
         } else {
             if (that.tools.getTarget() == Bjuiajax.NAVTAB) {
@@ -347,7 +348,7 @@
                 }
                 data = _data
             }
-            $target.ajaxUrl({ type:$element.attr('method') || 'POST', url:options.url, data:data })
+            that.reloadDiv($target, {type:$element.attr('method') || 'POST', url:options.url, data:data})
         } else {
             if (that.tools.getTarget() == Bjuiajax.NAVTAB) {
                 $target = $.CurrentNavtab
@@ -385,14 +386,15 @@
         }
         
         if ($target && $target.length) {
-            $target
-                .data('url', options.url).data('type', type).data('data', options.data)
-                .ajaxUrl({ type:type, url:options.url, data:options.data || {}, callback:function(html) {
-                    $target.find('[data-layout-h]').addClass('bjui-layout-h')
-                    $(window).resize(function() {
-                        setTimeout(function() { $target.find('[data-layout-h]').layoutH() }, 20)
-                    })
-                } })
+            $target.removeData('bjui.clientPaging')
+            options.callback = function($target) {
+                $target.find('[data-layout-h]').addClass('bjui-layout-h')
+                $(window).resize(function() {
+                    setTimeout(function() { $target.find('[data-layout-h]').layoutH() }, 20)
+                })
+            }
+            
+            that.reloadDiv($target, options)
         }
     }
     
@@ -404,15 +406,28 @@
                 type = options.type || $target.data('type'),
                 data = options.data || $target.data('data') || {}
             
-            $target
-                .data('url', url).data('type', type).data('data', data)
-                .ajaxUrl({ type:type, url:url, data:data, callback:function(html) {
-                    $target.find('[data-layout-h]').addClass('bjui-layout-h')
-                    $(window).resize(function() {
-                        setTimeout(function() { $target.find('[data-layout-h]').layoutH() }, 20)
-                    })
-                } })
+            $target.removeData('bjui.clientPaging')
+            options.callback = function($target) {
+                $target.find('[data-layout-h]').addClass('bjui-layout-h')
+                $(window).resize(function() {
+                    setTimeout(function() { $target.find('[data-layout-h]').layoutH() }, 20)
+                })
+            }
+            
+            that.reloadDiv($target, options)
         }
+    }
+    
+    Bjuiajax.prototype.reloadDiv = function($target, options) {
+        $target
+            .data('url', options.url).data('type', options.type).data('data', options.data)
+            .ajaxUrl({ type:options.type, url:options.url, data:options.data, callback:function(html) {
+                    if (BJUI.ui.clientPaging && $target.data('bjui.clientPaging'))
+                        $target.pagination('setPagingAndOrderby', $target)
+                    if (options.callback)
+                        options.callback.apply(this, [$target])
+                }
+            })
     }
     
     Bjuiajax.prototype.refreshDiv = function(divid) {

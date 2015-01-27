@@ -110,7 +110,7 @@
             reload: function($dialog, options) {
                 var $dialogContent = $dialog.find('> .dialogContent'), onLoad
                 
-                options = options || $dialog.data('options')
+                options = options || $dialog.data('initOptions')
                 onLoad  = options.onLoad ? options.onLoad.toFunc() : null
                 
                 $dialog.trigger(BJUI.eventType.beforeLoadDialog)
@@ -119,6 +119,7 @@
                     $dialogContent.ajaxUrl({
                         type:options.type || 'GET', url:options.url, data:options.data || {}, callback:function(response) {
                             if (onLoad) onLoad.apply(that, [$dialog])
+                            if (BJUI.ui.clientPaging && $dialog.data('bjui.clientPaging')) $dialog.pagination('setPagingAndOrderby', $dialog)
                         }
                     })
                 } else if (options.target) {
@@ -170,9 +171,11 @@
             options.url = undefined
         }
         if ($dialog) { //if the dialog id already exists
-            var op = $dialog.data('options') || options
+            var op = $dialog.data('initOptions') || options
             
+            $dialog.data('initOptions', options)
             this.switchDialog($dialog)
+            
             if ($dialog.is(':hidden')) $dialog.show()
             if (op.fresh || options.fresh || !op.url || op.url != options.url) {
                 that.reload(options)
@@ -188,6 +191,7 @@
             
             $dialog = $(dialog)
                 .data('options', options)
+                .data('initOptions', options)
                 .css('zIndex', (zindex += 2))
                 .hide()
                 .appendTo($body)
@@ -283,9 +287,13 @@
             for (var i = 0; i < arr.length; i++) {
                 var $dialog = $('body').data(arr[i].trim())
                 
-                if ($dialog) this.tools.reload($dialog)
+                if ($dialog) {
+                    $dialog.removeData('bjui.clientPaging')
+                    this.tools.reload($dialog)
+                }
             }
         } else {
+            $current.removeData('bjui.clientPaging')
             this.tools.reload($current)
         }
     }
@@ -296,7 +304,7 @@
         var $dialog = (options.id && $('body').data(options.id)) || that.getCurrent()
 
         if ($dialog) {
-            var op = $dialog.data('options') || options
+            var op = $dialog.data('initOptions') || options
             var _reload = function() {
                 var $dialogContent = $dialog.find('> .dialogContent')
                 

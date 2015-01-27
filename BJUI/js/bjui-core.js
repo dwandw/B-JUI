@@ -51,8 +51,9 @@
         statusCode: {ok:200, error:300, timeout:301},
         keys: {statusCode:'statusCode', message:'message'},
         ui: {
-            showSlidebar: true, // After the B-JUI initialization, display slidebar
-            hideMode: 'display' // Hidden mode when switching Navtab, optional values ​​are ’display’ or ’offsets’, 'display' is default.
+            showSlidebar : true,      // After the B-JUI initialization, display slidebar
+            hideMode     : 'display', // Hidden mode when switching Navtab, optional values ​​are ’display’ or ’offsets’, 'display' is default.
+            clientPaging : true       // Response paging and sorting information on the client
         },
         debug: function(msg) {
             if (this.IS_DEBUG) {

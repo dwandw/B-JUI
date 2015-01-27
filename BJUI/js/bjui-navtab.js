@@ -232,7 +232,7 @@
                 $panel.find('.bjui-layout [data-layout-h]').layoutH()
                 
                 this.getMoreLi().removeClass('active').eq(iTabIndex).addClass('active')
-                currentIndex  = iTabIndex
+                currentIndex = iTabIndex
                 this.scrollCurrent()
                 $currentTab     = $tab
                 $.CurrentNavtab = $currentPanel = $panel
@@ -276,8 +276,8 @@
             loadUrlCallback: function($panel) {
                 $panel.find(':button.btn-close').click(function() { that.closeCurrentTab() })
             },
-            reload: function($tab, flag, type) {
-                flag = flag || $tab.data('reloadFlag')
+            reload: function($tab, flag) {
+                flag    = flag || $tab.data('reloadFlag')
                 
                 var options = $tab.data('options')
                 
@@ -298,9 +298,10 @@
                 $panel
                     .trigger(BJUI.eventType.beforeLoadNavtab)
                     .ajaxUrl({
-                        type:(options.type || 'GET'), url:options.url, data:options.data, callback:function(response) {
+                        type:(options.type || 'GET'), url:options.url, data:options.data || {}, callback:function(response) {
                             that.tools.loadUrlCallback($panel)
                             if (onLoad) onLoad.apply(that, [$panel])
+                            if (BJUI.ui.clientPaging && $panel.data('bjui.clientPaging')) $panel.pagination('setPagingAndOrderby', $panel)
                         }
                     })
             }
@@ -315,7 +316,7 @@
             id: 'navtabCM',
             bindings: {
                 reload: function(t, m) {
-                    if (!t.data('tabid')) that.tools.reload(t, true)
+                    if (!t.data('tabid')) that.refresh(t.data('initOptions').id)
                 },
                 closeCurrent: function(t, m) {
                     if (!t.data('tabid')) {
@@ -381,9 +382,10 @@
         if (iOpenIndex >= 0) {
             var $tab   = tools.getTabs().eq(iOpenIndex)
             var $panel = tools.getPanels().eq(iOpenIndex)
-            var op     = $tab.data('options') || options
+            var op     = $tab.data('initOptions') || options
             
             if (op.fresh || options.fresh || op.url != options.url) {
+                $tab.data('initOptions', options)
                 that.reload(options)
             }
             
@@ -424,6 +426,7 @@
                 that.switchTab(options.id)
             })
             $tab.data('options', options)
+                .data('initOptions', options)
         }
         
         tools.switchTab(currentIndex)
@@ -476,9 +479,14 @@
     }
     
     Navtab.prototype.refresh = function(tabid) {
-        var $tab = tabid ? this.tools.getTab(tabid) : $currentTab
+        var $tab = tabid ? this.tools.getTab(tabid) : $currentTab, $panel
         
-        if ($tab) this.tools.reload($tab, true)
+        if ($tab) {
+            $panel = this.tools.getPanel(tabid)
+            $panel.removeData('bjui.clientPaging')
+            
+            this.reload($tab.data('initOptions'))
+        }
     }
     
     Navtab.prototype.reload = function(option) {
@@ -487,7 +495,7 @@
         var $tab    = options.id ? this.tools.getTab(options.id) : this.tools.getTabs().eq(currentIndex)
         
         if ($tab) {
-            var op = $tab.data('options') || options
+            var op = $tab.data('initOptions') || options
             var _reload = function() {
                 if (options.title != op.title) $tab.find('> a').attr('title', options.title).find('> span').html(options.title)
                 

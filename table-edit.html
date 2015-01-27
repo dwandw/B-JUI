@@ -58,10 +58,10 @@ $('#tabledit1').on('afterdelete.bjui.tabledit', function(e) {
 </div>
 <div class="bjui-pageContent">
     <form action="ajaxDone2.html" id="j_custom_form" class="pageForm" data-toggle="validate" method="post">
-        <table id="tabledit1" class="table table-bordered table-hover table-striped table-top" data-toggle="tabledit" data-initnum="0" data-layout-h="0">
+        <table id="tabledit1" class="table table-bordered table-hover table-striped table-top" data-toggle="tabledit" data-initnum="0" data-layout-h="0" data-action="ajaxDone3.html">
             <thead>
-                <tr>
-                    <th title="No."><input type="text" name="customList[#index#].id" class="no" data-rule="required" value="1" size="2"></th>
+                <tr data-idname="customList[#index#].id">
+                    <th title="No."><input type="text" name="customList[#index#].no" class="no" data-rule="required" value="1" size="2"></th>
                     <th title="客人姓名"><input type="text" name="customList[#index#].name" data-rule="required" value="熊大" size="5"></th>
                     <th title="拼音姓"><input type="text" name="customList[#index#].surname" data-rule="required" value="Xiong" size="5"></th>
                     <th title="拼音名"><input type="text" name="customList[#index#].enname" data-rule="required" value="Da" size="5"></th>
@@ -88,13 +88,14 @@ $('#tabledit1').on('afterdelete.bjui.tabledit', function(e) {
                         <input type="hidden" name="customList[#index#].pic" class="pic-name" value=""><span class="pic-box"></span>
                     </th>
                     <th title="" data-addtool="true" width="100">
+                        <a href="javascript:;" class="btn btn-green" data-toggle="dosave">保存</a>
                         <a href="ajaxDone2.html" class="btn btn-red row-del" data-confirm-msg="确定要删除该行信息吗？">删</a>
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
+                <tr data-id="1">
+                    <td data-id-val="1">1</td>
                     <td>孙悟空</td>
                     <td>Sun</td>
                     <td>Wukong</td>
@@ -116,7 +117,7 @@ $('#tabledit1').on('afterdelete.bjui.tabledit', function(e) {
                         <a href="ajaxDone2.html" class="btn btn-red row-del" data-confirm-msg="确定要删除该行信息吗？">删</a>
                     </td>
                 </tr>
-                <tr>
+                <tr data-id="2">
                     <td>2</td>
                     <td>唐僧</td>
                     <td>Tang</td>
@@ -139,7 +140,7 @@ $('#tabledit1').on('afterdelete.bjui.tabledit', function(e) {
                         <a href="ajaxDone2.html" class="btn btn-red row-del" data-confirm-msg="确定要删除该行信息吗？">删</a>
                     </td>
                 </tr>
-                <tr>
+                <tr data-id="3">
                     <td>3</td>
                     <td>猪八戒</td>
                     <td>Zhu</td>
@@ -162,7 +163,7 @@ $('#tabledit1').on('afterdelete.bjui.tabledit', function(e) {
                         <a href="ajaxDone2.html" class="btn btn-red row-del" data-confirm-msg="确定要删除该行信息吗？">删</a>
                     </td>
                 </tr>
-                <tr>
+                <tr data-id="4">
                     <td>4</td>
                     <td>沙和尚</td>
                     <td>Sha</td>

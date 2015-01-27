@@ -1,3 +1,9 @@
+<script type="text/javascript">
+    function doc_tabledit_dialog_onload($dialog) {
+        $dialog.find('pre').addClass('brush: js')
+        SyntaxHighlighter.highlight()
+    }
+</script>
 <div class="bjui-pageContent">
     <div class="pageFormContent" data-layout-h="0">
         <div class="bjui-doc">
@@ -69,6 +75,49 @@
                         <td>int</td>
                         <td>0</td>
                         <td>[可选] 默认初始化行数。</td>
+                    </tr>
+                    <tr>
+                        <td>action</td>
+                        <td>string</td>
+                        <td>null</td>
+                        <td>[可选] 点完成或保存按钮后处理数据的服务端url。</td>
+                    </tr>
+                    <tr>
+                        <td>type</td>
+                        <td>string</td>
+                        <td>POST</td>
+                        <td>[可选] 提交数据的方式。</td>
+                    </tr>
+                    <tr>
+                        <td>callback</td>
+                        <td>function(json)</td>
+                        <td>
+                            <a href="javascript:;" data-toggle="dialog" data-target="#doc-tabledit-callback" data-id="tabledit-doc-callback" data-width="460" data-height="200" data-on-load="doc_tabledit_dialog_onload" data-title="默认callback">点我查看</a>
+                            <span id="doc-tabledit-callback" class="hide">
+                                <pre>
+                                    function(json) {
+                                        if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
+                                            _doRead($tr)
+                                        } else {
+                                            $tr.bjuiajax('ajaxDone', json)
+                                        }
+                                    }
+                                </pre>
+                            </span>
+                        </td>
+                        <td>[可选] 回调函数。</td>
+                    </tr>
+                    <tr>
+                        <td>idname</td>
+                        <td>string</td>
+                        <td>id</td>
+                        <td><code>适用于 thead -> tr</code>[可选] 定义行数据的主键名称（id的name）。</td>
+                    </tr>
+                    <tr>
+                        <td>id</td>
+                        <td>string</td>
+                        <td>null</td>
+                        <td><code>适用于 tbody -> tr</code>[可选] 定义行数据的主键值（id的值）。</td>
                     </tr>
                     <tr>
                         <td>addtool</td>

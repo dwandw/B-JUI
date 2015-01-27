@@ -256,32 +256,20 @@
     Tablefixed.prototype.initBody = function() {
         var $tbody    = this.$fixed.find('> tbody')
         var layoutStr = ' data-layout-h="'+ (this.options.layoutH || 0) +'"'
-        var $tds      = $tbody.find('> tr:first-child > td')
         var styles    = this.options.styles
         
         if (this.options.height) layoutStr = 'style="height:'+ (this.options.height - this.$fixed.find('.fixedtableHeader').height()) +'px; overflow-y:auto;"'
         
-        $tds.each(function(i) {
-            if (i < styles.length) $(this).width(styles[i][0])
-        })
-        
-        this.options.$tds = $tds
         $tbody.wrap('<div class="fixedtableScroller"'+ layoutStr +' style="width:'+ (this.options.newWidth) +'px;"><div class="fixedtableTbody"><table style="width:'+ (this.options.newWidth - Tablefixed.SCROLLW) +'px; max-width:'+ (this.options.newWidth - Tablefixed.SCROLLW) +'px;"></table></div></div>')
         
         if (!this.$element.attr('class')) $tbody.parent().addClass('table table-striped table-bordered table-hover')
         else $tbody.parent().addClass(this.$element.attr('class'))
         if (typeof this.$element.attr('data-selected-multi') != 'undefined') $tbody.parent().attr('data-selected-multi', this.$element.attr('data-selected-multi'))
         
-        if (this.options.nowrap) {
-            $tbody.find('> tr > td').each(function(i) {
-                var $td = $(this)
-                
-                $td
-                    .html('<div class="fixedtableCol">'+ $td.html() +'</div>')
-                    .attr('title', $td.text())
-            })
-        }
-        
+        $tbody.before('<thead><tr class="resize-head">'+ this.$fixed.find('thead > tr').html() +'</tr></thead>')
+        this.options.$tds = $tbody.prev().find('> tr:first-child > th')
+        if (this.options.nowrap) $tbody.parent().addClass('nowrap')
+       
         $tbody.closest('.fixedtableScroller').scroll(function(e) {
             var $scroller  = $(this)
             var scrollLeft = $scroller.scrollLeft()
@@ -376,10 +364,13 @@
             $orderBox = $th.find('.fixedtableCol'),
             $order    = $(FRAG.orderby.replace('#asc#', BJUI.regional.orderby.asc).replace('#desc#', BJUI.regional.orderby.desc))
             
-        options   = options || this.options
+        options = options || this.options
         
         $th.addClass('orderby')
-        if (options.orderDirection) $th.addClass(options.orderDirection)
+        if (options.orderDirection) {
+            if (!BJUI.ui.clientPaging) $th.addClass(options.orderDirection)
+            $th.pagination('setClientOrder', {orderField:options.orderField, orderDirection:options.orderDirection})
+        }
         if (!$orderBox.length) {
             $orderBox = $('<div class="fixedtableCol">'+ $th.html() +'</div>')
                 .appendTo($th.empty())

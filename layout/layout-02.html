@@ -3,11 +3,11 @@
         <input type="hidden" name="pageCurrent" value="1111" />
         <input type="hidden" name="pageSize" value="2222" />
         <input type="hidden" name="orderField" value="${model.orderField)" />
-        <ul class="bjui-searchBar">
-            <li><label>名称：</label><input type="text" value="" name="code" size="10"></li>
-            <li><button type="submit" class="btn-default" data-icon="search">查询</button></li>
-            <li><a class="btn btn-orange" href="javascript:;" data-toggle="reloadsearch" data-clear-query="true" data-icon="undo">清空查询</a></li>
-        </ul>
+        <div class="bjui-searchBar">
+            <label>名称：</label><input type="text" value="" name="code" size="10">&nbsp;
+            <button type="submit" class="btn-default" data-icon="search">查询</button>&nbsp;
+            <a class="btn btn-orange" href="javascript:;" data-toggle="reloadsearch" data-clear-query="true" data-icon="undo">清空查询</a>
+        </div>
     </form>
 </div>
 <div class="bjui-pageContent">
@@ -17,7 +17,7 @@
                 <th data-order-field="id">No.</th>
                 <th data-order-field="name">名称</th>
                 <th data-order-field="note">描述</th>
-                <th class="orderby asc" data-order-field="date">创建日期</th>
+                <th class="orderby" data-order-direction="asc" data-order-field="date">创建日期</th>
                 <th width="28"><input type="checkbox" class="checkboxCtrl" data-group="ids" data-toggle="icheck"></th>
             </tr>
         </thead>
@@ -77,7 +77,7 @@
         <div class="pages">
             <span>每页&nbsp;</span>
             <div class="selectPagesize">
-                <select data-toggle="selectpicker" name="numPerPage" onchange="navTabPageBreak({numPerPage:this.value})">
+                <select data-toggle="selectpicker" data-toggle-change="changepagesize">
                     <option value="30">30</option>
                     <option value="60">60</option>
                     <option value="120">120</option>

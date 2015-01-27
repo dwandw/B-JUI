@@ -155,8 +155,39 @@
                     .on('click.bjui.tabledit.readonly', '[data-toggle="doedit"]', function(e) {
                         _doEdit($(this).closest('tr'))
                     })
-                    .on('click.bjui.tabledit.readonly', '[data-toggle="doreadonly"]', function(e) {
-                        _doRead($(this).closest('tr'))
+                    .on('click.bjui.tabledit.readonly', '[data-toggle="dosave"]', function(e) {
+                        var $tr = $(this).closest('tr'), callback = that.options.callback
+                        
+                        if (that.options.action) {
+                            $tr.wrap('<form action="" method="POST"></form>')
+                            if ($tr.attr('data-id')) {
+                                var name = $table.find('> thead > tr:eq(0)').data('idname') || 'id'
+                                $tr.before('<input type="hidden" name="'+ name.replaceSuffix($tr.index()) +'" value="'+ $tr.attr('data-id') +'">')
+                            }
+                            var data = $tr.parent().serializeArray()
+                            
+                            $tr.prev('input').remove()
+                            $tr
+                                .unwrap()
+                                .isValid(function(v) {
+                                    if (v) {
+                                        if (callback) {
+                                            callback = callback.toFunc()
+                                        } else {
+                                            callback = function(json) {
+                                                if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
+                                                    _doRead($tr)
+                                                } else {
+                                                    $tr.bjuiajax('ajaxDone', json)
+                                                }
+                                            }
+                                        }
+                                        $tr.bjuiajax('doAjax', {url:that.options.action, data:data, type:that.options.type || 'POST', callback:callback})
+                                    }
+                                })
+                        } else {
+                            _doRead($tr)
+                        }
                     })
                 
                 that.tools.initEnter($tbody)
@@ -178,7 +209,7 @@
                             $this.closest('.iradio_minimal-purple').find('ins').removeClass('readonly')
                         }
                         if (toggle) {
-                            if (toggle == 'doreadonly') return true
+                            if (toggle == 'dosave') return true
                             else $this.removeAttr('data-toggle-old').attr('data-toggle', toggle)
                             if (toggle == 'spinner') {
                                 $this.spinner('destroy').spinner()
@@ -191,7 +222,7 @@
                     })
                     
                     $tr.find('[data-toggle="doedit"]')
-                        .attr('data-toggle', 'doreadonly')
+                        .attr('data-toggle', 'dosave')
                         .text('完成')
                 }
                 function _doRead($tr) {
@@ -210,7 +241,7 @@
                             $this.closest('.iradio_minimal-purple').find('ins').addClass('readonly')
                         }
                         if (toggle) {
-                            if (toggle == 'doedit' || toggle == 'doreadonly') return true
+                            if (toggle == 'doedit' || toggle == 'dosave') return true
                             else $this.removeAttr('data-toggle').attr('data-toggle-old', toggle)
                         }
                         if ($this.is(':text') || $this.is('textarea'))
@@ -219,7 +250,7 @@
                         $this.find('.bjui-lookup, .bjui-spinner, .bjui-upload').hide()
                     })
                     
-                    $tr.find('[data-toggle="doreadonly"]')
+                    $tr.find('[data-toggle="dosave"]')
                         .attr('data-toggle', 'doedit')
                         .text('编辑')
                 }

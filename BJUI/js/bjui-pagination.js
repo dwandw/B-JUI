@@ -28,12 +28,12 @@
     }
     
     Pagination.DEFAULTS = {
-        first :  'li.j-first',
-        prev  :  'li.j-prev',
-        next  :  'li.j-next',
-        last  :  'li.j-last',
-        nums  :  'li.j-num > a',
-        jump  :  'li.jumpto',
+        first : 'li.j-first',
+        prev  : 'li.j-prev',
+        next  : 'li.j-next',
+        last  : 'li.j-last',
+        nums  : 'li.j-num > a',
+        jump  : 'li.jumpto',
         pageNumFrag : '<li class="#liClass#"><a href="javascript:;">#pageNum#</a></li>',
         total       : 0,
         pageSize    : 10,
@@ -74,6 +74,8 @@
     }
     
     Pagination.prototype.init = function() {
+        if (BJUI.ui.clientPaging && !this.getClientPaging()) this.setClientPaging({pageCurrent:this.options.pageCurrent, pageSize:this.options.pageSize})
+        
         var that        = this
         var options     = this.options
         var tools       = this.tools
@@ -128,10 +130,12 @@
             var $button   = $(this).find('.goto')
             
             $button.on('click', function() {
-                var pageNum = $inputBox.val()
+                var pageCurrent = $inputBox.val(), pagingInfo = {pageCurrent:pageCurrent, pageSize:options.pageSize}
                 
-                if (pageNum && pageNum.isPositiveInteger())
-                    $(this).bjuiajax('pageCallback', {pageCurrent:pageNum, pageSize:options.pageSize}, that.$element.closest('.bjui-layout'))
+                if (pageCurrent && pageCurrent.isPositiveInteger()) {
+                    that.setClientPaging(pagingInfo)
+                    $(this).bjuiajax('pageCallback', pagingInfo, that.$element.closest('.bjui-layout'))
+                }
             })
             
             $inputBox.keyup(function(e) {
@@ -139,9 +143,12 @@
             })
         })
         
-        function _bindEvent($target, pageNum) {
+        function _bindEvent($target, pageCurrent) {
             $target.on('click', function(e) {
-                $(this).bjuiajax('pageCallback', {pageCurrent:pageNum, pageSize:that.options.pageSize}, that.$element.closest('.bjui-layout'))
+                var pagingInfo = {pageCurrent:pageCurrent, pageSize:that.options.pageSize}
+                
+                that.setClientPaging(pagingInfo)
+                $(this).bjuiajax('pageCallback', pagingInfo, that.$element.closest('.bjui-layout'))
                 
                 e.preventDefault()
             })
@@ -149,10 +156,12 @@
     }
     
     Pagination.prototype.changePagesize = function() {
-        var that = this, pageSize = that.$element.val()
+        var that = this, pageSize = that.$element.val(), pagingInfo = {pageSize:pageSize}
         
-        if (!isNaN(pageSize))
-            that.$element.bjuiajax('pageCallback', {pageSize:pageSize}, that.$element.closest('.bjui-layout'))
+        if (!isNaN(pageSize)) {
+            that.setClientPaging(pagingInfo)
+            that.$element.bjuiajax('pageCallback', pagingInfo, that.$element.closest('.bjui-layout'))
+        }
     }
     
     Pagination.prototype.orderBy = function(options) {
@@ -161,9 +170,58 @@
         that.$element.css({cursor:'pointer'}).click(function() {
             var orderField     = $(this).data('orderField')
             var orderDirection = $(this).data('orderDirection')
+            var orderInfo      = {orderField:orderField, orderDirection:orderDirection}
             
-            $(this).bjuiajax('pageCallback', {orderField:orderField, orderDirection:orderDirection}, that.$element.closest('.bjui-layout'))
+            that.setClientPaging(orderInfo)
+            $(this).bjuiajax('pageCallback', orderInfo, that.$element.closest('.bjui-layout'))
         })
+    }
+    
+    Pagination.prototype.destroy = function() {
+        this.$element.removeData('bjui.pagination').empty()
+    }
+    
+    Pagination.prototype.getTarget = function() {
+        var that = this, $target
+        
+        if (that.$element.closest('.bjui-layout').length) $target = that.$element.closest('.bjui-layout')
+        else if (that.$element.closest('.navtab-panel').length) $target = $.CurrentNavtab
+        else $target = $.CurrentDialog
+        
+        return $target
+    }
+    
+    Pagination.prototype.getClientPaging = function() {
+        return this.getTarget().data('bjui.clientPaging')
+    }
+    
+    Pagination.prototype.setClientPaging = function(clientPaging) {
+        if (BJUI.ui.clientPaging) {
+            var $target = this.getTarget()
+            
+            $target.data('bjui.clientPaging', $.extend({}, $target.data('bjui.clientPaging') || {}, clientPaging))
+        }
+    }
+    
+    Pagination.prototype.setClientOrder = function(clientOrder) {
+        if (BJUI.ui.clientPaging) {
+            var clientPaging = this.getClientPaging()
+            
+            if (!clientPaging || !clientPaging.orderField) this.setClientPaging(clientOrder)
+        }
+    }
+    
+    Pagination.prototype.setPagingAndOrderby = function($target) {
+        var clientPaging = $target.data('bjui.clientPaging')
+        
+        $target.find('[data-toggle="pagination"]')
+            .pagination('destroy')
+            .pagination(clientPaging)
+        
+        if (clientPaging.pageSize)
+            $target.find('select[data-toggle-change="changepagesize"]').selectpicker('val', clientPaging.pageSize)
+        if (clientPaging.orderField)
+            $target.find('th[data-order-field="'+ clientPaging.orderField +'"]').addClass(clientPaging.orderDirection).siblings().removeClass('asc desc')
     }
     
     // PAGINATION PLUGIN DEFINITION
