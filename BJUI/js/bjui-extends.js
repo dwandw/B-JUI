@@ -76,7 +76,7 @@
          * @param {Object} refBox: reference box jQuery Obj
          */
         layoutH: function($refBox) {
-            return this.each(function() {
+            return this.each(function(i) {
                 var $box      = $(this)
                 var $unitBox  = null
                 var $fixedBox = null
@@ -122,6 +122,7 @@
                 } else {
                     $box.animate({ height:bodH }, 'fast', function() {
                         $box.css('overflow', 'auto')
+                        $box.find('.bjui-layout').find('[data-layout-h]').layoutH()
                     })
                 }
             })

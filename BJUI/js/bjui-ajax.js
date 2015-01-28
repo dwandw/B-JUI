@@ -387,13 +387,6 @@
         
         if ($target && $target.length) {
             $target.removeData('bjui.clientPaging')
-            options.callback = function($target) {
-                $target.find('[data-layout-h]').addClass('bjui-layout-h')
-                $(window).resize(function() {
-                    setTimeout(function() { $target.find('[data-layout-h]').layoutH() }, 20)
-                })
-            }
-            
             that.reloadDiv($target, options)
         }
     }
@@ -407,13 +400,6 @@
                 data = options.data || $target.data('data') || {}
             
             $target.removeData('bjui.clientPaging')
-            options.callback = function($target) {
-                $target.find('[data-layout-h]').addClass('bjui-layout-h')
-                $(window).resize(function() {
-                    setTimeout(function() { $target.find('[data-layout-h]').layoutH() }, 20)
-                })
-            }
-            
             that.reloadDiv($target, options)
         }
     }
@@ -426,6 +412,8 @@
                         $target.pagination('setPagingAndOrderby', $target)
                     if (options.callback)
                         options.callback.apply(this, [$target])
+                    
+                    $target.find('[data-layout-h]').addClass('bjui-layout-h')
                 }
             })
     }
