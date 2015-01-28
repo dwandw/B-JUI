@@ -482,7 +482,7 @@
         var $tab = tabid ? this.tools.getTab(tabid) : $currentTab, $panel
         
         if ($tab) {
-            $panel = this.tools.getPanel(tabid)
+            $panel = this.tools.getPanel($tab.data('initOptions').id)
             $panel.removeData('bjui.clientPaging')
             
             this.reload($tab.data('initOptions'))
