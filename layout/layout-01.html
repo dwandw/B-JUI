@@ -4,8 +4,8 @@ function pic_upload_success(file, data) {
     
     $(this).bjuiajax('ajaxDone', json)
     if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
-        $('#j_layout_pic').val(json.navTabId).trigger('validate')
-        $('#j_layout_span_pic').html('<img src="'+ json.navTabId +'" width="100" />')
+        $('#j_layout_pic').val(json.filename).trigger('validate')
+        $('#j_layout_span_pic').html('<img src="'+ json.filename +'" width="100" />')
     }
 }
 //护照有效日期  = 签发日期 + 10年
@@ -42,7 +42,7 @@ $('#j_layout_issuedate').on('afterchange.bjui.datepicker', function(e, data) {
                         <td colspan="2">
                             <label class="control-label x85">客人照片：</label>
                             <div style="display: inline-block; vertical-align: middle;">
-                                <div id="j_layout_pic_up" data-toggle="upload" data-uploader="ajaxPic.html?sessionid=?" 
+                                <div id="j_layout_pic_up" data-toggle="upload" data-uploader="ajaxUpload.html?sessionid=?" 
                                     data-file-size-limit="1024000000"
                                     data-file-type-exts="*.jpg;*.png;*.gif;*.mpg"
                                     data-multi="true"
