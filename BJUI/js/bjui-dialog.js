@@ -173,12 +173,11 @@
         if ($dialog) { //if the dialog id already exists
             var op = $dialog.data('initOptions') || options
             
-            $dialog.data('initOptions', options)
             this.switchDialog($dialog)
-            
             if ($dialog.is(':hidden')) $dialog.show()
             if (op.fresh || options.fresh || !op.url || op.url != options.url) {
                 that.reload(options)
+                $dialog.data('initOptions', options)
             }
         } else { //open a new dialog
             var dr     = BJUI.regional.dialog
