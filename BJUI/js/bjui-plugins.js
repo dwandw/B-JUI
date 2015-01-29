@@ -49,9 +49,7 @@
                 })
                 .on('ifChanged', function() {
                     /* Trigger validation */
-                    if ($(this).closest('div').attr('aria-checked')) {
-                        $(this).trigger('validate')
-                    }
+                    $(this).trigger('validate')
                 })
             
             if ($element.prop('disabled')) $element.iCheck('disable')

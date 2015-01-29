@@ -24,7 +24,7 @@ $('#j_custom_issuedate').on('afterchange.bjui.datepicker', function(e, data) {
 })
 </script>
 <div class="bjui-pageContent">
-    <form action="ajaxDone2.html" id="j_custom_form" class="pageForm" data-toggle="validate" data-alertmsg="false">
+    <form action="ajaxDone2.html" id="j_custom_form" data-toggle="validate" data-alertmsg="false">
         <input type="hidden" name="custom.id" value="edce142bc2ed4ec6b623aacaf602a4de">
         <div class="pageFormContent" data-layout-h="0">
             <table class="table table-condensed table-hover" width="100%">
@@ -52,7 +52,7 @@ $('#j_custom_issuedate').on('afterchange.bjui.datepicker', function(e, data) {
                                     data-multi="true"
                                     data-on-upload-success="pic_upload_success"
                                     data-icon="cloud-upload"></div>
-                                <input type="hidden" name="custom.pic" value="" id="j_custom_pic" data-rule="required" data-target="#j_custom_pic_up .bjui-upload-select-file">
+                                <input type="hidden" name="custom.pic" value="" id="j_custom_pic">
                                 <span id="j_custom_span_pic"></span>
                             </div>
                         </td>
@@ -126,7 +126,7 @@ $('#j_custom_issuedate').on('afterchange.bjui.datepicker', function(e, data) {
                     <tr>
                         <td>
                             <label for="" class="control-label x85">占床：</label>
-                            <input type="checkbox" name="custom.room" id="j_custom_room" data-toggle="icheck" value="true" data-label="是否占床" checked>
+                            <input type="checkbox" name="custom.room" id="j_custom_room" data-toggle="icheck" value="true" data-label="是否占床" checked data-rule="checked">
                         </td>
                         <td>
                             <label for="" class="control-label x85">签证：</label>

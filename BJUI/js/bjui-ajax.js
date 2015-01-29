@@ -116,7 +116,7 @@
             enctype   = $form.attr('enctype'),
             $target   = $form.closest('.bjui-layout')
         
-        that.options = options
+        that.options = $.extend({}, that.options, options)
         
         if (callback) callback = callback.toFunc()
         if (!$target || !$target.length) {
@@ -394,18 +394,19 @@
     Bjuiajax.prototype.refreshLayout = function(options) {
         var that = this, $element = that.$element, $target = options.target ? $(options.target) : null
         
+        if (!$target || !$target.length) {
+            BJUI.debug('Not set loaded \'ajax\' content container, like [data-target].')
+            return false
+        }
         if ($target && $target.length) {
-            var url  = options.url || $target.data('url'),
-                type = options.type || $target.data('type'),
-                data = options.data || $target.data('data') || {}
-            
             $target.removeData('bjui.clientPaging')
-            that.reloadDiv($target, options)
+            that.reloadDiv($target, $.extend({}, options, {type:$target.data('type'), url:$target.data('url'), data:$target.data('data')}))
         }
     }
     
     Bjuiajax.prototype.reloadDiv = function($target, options) {
         $target
+            .addClass('bjui-layout')
             .data('url', options.url).data('type', options.type).data('data', options.data)
             .ajaxUrl({ type:options.type, url:options.url, data:options.data, callback:function(html) {
                     if (BJUI.ui.clientPaging && $target.data('bjui.clientPaging'))
@@ -681,7 +682,7 @@
         
         if (!$this.isTag('form')) return
         
-        Plugin.call($this, 'ajaxForm', $this.data())
+        Plugin.call($this, 'ajaxForm')
         
         e.preventDefault()
     })

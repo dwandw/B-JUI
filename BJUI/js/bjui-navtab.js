@@ -385,8 +385,8 @@
             var op     = $tab.data('initOptions') || options
             
             if (op.fresh || options.fresh || op.url != options.url) {
-                $tab.data('initOptions', options)
                 that.reload(options)
+                $tab.data('initOptions', options)
             }
             
             currentIndex = iOpenIndex
