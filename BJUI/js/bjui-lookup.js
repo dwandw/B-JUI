@@ -102,13 +102,13 @@
         return (group ? (group +'.') : '') + (key) + (suffix ? suffix : '')
     }
     
-    Lookup.prototype.setSingle = function(args) {
+    Lookup.prototype.setSingle = function(args,type) {
         if (typeof args == 'string')
             args  = new Function('return '+ args)()
-        this.setVal(args)
+        this.setVal(args,type)
     }
     
-    Lookup.prototype.setMult = function(id) {
+    Lookup.prototype.setMult = function(id,type) {
         var args  = {}
         var $unitBox = this.$element.closest('.unitBox')
         
@@ -127,12 +127,13 @@
             return
         }
         
-        this.setVal(args)
+        this.setVal(args,type)
     }
     
-    Lookup.prototype.setVal = function(args) {
+    Lookup.prototype.setVal = function(args,type) {
         var that = this
         var $box = $currentLookup.closest('.unitBox')
+        var newValue  /* @description 增加 @author 小策一喋 */
         
         $box.find(':input').each(function() {
             var $input = $(this), inputName = $input.attr('name')
@@ -141,8 +142,15 @@
                 var name = that.getField(key)
                 
                 if (name == inputName) {
+
+                    /* @description 增加 追加参数 @author 小策一喋 */
+                    if(type == 1)
+                        newValue = $input.val() ? $input.val() + ',' + args[key] : args[key]
+                    else
+                        newValue = args[key]
+
                     $input
-                        .val(args[key])
+                        .val(newValue) /* @description 修改 args[key] 为 newValue @author 小策一喋 */
                         .trigger(Lookup.EVENTS.afterChange, {value:args[key]})
                         
                     break
@@ -152,7 +160,7 @@
         
         this.$element.dialog('closeCurrent')
     }
-    
+       
     // LOOKUP PLUGIN DEFINITION
     // =======================
     
@@ -220,11 +228,12 @@
         var $this = $(this)
         var args  = $this.data('args')
         var mult  = $this.data('lookupid')
+        var type = $('input[name="lookupType"]:checked').val() /* @description 新增 获取是否追加框值 @author 小策一喋 */
         
         if (args)
-            Plugin.call($this, 'setSingle', args)
+            Plugin.call($this, 'setSingle', args, type) /* @description 修改 增加type参数 @author 小策一喋 */
         else if (mult)
-            Plugin.call($this, 'setMult', mult)
+            Plugin.call($this, 'setMult', mult, type) /* @description 修改 增加type参数 @author 小策一喋 */
             
         e.preventDefault()
     })
