@@ -400,7 +400,7 @@
         }
         if ($target && $target.length) {
             $target.removeData('bjui.clientPaging')
-            that.reloadDiv($target, $.extend({}, options, {type:$target.data('type'), url:$target.data('url'), data:$target.data('data')}))
+            that.reloadDiv($target, $.extend({}, {type:$target.data('type'), url:$target.data('url'), data:$target.data('data')}, options))
         }
     }
     
