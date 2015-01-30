@@ -112,11 +112,11 @@
     Bjuiajax.prototype.ajaxForm = function(options) {
         var that      = this
         var $form     = this.$element,
-            callback  = options.callback,
+            callback  = options && options.callback,
             enctype   = $form.attr('enctype'),
             $target   = $form.closest('.bjui-layout')
         
-        that.options = $.extend({}, that.options, options)
+        options = $.extend({}, that.options, typeof options == 'object' && options)
         
         if (callback) callback = callback.toFunc()
         if (!$target || !$target.length) {
