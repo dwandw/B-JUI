@@ -1181,7 +1181,12 @@ if (!Object.keys) {
     
     /*Defined by K'naan*/
     destroyMenu: function() {
-        this.$menu.parents('.bootstrap-select').remove();
+        if (this.options.container == 'body') {
+            if (!this.$newElement.find(this.$menu).length) {
+                this.$menu.appendTo(this.$newElement)
+                var $emptyselect = $('body').find('> .bootstrap-select:empty').remove()
+            }
+        }
     }
   };
 
