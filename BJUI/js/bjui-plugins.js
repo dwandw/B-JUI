@@ -562,7 +562,10 @@
                 afterSelectFile          : options.afterSelectFile,
                 X_afterSelect            : options.confirmSelect,
                 htmlTags                 : htmlTags,
-                cssPath                  : BJUI.PLUGINPATH + 'kindeditor_4.1.10/editor-content.css',
+                cssPath                  : [
+                                                BJUI.PLUGINPATH + 'kindeditor_4.1.10/editor-content.css', 
+                                                BJUI.PLUGINPATH + 'kindeditor_4.1.10/plugins/code/prettify.css'
+                                            ],
                 afterBlur                : function() { this.sync() }
             })
         })
