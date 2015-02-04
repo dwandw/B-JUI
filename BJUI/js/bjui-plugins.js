@@ -565,7 +565,7 @@
                 cssPath                  : [
                                                 BJUI.PLUGINPATH + 'kindeditor_4.1.10/editor-content.css', 
                                                 BJUI.PLUGINPATH + 'kindeditor_4.1.10/plugins/code/prettify.css'
-                                            ],
+                                           ],
                 afterBlur                : function() { this.sync() }
             })
         })
@@ -594,6 +594,12 @@
                 })
             }
         })
+        
+        /* tooltip */
+        $box.find('[data-toggle="tooltip"]').each(function() {
+            $(this).tooltip()
+        })
+        
         
         /* not validate */
         $box.find('form[data-toggle="ajaxform"]').each(function() {

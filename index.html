@@ -7,7 +7,7 @@
 <meta name="Keywords" content="B-JUI,Bootstrap,DWZ,jquery,ui,前端,框架,开源,OSC,开源框架,knaan"/>
 <meta name="Description" content="B-JUI, Bootstrap for DWZ富客户端框架，基于DWZ富客户端框架修改。主要针对皮肤，编辑器，表单验证等方面进行了大量修改，引入了Bootstrap，Font Awesome，KindEditor，jquery.validationEngine，iCheck等众多开源项目。交流QQ群：232781006。"/> 
 <!-- bootstrap - css -->
-<link href="BJUI/themes/css/bootstrap.min.css" rel="stylesheet">
+<link href="BJUI/themes/css/bootstrap.css" rel="stylesheet">
 <!-- core - css -->
 <link href="BJUI/themes/css/style.css" rel="stylesheet">
 <link href="BJUI/themes/purple/core.css" id="bjui-link-theme" rel="stylesheet">
@@ -103,7 +103,7 @@ $(function() {
         alertTimeout : 3000, //[可选]信息提示[info/correct]自动关闭延时(毫秒)
         pageInfo     : {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'}, //[可选]分页参数
         keys         : {statusCode:'statusCode', message:'message'}, //[可选]
-        ui           : {showSlidebar:true, hideMode:'display', clientPaging:true}, //[可选]clientPaging:在客户端响应分页及排序参数
+        ui           : {showSlidebar:true, clientPaging:true}, //[可选]clientPaging:在客户端响应分页及排序参数
         debug        : true,    // [可选]调试模式 [true|false，默认false]
         theme        : 'purple' // 若有Cookie['bjui_theme'],优先选择Cookie['bjui_theme']。皮肤[五种皮肤:default, orange, purple, blue, red, green]
     })
@@ -147,33 +147,21 @@ $(function(){
 })
 </script>
 <!-- for doc end -->
-<!-- for git 挂件 begin -->
-<style type="text/css">
-    .pro_name a{color:#4183c4;}
-    .osc_git_title{background-color:#d8e5f1;}
-    .osc_git_box{background-color:#fafafa;}
-    .osc_git_box{border-color:#ddd;}
-    .osc_git_info{color:#666;}
-    .osc_git_main a{color:#4183c4; font-size:14px; line-height:1.5;}
-    .osc_git_main li{line-height:1.5;}
-</style>
-<!-- for git 挂件 end -->
 </head>
 <body>
     <!--[if lte IE 7]>
         <div id="errorie"><div>您还在使用老掉牙的IE，正常使用系统前请升级您的浏览器到 IE8以上版本 <a target="_blank" href="http://windows.microsoft.com/zh-cn/internet-explorer/ie-8-worldwide-languages">点击升级</a>&nbsp;&nbsp;强烈建议您更改换浏览器：<a href="http://down.tech.sina.com.cn/content/40975.html" target="_blank">谷歌 Chrome</a></div></div>
     <![endif]-->
-    <header class="navbar navbar-default" id="bjui-header">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bjui-navbar-collapse">
-                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+    <header id="bjui-header">
+        <div class="bjui-navbar-header">
+            <button type="button" class="bjui-navbar-toggle btn-default" data-toggle="collapse" data-target="#bjui-navbar-collapse">
+                <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="#"><img src="images/logo.png"></a>
+            <a class="bjui-navbar-logo" href="#"><img src="images/logo.png"></a>
         </div>
-        <nav class="collapse navbar-collapse" id="bjui-navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
+        <nav id="bjui-navbar-collapse">
+            <ul class="bjui-navbar-right">
                 <li class="datetime"><div><span id="bjui-date"></span><br><i class="fa fa-clock-o"></i> <span id="bjui-clock"></span></div></li>
-                <li><a href="http://b-jui.com/index-hnav.html" target="_blank"><span class="badge">横向菜单版</span></a></li>
                 <li><a href="http://www.bootcss.com/" target="_blank">Bootstrap中文网</a></li>
                 <li><a href="http://www.j-ui.com/" target="_blank">DWZ(j-ui)官网</a></li>
                 <li><a href="#">消息 <span class="badge">4</span></a></li>
@@ -198,123 +186,196 @@ $(function(){
             </ul>
         </nav>
     </header>
-
-    <div class="bjui-leftside" id="bjui-leftside">
-        <div id="bjui-sidebar-s">
-            <div class="collapse">
-                <div class="toggleCollapse"><div title="展开菜单"><i class="fa fa-angle-double-right"></i></div></div>
+    <div id="bjui-hnav">
+        <button type="button" class="bjui-hnav-toggle btn-default" data-toggle="collapse" data-target="#bjui-hnav-navbar">
+            <i class="fa fa-bars"></i>
+        </button>
+        <ul id="bjui-hnav-navbar">
+            <li><a href="javascript:;" data-toggle="slidebar"><i class="fa fa-check-square-o"></i> 表单元素</a>
+                <ul id="bjui-hnav-tree1" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true" data-noinit="true">
+                    <li data-id="1" data-pid="0">表单元素</li>
+                    <li data-id="10" data-pid="1" data-url="form-button.html" data-tabid="form-button">按钮</li>
+                    <li data-id="11" data-pid="1" data-url="form-input.html" data-tabid="form-input">文本框</li>
+                    <li data-id="12" data-pid="1" data-url="form-select.html" data-tabid="form-select">下拉选择框</li>
+                    <li data-id="13" data-pid="1" data-url="form-checkbox.html" data-tabid="table">复选、单选框</li>
+                    <li data-id="14" data-pid="1" data-url="form.html" data-tabid="form">表单综合演示</li>
+                </ul>
+            </li>
+            <li><a href="javascript:;" data-toggle="slidebar"><i class="fa fa-table"></i> 表格</a>
+                <ul id="bjui-hnav-tree2" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true" data-noinit="true">
+                    <li data-id="2" data-pid="0">表格</li>
+                    <li data-id="20" data-pid="2" data-url="table.html" data-tabid="table">普通表格</li>
+                    <li data-id="21" data-pid="2" data-url="table-fixed.html" data-tabid="table-fixed">固定表头表格</li>
+                    <li data-id="22" data-pid="2" data-url="table-edit.html" data-tabid="table-edit">可编辑表格</li>
+                </ul>
+            </li>
+            <li><a href="javascript:;" data-toggle="slidebar"><i class="fa fa-plane"></i> 弹出窗口</a>
+                <ul id="bjui-hnav-tree3" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true" data-noinit="true">
+                    <li data-id="3" data-pid="0">弹出窗口</li>
+                    <li data-id="30" data-pid="3" data-url="dialog.html" data-tabid="dialog">弹出窗口</li>
+                    <li data-id="31" data-pid="3" data-url="alert.html" data-tabid="alert">信息提示</li>
+                </ul>
+            </li>
+            <li><a href="javascript:;" data-toggle="slidebar"><i class="fa fa-image"></i> 图形报表</a>
+                <ul id="bjui-hnav-tree4" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true" data-noinit="true">
+                    <li data-id="4" data-pid="0">图形报表</li>
+                    <li data-id="40" data-pid="4" data-url="highcharts.html" data-tabid="chart">Highcharts图表</li>
+                    <li data-id="40" data-pid="4" data-url="echarts.html" data-tabid="echarts">ECharts图表</li>
+                </ul>
+            </li>
+            <li><a href="javascript:;" data-toggle="slidebar"><i class="fa fa-coffee"></i> 框架组件</a>
+                <ul id="bjui-hnav-tree5" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true" data-noinit="true">
+                    <li data-id="5" data-pid="0">框架组件</li>
+                    <li data-id="51" data-pid="5" data-url="tabs.html" data-tabid="tabs">选项卡</li>
+                </ul>
+            </li>
+            <li><a href="javascript:;" data-toggle="slidebar"><i class="fa fa-bug"></i> 其他插件</a>
+                <ul id="bjui-hnav-tree6" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true" data-noinit="true">
+                    <li data-id="6" data-pid="0">其他插件</li>
+                    <li data-id="61" data-pid="6" data-url="ztree.html" data-tabid="ztree">zTree</li>
+                    <li data-id="62" data-pid="6" data-url="ztree-select.html" data-tabid="ztree-select">zTree下拉选择</li>
+                </ul>
+            </li>
+            <li><a href="javascript:;" data-toggle="slidebar"><i class="fa fa-database"></i> 综合应用</a>
+                <ul id="bjui-hnav-tree7" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true" data-noinit="true">
+                    <li data-id="8" data-pid="0">综合应用</li>
+                    <li data-id="80" data-pid="8" data-url="table-layout.html" data-tabid="table-layout">局部刷新1</li>
+                </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> 系统设置 <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">角色权限</a></li>
+                    <li><a href="#">用户列表</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">关于我们</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">友情链接</a></li>
+                </ul>
+            </li>
+        </ul>
+        <form class="hnav-form">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                </span>
             </div>
-        </div>
-        <div id="bjui-sidebar">
-            <div class="toggleCollapse"><h2>主菜单</h2><div title="收缩菜单"><i class="fa fa-angle-double-left"></i></div></div>
-            <div class="panel-group panel-main" data-toggle="accordion" id="bjui-accordionmenu" data-heightbox="#bjui-sidebar" data-offsety="26">
-                <div class="panel panel-default">
-                    <div class="panel-heading panelContent">
-                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#bjui-accordionmenu" href="#bjui-collapse0" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;Demo演示</a></h4>
-                    </div>
-                    <div id="bjui-collapse0" class="panel-collapse panelContent collapse in">
-                        <div class="panel-body" >
-                            <ul id="bjui-tree0" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
-                                <li data-id="1" data-pid="0">表单元素</li>
-                                <li data-id="10" data-pid="1" data-url="form-button.html" data-tabid="form-button">按钮</li>
-                                <li data-id="11" data-pid="1" data-url="form-input.html" data-tabid="form-input">文本框</li>
-                                <li data-id="12" data-pid="1" data-url="form-select.html" data-tabid="form-select">下拉选择框</li>
-                                <li data-id="13" data-pid="1" data-url="form-checkbox.html" data-tabid="table">复选、单选框</li>
-                                <li data-id="14" data-pid="1" data-url="form.html" data-tabid="form">表单综合演示</li>
-                                <li data-id="2" data-pid="0">表格</li>
-                                <li data-id="20" data-pid="2" data-url="table.html" data-tabid="table">普通表格</li>
-                                <li data-id="21" data-pid="2" data-url="table-fixed.html" data-tabid="table-fixed">固定表头表格</li>
-                                <li data-id="22" data-pid="2" data-url="table-edit.html" data-tabid="table-edit">可编辑表格</li>
-                                <li data-id="3" data-pid="0">弹出窗口</li>
-                                <li data-id="30" data-pid="3" data-url="dialog.html" data-tabid="dialog">弹出窗口</li>
-                                <li data-id="31" data-pid="3" data-url="alert.html" data-tabid="alert">信息提示</li>
-                                <li data-id="4" data-pid="0">图形报表</li>
-                                <li data-id="40" data-pid="4" data-url="highcharts.html" data-tabid="chart">Highcharts图表</li>
-                                <li data-id="40" data-pid="4" data-url="echarts.html" data-tabid="echarts">ECharts图表</li>
-                                <li data-id="5" data-pid="0">框架组件</li>
-                                <li data-id="51" data-pid="5" data-url="tabs.html" data-tabid="tabs">选项卡</li>
-                                <li data-id="6" data-pid="0">其他插件</li>
-                                <li data-id="61" data-pid="6" data-url="ztree.html" data-tabid="ztree">zTree</li>
-                                <li data-id="62" data-pid="6" data-url="ztree-select.html" data-tabid="ztree-select">zTree下拉选择</li>
-                                <li data-id="8" data-pid="0">综合应用</li>
-                                <li data-id="80" data-pid="8" data-url="table-layout.html" data-tabid="table-layout">局部刷新1</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="panelFooter"><div class="panelFooterContent"></div></div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading panelContent">
-                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#bjui-accordionmenu" href="#bjui-collapse1" class="" style="color:#FF1100;"><i class="fa fa-caret-square-o-right"></i>&nbsp;简要文档</a></h4>
-                    </div>
-                    <div id="bjui-collapse1" class="panel-collapse panelContent collapse">
-                        <div class="panel-body">
-                            <ul id="bjui-tree1" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="false">
-                                <li data-id="99" data-pid="0">文件列表</li>
-                                <li data-id="100" data-pid="99" data-url="doc/base/filelist.html" data-tabid="doc-file">文件详解</li>
-                                <li data-id="1" data-pid="0">框架介绍</li>
-                                <li data-id="10" data-pid="1" data-url="doc/base/structure.html" data-tabid="doc-base">页面结构</li>
-                                <li data-id="11" data-pid="1" data-url="doc/base/init.html" data-tabid="doc-base">框架初始化</li>
-                                <li data-id="12" data-pid="1" data-url="doc/base/navtab.html" data-tabid="doc-base">标签工作区(navtab)</li>
-                                <li data-id="13" data-pid="1" data-url="doc/base/dialog.html" data-tabid="doc-base">弹窗工作区(dialog)</li>
-                                <li data-id="14" data-pid="1" data-url="doc/base/idname.html" data-tabid="doc-base">元素ID命名规范</li>
-                                <li data-id="15" data-pid="1" data-url="doc/base/data.html" data-tabid="doc-base">data属性</li>
-                                <li data-id="16" data-pid="1" data-url="doc/base/api.html" data-tabid="doc-base">jQuery API调用</li>
-                                <li data-id="17" data-pid="1" data-url="doc/base/event.html" data-tabid="doc-base">事件</li>
-                                <li data-id="18" data-pid="1" data-url="doc/base/url.html" data-tabid="doc-base">URL动态赋值</li>
-                                <li data-id="2" data-pid="0">标签navtab</li>
-                                <li data-id="20" data-pid="2" data-url="doc/navtab/navtab.html" data-tabid="doc-navtab">创建navtab</li>
-                                <li data-id="21" data-pid="2" data-url="doc/navtab/navtab-op.html" data-tabid="doc-navtab">参数及方法</li>
-                                <li data-id="3" data-pid="0">弹窗dialog</li>
-                                <li data-id="30" data-pid="3" data-url="doc/dialog/dialog.html" data-tabid="doc-dialog">创建dialog</li>
-                                <li data-id="31" data-pid="3" data-url="doc/dialog/dialog-op.html" data-tabid="doc-dialog">参数及方法</li>
-                                <li data-id="4" data-pid="0">Ajax</li>
-                                <li data-id="40" data-pid="4" data-url="doc/ajax/callback.html" data-tabid="doc-ajax">回调函数</li>
-                                <li data-id="41" data-pid="4" data-url="doc/ajax/form.html" data-tabid="doc-ajax">提交表单</li>
-                                <li data-id="42" data-pid="4" data-url="doc/ajax/search.html" data-tabid="doc-ajax">搜索表单</li>
-                                <li data-id="43" data-pid="4" data-url="doc/ajax/load.html" data-tabid="doc-ajax">加载(局部刷新)</li>
-                                <li data-id="44" data-pid="4" data-url="doc/ajax/action.html" data-tabid="doc-ajax">执行动作</li>
-                                <li data-id="5" data-pid="0">图形报表</li>
-                                <li data-id="50" data-pid="5" data-url="highcharts.html" data-tabid="chart">Highcharts图表</li>
-                                <li data-id="50" data-pid="5" data-url="echarts.html" data-tabid="echarts">ECharts图表</li>
-                                <li data-id="6" data-pid="0">表单相关</li>
-                                <li data-id="60" data-pid="6" data-url="doc/form/datepicker.html" data-tabid="doc-form">日期选择器</li>
-                                <li data-id="61" data-pid="6" data-url="doc/form/spinner.html" data-tabid="doc-form">微调器</li>
-                                <li data-id="62" data-pid="6" data-url="doc/form/lookup.html" data-tabid="doc-form">查找带回</li>
-                                <li data-id="63" data-pid="6" data-url="doc/form/tags.html" data-tabid="doc-form">自动完成标签</li>
-                                <li data-id="64" data-pid="6" data-url="doc/form/upload.html" data-tabid="doc-form">上传组件</li>
-                                <li data-id="66" data-pid="6" data-url="doc/form/checkbox.html" data-tabid="doc-form">plugin:复选/单选</li>
-                                <li data-id="66" data-pid="6" data-url="doc/form/select.html" data-tabid="doc-form">plugin:下拉选择框</li>
-                                <li data-id="67" data-pid="6" data-url="doc/form/validate.html" data-tabid="doc-form">plugin:表单验证</li>
-                                <li data-id="68" data-pid="6" data-url="doc/form/kindeditor.html" data-tabid="doc-form">plugin:编辑器</li>
-                                <li data-id="7" data-pid="0">表格相关</li>
-                                <li data-id="70" data-pid="7" data-url="doc/table/style.html" data-tabid="doc-table">表格样式</li>
-                                <li data-id="71" data-pid="7" data-url="doc/table/order.html" data-tabid="doc-table">字段排序</li>
-                                <li data-id="72" data-pid="7" data-url="doc/table/paging.html" data-tabid="doc-table">分页组件</li>
-                                <li data-id="73" data-pid="7" data-url="doc/table/selected.html" data-tabid="doc-table">行选中操作</li>
-                                <li data-id="74" data-pid="7" data-url="doc/table/fixed.html" data-tabid="doc-table">固定表头</li>
-                                <li data-id="75" data-pid="7" data-url="doc/table/edit.html" data-tabid="doc-table">可编辑表格</li>
-                                <li data-id="8" data-pid="0">其他</li>
-                                <li data-id="80" data-pid="8" data-url="doc/other/contextmenu.html" data-tabid="doc-other">右键菜单</li>
-                                <li data-id="9" data-pid="0">框架皮肤</li>
-                                <li data-id="90" data-pid="9" data-url="doc/theme/color.html" data-tabid="doc-theme">颜色值</li>
-                                <li data-id="10" data-pid="0">图形报表</li>
-                                <li data-id="100" data-pid="10" data-url="doc/chart/highcharts.html" data-tabid="doc-highcharts">Highcharts图表说明</li>
-                                <li data-id="101" data-pid="10" data-url="doc/chart/echarts.html" data-tabid="doc-echarts">ECharts图表说明</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="panelFooter"><div class="panelFooterContent"></div></div>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
-    <div id="bjui-container">
+    <div id="bjui-container" class="clearfix">
+        <div id="bjui-leftside">
+            <div id="bjui-sidebar-s">
+                <div class="collapse"></div>
+            </div>
+            <div id="bjui-sidebar">
+                <div class="toggleCollapse"><h2><i class="fa fa-bars"></i> 导航栏 <i class="fa fa-bars"></i></h2><a href="javascript:;" class="lock"><i class="fa fa-lock"></i></a></div>
+                <div class="panel-group panel-main" data-toggle="accordion" id="bjui-accordionmenu" data-heightbox="#bjui-sidebar" data-offsety="26">
+                    <div class="panel panel-default">
+                        <div class="panel-heading panelContent">
+                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#bjui-accordionmenu" href="#bjui-collapse0" class="active"><i class="fa fa-caret-square-o-down"></i>&nbsp;Demo演示</a></h4>
+                        </div>
+                        <div id="bjui-collapse0" class="panel-collapse panelContent collapse in">
+                            <div class="panel-body" >
+                                <ul id="bjui-tree0" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
+                                    <li data-id="1" data-pid="0">表单元素</li>
+                                    <li data-id="10" data-pid="1" data-url="form-button.html" data-tabid="form-button">按钮</li>
+                                    <li data-id="11" data-pid="1" data-url="form-input.html" data-tabid="form-input">文本框</li>
+                                    <li data-id="12" data-pid="1" data-url="form-select.html" data-tabid="form-select">下拉选择框</li>
+                                    <li data-id="13" data-pid="1" data-url="form-checkbox.html" data-tabid="table">复选、单选框</li>
+                                    <li data-id="14" data-pid="1" data-url="form.html" data-tabid="form">表单综合演示</li>
+                                    <li data-id="2" data-pid="0">表格</li>
+                                    <li data-id="20" data-pid="2" data-url="table.html" data-tabid="table">普通表格</li>
+                                    <li data-id="21" data-pid="2" data-url="table-fixed.html" data-tabid="table-fixed">固定表头表格</li>
+                                    <li data-id="22" data-pid="2" data-url="table-edit.html" data-tabid="table-edit">可编辑表格</li>
+                                    <li data-id="3" data-pid="0">弹出窗口</li>
+                                    <li data-id="30" data-pid="3" data-url="dialog.html" data-tabid="dialog">弹出窗口</li>
+                                    <li data-id="31" data-pid="3" data-url="alert.html" data-tabid="alert">信息提示</li>
+                                    <li data-id="4" data-pid="0">图形报表</li>
+                                    <li data-id="40" data-pid="4" data-url="highcharts.html" data-tabid="chart">Highcharts图表</li>
+                                    <li data-id="40" data-pid="4" data-url="echarts.html" data-tabid="echarts">ECharts图表</li>
+                                    <li data-id="5" data-pid="0">框架组件</li>
+                                    <li data-id="51" data-pid="5" data-url="tabs.html" data-tabid="tabs">选项卡</li>
+                                    <li data-id="6" data-pid="0">其他插件</li>
+                                    <li data-id="61" data-pid="6" data-url="ztree.html" data-tabid="ztree">zTree</li>
+                                    <li data-id="62" data-pid="6" data-url="ztree-select.html" data-tabid="ztree-select">zTree下拉选择</li>
+                                    <li data-id="8" data-pid="0">综合应用</li>
+                                    <li data-id="80" data-pid="8" data-url="table-layout.html" data-tabid="table-layout">局部刷新1</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panelFooter"><div class="panelFooterContent"></div></div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading panelContent">
+                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#bjui-accordionmenu" href="#bjui-collapse1" class="" style="color:#FF1100;"><i class="fa fa-caret-square-o-right"></i>&nbsp;简要文档</a></h4>
+                        </div>
+                        <div id="bjui-collapse1" class="panel-collapse panelContent collapse">
+                            <div class="panel-body">
+                                <ul id="bjui-tree1" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="false">
+                                    <li data-id="99" data-pid="0">文件列表</li>
+                                    <li data-id="100" data-pid="99" data-url="doc/base/filelist.html" data-tabid="doc-file">文件详解</li>
+                                    <li data-id="1" data-pid="0">框架介绍</li>
+                                    <li data-id="10" data-pid="1" data-url="doc/base/structure.html" data-tabid="doc-base">页面结构</li>
+                                    <li data-id="11" data-pid="1" data-url="doc/base/init.html" data-tabid="doc-base">框架初始化</li>
+                                    <li data-id="12" data-pid="1" data-url="doc/base/navtab.html" data-tabid="doc-base">标签工作区(navtab)</li>
+                                    <li data-id="13" data-pid="1" data-url="doc/base/dialog.html" data-tabid="doc-base">弹窗工作区(dialog)</li>
+                                    <li data-id="14" data-pid="1" data-url="doc/base/idname.html" data-tabid="doc-base">元素ID命名规范</li>
+                                    <li data-id="15" data-pid="1" data-url="doc/base/data.html" data-tabid="doc-base">data属性</li>
+                                    <li data-id="16" data-pid="1" data-url="doc/base/api.html" data-tabid="doc-base">jQuery API调用</li>
+                                    <li data-id="17" data-pid="1" data-url="doc/base/event.html" data-tabid="doc-base">事件</li>
+                                    <li data-id="18" data-pid="1" data-url="doc/base/url.html" data-tabid="doc-base">URL动态赋值</li>
+                                    <li data-id="2" data-pid="0">标签navtab</li>
+                                    <li data-id="20" data-pid="2" data-url="doc/navtab/navtab.html" data-tabid="doc-navtab">创建navtab</li>
+                                    <li data-id="21" data-pid="2" data-url="doc/navtab/navtab-op.html" data-tabid="doc-navtab">参数及方法</li>
+                                    <li data-id="3" data-pid="0">弹窗dialog</li>
+                                    <li data-id="30" data-pid="3" data-url="doc/dialog/dialog.html" data-tabid="doc-dialog">创建dialog</li>
+                                    <li data-id="31" data-pid="3" data-url="doc/dialog/dialog-op.html" data-tabid="doc-dialog">参数及方法</li>
+                                    <li data-id="4" data-pid="0">Ajax</li>
+                                    <li data-id="40" data-pid="4" data-url="doc/ajax/callback.html" data-tabid="doc-ajax">回调函数</li>
+                                    <li data-id="41" data-pid="4" data-url="doc/ajax/form.html" data-tabid="doc-ajax">提交表单</li>
+                                    <li data-id="42" data-pid="4" data-url="doc/ajax/search.html" data-tabid="doc-ajax">搜索表单</li>
+                                    <li data-id="43" data-pid="4" data-url="doc/ajax/load.html" data-tabid="doc-ajax">加载(局部刷新)</li>
+                                    <li data-id="44" data-pid="4" data-url="doc/ajax/action.html" data-tabid="doc-ajax">执行动作</li>
+                                    <li data-id="5" data-pid="0">图形报表</li>
+                                    <li data-id="50" data-pid="5" data-url="highcharts.html" data-tabid="chart">Highcharts图表</li>
+                                    <li data-id="50" data-pid="5" data-url="echarts.html" data-tabid="echarts">ECharts图表</li>
+                                    <li data-id="6" data-pid="0">表单相关</li>
+                                    <li data-id="60" data-pid="6" data-url="doc/form/datepicker.html" data-tabid="doc-form">日期选择器</li>
+                                    <li data-id="61" data-pid="6" data-url="doc/form/spinner.html" data-tabid="doc-form">微调器</li>
+                                    <li data-id="62" data-pid="6" data-url="doc/form/lookup.html" data-tabid="doc-form">查找带回</li>
+                                    <li data-id="63" data-pid="6" data-url="doc/form/tags.html" data-tabid="doc-form">自动完成标签</li>
+                                    <li data-id="64" data-pid="6" data-url="doc/form/upload.html" data-tabid="doc-form">上传组件</li>
+                                    <li data-id="66" data-pid="6" data-url="doc/form/checkbox.html" data-tabid="doc-form">plugin:复选/单选</li>
+                                    <li data-id="66" data-pid="6" data-url="doc/form/select.html" data-tabid="doc-form">plugin:下拉选择框</li>
+                                    <li data-id="67" data-pid="6" data-url="doc/form/validate.html" data-tabid="doc-form">plugin:表单验证</li>
+                                    <li data-id="68" data-pid="6" data-url="doc/form/kindeditor.html" data-tabid="doc-form">plugin:编辑器</li>
+                                    <li data-id="7" data-pid="0">表格相关</li>
+                                    <li data-id="70" data-pid="7" data-url="doc/table/style.html" data-tabid="doc-table">表格样式</li>
+                                    <li data-id="71" data-pid="7" data-url="doc/table/order.html" data-tabid="doc-table">字段排序</li>
+                                    <li data-id="72" data-pid="7" data-url="doc/table/paging.html" data-tabid="doc-table">分页组件</li>
+                                    <li data-id="73" data-pid="7" data-url="doc/table/selected.html" data-tabid="doc-table">行选中操作</li>
+                                    <li data-id="74" data-pid="7" data-url="doc/table/fixed.html" data-tabid="doc-table">固定表头</li>
+                                    <li data-id="75" data-pid="7" data-url="doc/table/edit.html" data-tabid="doc-table">可编辑表格</li>
+                                    <li data-id="8" data-pid="0">其他</li>
+                                    <li data-id="80" data-pid="8" data-url="doc/other/contextmenu.html" data-tabid="doc-other">右键菜单</li>
+                                    <li data-id="9" data-pid="0">框架皮肤</li>
+                                    <li data-id="90" data-pid="9" data-url="doc/theme/color.html" data-tabid="doc-theme">颜色值</li>
+                                    <li data-id="10" data-pid="0">图形报表</li>
+                                    <li data-id="100" data-pid="10" data-url="doc/chart/highcharts.html" data-tabid="doc-highcharts">Highcharts图表说明</li>
+                                    <li data-id="101" data-pid="10" data-url="doc/chart/echarts.html" data-tabid="doc-echarts">ECharts图表说明</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panelFooter"><div class="panelFooterContent"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="bjui-navtab" class="tabsPage">
             <div class="tabsPageHeader">
                 <div class="tabsPageHeaderContent">
                     <ul class="navtab-tab nav nav-tabs">
-                        <li data-tabid="main" class="main active"><a href="javascript:;"><span><i class="fa fa-home"></i> #maintab#</span></a></li>
+                        <li data-tabid="main" class="main active" data-url="index_layout.html"><a href="javascript:;"><span><i class="fa fa-home"></i> #maintab#</span></a></li>
                     </ul>
                 </div>
                 <div class="tabsLeft"><i class="fa fa-angle-double-left"></i></div>
@@ -327,7 +388,7 @@ $(function(){
             <div class="navtab-panel tabsPageContent layoutBox">
                 <div class="page unitBox">
                     <div class="bjui-pageHeader" style="background:#FFF;">
-                        <div style="padding: 0 5px; border-bottom: 1px #DDD solid;">
+                        <div style="padding: 0 5px;">
                             <h4>B-JUI 前端框架 　　<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=0047455f3845597286edd381d54076b1e10a45c0c735115f0ee74961f70880af"><img border="0" src="images/group.png" alt="[B-JUI]Bootstrap4DWZ交流群" title="[B-JUI]Bootstrap4DWZ交流群" style="vertical-align:top;"></a></h4>
                             <hr style="margin: 12px 0 0px;">
                             <div class="row">
@@ -340,208 +401,6 @@ $(function(){
                                     <h5>DWZ(J-UI)官网：<a href="http://www.j-ui.com/" target="_blank">http://www.j-ui.com/</a></h5>
                                     <h5>Bootstrap中文网：<a href="http://www.bootcss.com/" target="_blank">http://www.bootcss.com/</a></h5>
                                     <h5>QQ交流群：232781006</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bjui-pageFormContent" data-layout-h="150">
-                        <div style="position: absolute;top:10px;right:0;width:300px;">
-                            <iframe width="100%" height="550" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=0&uid=2838273614&verifier=75a3b95b&dpc=1"></iframe>
-                        </div>
-                        <div style="margin-right:300px; overflow: hidden;">
-                            <div class="row" style="padding: 0 8px;">
-                                <div class="col-md-12">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><h3 class="panel-title">历史版本</h3></div>
-                                        <div class="panel-body">
-                                            <table class="table table-condensed table-striped table-hover" width="100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="100">版本号</th>
-                                                        <th width="90">发布日期</th>
-                                                        <th width="120">在线DEMO</th>
-                                                        <th>下载地址</th>
-                                                        <th>描述</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>1.0 beta</td>
-                                                        <td>2014.10.31</td>
-                                                        <td>http://b-jui.com/</td>
-                                                        <td>http://git.oschina.net/xknaan/B-JUI</td>
-                                                        <td>全新的前端框架B-JUI，全Bootstrap插件式的组合，仅借鉴了DWZ的思想，功能已全部重写。</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>0.1 released</td>
-                                                        <td>2014.08.01</td>
-                                                        <td>- 无 -</td>
-                                                        <td>http://git.oschina.net/xknaan/Bootstrap_for_DWZ</td>
-                                                        <td>穿上Bootstrap衣服的DWZ</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><h3 class="panel-title">更新日志</h3></div>
-                                        
-                                        <div class="panel-body">
-                                            <script src='http://git.oschina.net/xknaan/B-JUI/widget_preview'></script>
-                                            <table class="table table-condensed table-striped table-hover" width="100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="70">更新日期</th>
-                                                        <th width="70">更新版本</th>
-                                                        <th>更新内容</th>
-                                                        <th width="55">重要程度</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>2015.01.15</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>重新定义搜索条(bjui-searchBar和bjui-moreSearch)；lookup新增动态更换url方法；upload(html5版)修正扩展名支持；加载html内容时发生ajaxError后自动关闭当前navtab或dialog；修复navtab加载外部页面(iframe方式)参数external；修复可编辑表格的select和checkbox/radio在只读状态下后台取不到值的问题；bjui-ajax.js中的ajax方法全部应用全局超时变量ajaxTimeout；修正ajaxCallback的回调逻辑；修正tab选项卡下固定表头表格的显示问题；其他若干细节。</td>
-                                                        <td><span class="label label-danger">重要</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2015.01.08</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>新增table的行选中操作；新增Ajax提交的callback参数dialogid和divid；新增框架初始化参数JSPATH、PLUGINPATH、alertTimeout；<br>新增部分文档；其他若干细节优化。</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2015.01.05</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>优化layoutH，selectpicker联动支持json数据。</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2015.01.02</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>增大右键菜单的z-index，修复调整浏览器窗口大小后页片高度错误的bug</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.12.30</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>新增自定义右键菜单，bjui-all.js改为压缩版，其他细节完善</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.12.29</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>[修复bug] 清空查询的分页参数bug</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.12.24</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>[修复bug] 分页/排序 隐藏域重复生成；修复IE下超时对话框bug</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.12.19</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>日期选择框添加日历按钮，更新三个插件文档，其他。。</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.12.18</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>新增单独JS: bjui-all.js。 dialog\横向导航等小调整。</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.12.17</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>修复 bootstrap-select 联动在IE下的bug，新增有初始值的联动。</td>
-                                                        <td><span class="label label-danger">重要</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.12.15</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>添加表格相关文档，一些小细节完善。</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.12.11</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>可编辑表格：修复select的初始化值。</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.12.09</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>优化了ajax相关方法，其他多处小调整。将文档移至DEMO内，文档将持续更新。</td>
-                                                        <td><span class="label label-danger">重要</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.12.05</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>修复框架初始化参数：ui.showSlidebar (boolean) [配置框架启动时是否隐藏左侧边栏]。</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.12.04</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>[修复bug] 超时不弹出指定页面。</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.12.01</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>新增框架初始化参数：ajaxTimeout [配置全局ajax请求的超时时间]。</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.11.21</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>分页 跳转页面bug修复</td>
-                                                        <td><span class="label label-danger">重要</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.11.18</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>新增横向导航菜单</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.11.10</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>doAjax支持data属性[data-data]；ajax回调新增参数(dialogid)；新增ajax回调属性[data-reload-navtab]；navtab新增属性[data-fresh]</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.11.04</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>修复IE8下的selectpicker；多个html5的上传组件bug修复；启用tabs选项卡组件</td>
-                                                        <td><span class="label label-info">一般</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.11.03</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>在线文档（部分）；zTree - select功能完成；ajax回调功能修整；其他细节完善</td>
-                                                        <td><span class="label label-danger">重要</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.10.31</td>
-                                                        <td>V1.0 Beta</td>
-                                                        <td>创建</td>
-                                                        <td><span class="label label-danger">重要</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2014.09.10</td>
-                                                        <td>初始版本</td>
-                                                        <td>创建</td>
-                                                        <td><span class="label label-default">停更</span></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

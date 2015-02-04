@@ -640,7 +640,7 @@
             var data    = $this.data('bjui.dialog')
             
             if (!data) $this.data('bjui.dialog', (data = new Dialog(this, options)))
-            else if (data.options.id && data.options.id != options.id) $this.data('bjui.dialog', (data = new Dialog(this, options)))
+            else if (options.fresh) $this.data('bjui.dialog', (data = new Dialog(this, options)))
             
             if (typeof property == 'string' && $.isFunction(data[property])) {
                 [].shift.apply(args)
@@ -670,11 +670,15 @@
 
     $(document).on('click.bjui.dialog.data-api', '[data-toggle="dialog"]', function(e) {
         var $this   = $(this)
+        var href    = $this.attr('href')
         var options = $this.data()
         
-        if (!options.url)   options.url   = $this.attr('href')
-        if (!options.id)    options.id    = 'dialog'
         if (!options.title) options.title = $this.text()
+        if (href) {
+            if (!options.url) options.url = href
+            if (options.url && options.url != href)
+                options.url = href
+        }
         
         Plugin.call($this, options)
         

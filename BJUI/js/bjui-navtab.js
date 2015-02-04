@@ -51,6 +51,12 @@
                 .click(function() { $(this).navtab('switchTab', 'main') })
                 .find('> a').html(function(n, c) { return c.replace('#maintab#', BJUI.regional.maintab) })
             
+            if ($main.attr('data-url')) {
+                $(document).one(BJUI.eventType.initUI, function(e) {
+                    $main.navtab({id:'main', url:$main.data('url'), fresh:true})
+                })
+            }
+                
             $mainLi
                 .click(function() {
                     if ($(this).hasClass('active')) $moreBox.hide()
@@ -209,23 +215,18 @@
                 
                 if ($tab.data('reloadFlag')) {
                     $panels.hide()
-                    $panel.removeClass('fade').show()
+                    $panel.show()
                     that.refresh($tab.data('options').id)
                 } else {
-                    if (BJUI.ui.hideMode == 'offsets') {
-                        $panels.css({position: 'absolute', top:'-100000px', left:'-100000px'}).eq(iTabIndex).css({position: '', top:'', left:''})
-                    } else {
-                        $panels.addClass('fade').removeClass('in').hide()
+                    $panels.hide()
+                    if ($panel.find('.bjui-ajax-mask').length) {
                         $panel.show()
-                        
+                    } else {
+                        $panel.addClass('fade').removeClass('in').show()
                         if ($.support.transition)
-                            $panel.one('bsTransitionEnd', function() { $panel.addClass('in') }).emulateTransitionEnd(100)
+                            $panel.one('bsTransitionEnd', function() { $panel.addClass('in') }).emulateTransitionEnd(10)
                         else
-                            $panels.removeClass('fade')
-                            
-                        setTimeout(function() {
-                            if (!$panel.hasClass('in')) $panel.addClass('in')
-                        }, 110)
+                            $panel.removeClass('fade')
                     }
                 }
                 
@@ -277,7 +278,7 @@
                 $panel.find(':button.btn-close').click(function() { that.closeCurrentTab() })
             },
             reload: function($tab, flag) {
-                flag    = flag || $tab.data('reloadFlag')
+                flag = flag || $tab.data('reloadFlag')
                 
                 var options = $tab.data('options')
                 
@@ -317,10 +318,11 @@
             bindings: {
                 reload: function(t, m) {
                     if (!t.data('tabid')) that.refresh(t.data('initOptions').id)
+                    else if (t.data('url')) that.refresh(t)
                 },
                 closeCurrent: function(t, m) {
                     if (!t.data('tabid')) {
-                        var tabId = t.data('options').id
+                        var tabId = t.data('initOptions').id
                         
                         if (tabId) that.closeTab(tabId)
                         else that.closeCurrentTab()
@@ -330,7 +332,7 @@
                     if (t.data('tabid') == 'main') {
                         that.closeAllTab()
                     } else {
-                        var index = that.tools.indexTabId(t.data('options').id)
+                        var index = that.tools.indexTabId(t.data('initOptions').id)
                         
                         that.tools.closeOtherTab(index > 0 ? index : currentIndex)
                     }
@@ -348,7 +350,7 @@
                 
                 if (t.data('tabid') == 'main') {
                     mCur.addClass('disabled')
-                    mReload.addClass('disabled')
+                    if (!t.data('url')) mReload.addClass('disabled')
                 }
             }
         })
@@ -372,12 +374,13 @@
             
             options.url = encodeURI(options.url)
         }
+        
         if (!options.id) {
             BJUI.debug('Navtab Plugin: Error trying to open a navtab, the id is undefined!')
             return
         }
         
-        var iOpenIndex = tools.indexTabId(this.options.id)
+        var iOpenIndex = tools.indexTabId(options.id)
         
         if (iOpenIndex >= 0) {
             var $tab   = tools.getTabs().eq(iOpenIndex)
@@ -479,9 +482,17 @@
     }
     
     Navtab.prototype.refresh = function(tabid) {
-        var $tab = tabid ? this.tools.getTab(tabid) : $currentTab, $panel
+        var $tab, $panel
         
-        if ($tab) {
+        if (!tabid) {
+            $tab = $currentTab
+        } else if (typeof tabid == 'string') {
+            $tab = this.tools.getTab(tabid)
+        } else {
+            $tab = tabid
+        }
+        
+        if ($tab && $tab.length) {
             $panel = this.tools.getPanel($tab.data('initOptions').id)
             $panel.removeData('bjui.clientPaging')
             
@@ -578,7 +589,7 @@
             var data    = $this.data('bjui.navtab')
             
             if (!data) $this.data('bjui.navtab', (data = new Navtab(this, options)))
-            else if (data.options.id && data.options.id != options.id) $this.data('bjui.navtab', (data = new Navtab(this, options)))
+            else if (options.fresh) $this.data('bjui.navtab', (data = new Navtab(this, options)))
             
             if (typeof property == 'string' && $.isFunction(data[property])) {
                 [].shift.apply(args)
@@ -608,10 +619,15 @@
 
     $(document).on('click.bjui.navtab.data-api', '[data-toggle="navtab"]', function(e) {
         var $this   = $(this)
+        var href    = $this.attr('href')
         var options = $this.data()
         
-        if (!options.url)   options.url   = $this.attr('href')
         if (!options.title) options.title = $this.text()
+        if (href) {
+            if (!options.url) options.url = href
+            if (options.url && options.url != href)
+                options.url = href
+        }
         
         Plugin.call($this, options)
         

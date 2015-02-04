@@ -100,6 +100,9 @@
         var noinits = []
         var $noinit = $box.find('[data-noinit]')
         
+        //progress
+        $box.find('> .bjui-maskProgress').find('.progress').animate({width:'70%'}, 'fast')
+        
         // Hide not need to initialize the UI DOM
         $noinit.each(function(i) {
             var $this   = $(this)
@@ -109,12 +112,21 @@
             pos.$next   = $this.next()
             pos.$prev   = $this.prev()
             pos.$parent = $this.parent()
+            pos.visible = $this.is(':visible') ? true : false
             
             noinits.push(pos)
             $this.remove()
         })
         
         $box.data('bjui.noinit', noinits)
+    })
+    
+    /* initUI */
+    $(document).on(BJUI.eventType.initUI, function(e) {
+        var $box    = $(e.target)
+        
+        //progress
+        $box.find('> .bjui-maskProgress').find('.progress').animate({width:'80%'}, 'fast')
     })
     
     /* afterInitUI */
@@ -129,7 +141,8 @@
                 else if (n.$prev.length) n.$prev.after(n.$target)
                 else if (n.$parent.length) n.$parent.append(n.$target)
                 
-                n.$target.show()
+                if (n.visible) n.$target.show()
+                
                 $box.removeData('bjui.noinit')
             })
         }
@@ -137,11 +150,10 @@
         $box.find('.bjui-pageHeader, .bjui-headBar, .bjui-footBar').attr('data-layout-fixed', true)
         $box.find('[data-layout-h]').layoutH()
         
-        /*$(window).resize(function() {
-            setTimeout(function() {
-                $box.find('[data-layout-h]').layoutH($box.data('.bjui-layout') || $box.data('bjui.layoutBox'))
-            }, 20)
-        })*/
+        //progress
+        $box.find('> .bjui-maskProgress').find('.progress').animate({width:'100%'}, 'fast', function() {
+            $box.find('> .bjui-ajax-mask').fadeOut('normal', function() { $(this).remove() })
+        })
     })
     
     /* ajaxStatus */
@@ -165,10 +177,8 @@
         var bgZindex = parseInt($ajaxBackground.css('zIndex')) || 0
         var prZindex = parseInt($ajaxProgress.css('zIndex')) || 0
         
-        //if (zIndex > bgZindex) {
-            $ajaxBackground.css('zIndex', zIndex + 1)
-            $ajaxProgress.css('zIndex', zIndex + 2)
-        //}
+        $ajaxBackground.css('zIndex', zIndex + 1)
+        $ajaxProgress.css('zIndex', zIndex + 2)
         
         return {$bg:$ajaxBackground, $pr:$ajaxProgress}
     }
@@ -179,12 +189,14 @@
             
             ajaxMask.$bg.fadeIn()
             ajaxMask.$pr.fadeIn()
+            ajaxMask.$pr.find('.progress').animate({width:'5%'}, 'fast')
         })
         .on('bjui.ajaxStop', function(e) {
-            var ajaxMask = bjui_ajaxStatus($(e.target))
+            //var ajaxMask = bjui_ajaxStatus($(e.target))
             
-            ajaxMask.$bg.fadeOut()
-            ajaxMask.$pr.fadeOut()
+            //ajaxMask.$bg.fadeOut()
+            //ajaxMask.$pr.fadeOut()
+            //ajaxMask.$pr.find('.progress').animate({width:'55%'}, 'fast')
         })
     
     $(document).on(BJUI.eventType.ajaxStatus, function(e) {
@@ -194,10 +206,12 @@
             .one('ajaxStart', function() {
                 ajaxMask.$bg.fadeIn()
                 ajaxMask.$pr.fadeIn()
+                ajaxMask.$pr.find('.progress').animate({width:'5%'}, 'slow')
             })
             .one('ajaxStop', function() {
-                ajaxMask.$bg.fadeOut()
-                ajaxMask.$pr.fadeOut()
+                //ajaxMask.$bg.fadeOut()
+                //ajaxMask.$pr.fadeOut()
+                //ajaxMask.$pr.find('.progress').animate({width:'50%'}, 'slow')
             })
     })
     
@@ -208,7 +222,7 @@
     }
     
     $(document).on(BJUI.eventType.beforeLoadDialog, function(e) {
-        //console.log(111)
+        
     }).on(BJUI.eventType.beforeAjaxLoad, function(e) {
         bodyClear($(e.target))
     }).on(BJUI.eventType.beforeCloseNavtab, function(e) {

@@ -35,10 +35,10 @@
                 dataType : 'html',
                 timeout  : BJUI.ajaxTimeout,
                 success  : function(response) {
-                    var json = response.toJson()
+                    var json = response.toJson(), $ajaxBackground = $this.find('> .bjui-maskBackground'), $ajaxProgress = $this.find('> .bjui-maskProgress')
                     
                     if (!json[BJUI.keys.statusCode]) {
-                        $this.html(response).initui()
+                        $this.html(response).append($ajaxBackground).append($ajaxProgress).initui()
                         if ($.isFunction(op.callback)) op.callback(response)
                     } else {
                         if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {

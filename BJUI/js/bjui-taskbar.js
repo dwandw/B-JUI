@@ -90,8 +90,10 @@
                 } else {
                     if ($dialog.is(':hidden')) {
                         that.restoreDialog($dialog)
-                    } else
+                    } else {
                         $dialog.trigger('click')
+                        $task.addClass(taskSelected)
+                    }   
                 }
                 that.scrollCurrent($task)
             }

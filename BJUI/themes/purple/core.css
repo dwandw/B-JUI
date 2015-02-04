@@ -48,38 +48,34 @@ fieldset{border-color:#927ab5;}
 .table > tbody > tr.selected > td{background-color:#c7bbd8;}
 /* Main */
 #bjui-header{background:#927ab5 url(topbg.png);}
-#bjui-header > .navbar-header > .navbar-toggle:hover,
-#bjui-header > .navbar-header > .navbar-toggle:focus{background-color:#927ab5;}
-#bjui-header > nav > .nav > li.datetime > div,
-#bjui-header > nav > .nav > li > a{border-left:1px #EEE solid; border-right:1px #927ab5 solid; background:rgba(86,61,124,0.2);}
-#bjui-header > nav.collapsing,
-#bjui-header > nav.in{padding:0;}
-#bjui-header > nav.collapsing > .nav, #bjui-header > nav.in > .nav{margin:0;}
-#bjui-header > nav.collapsing > .nav > li.datetime > div,
-#bjui-header > nav.collapsing > .nav > li > a,
-#bjui-header > nav.in > .nav > li.datetime > div,
-#bjui-header > nav.in > .nav > li > a{border-left-width:0px;}
-#bjui-header > nav.collapsing > .nav > li > a,
-#bjui-header > nav.collapsing > .nav > li.datetime > div,
-#bjui-header > nav.in > .nav > li > a,
-#bjui-header > nav.in > .nav > li.datetime > div{color:#FFF; background:#563d7c;}
-#bjui-header > nav.in > .nav > li > ul > li > a{color:#FFF; background:#c7bbd8;}
-#bjui-header > nav.in > .nav > li > ul > li.divider{margin:0;}
-#bjui-header > nav > .nav > li.active > a,
-#bjui-header > nav > .nav > li.open > a,
-#bjui-header > nav > .nav > li > a:hover,
-#bjui-header > nav.in > .nav > li > ul > li > a:hover{background-color:#c000ff !important; border-right-color:#c000ff;}
-#bjui-header > nav.in > .nav > li > ul{padding:0;}
-#bjui-header > nav > .nav > li > a.theme{color:#FFF !important;}
+#bjui-header > .bjui-navbar-header > .bjui-navbar-toggle:focus,
+#bjui-header > .bjui-navbar-header > .bjui-navbar-toggle:hover{background:#c000ff;}
+#bjui-header > #bjui-navbar-collapse.menu {background:#927ab5;}
+#bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > a:hover{background:#c000ff;}
+#bjui-hnav{background-color:#eae7ef; box-shadow:0 2px 5px rgba(86, 61, 124, 0.6);}
+#bjui-hnav > .bjui-hnav-toggle:focus,
+#bjui-hnav > .bjui-hnav-toggle:hover{background:#c000ff;}
+#bjui-hnav > #bjui-hnav-navbar > li > a{color:#563d7c;}
+#bjui-hnav > #bjui-hnav-navbar > li > a:hover,
+#bjui-hnav > #bjui-hnav-navbar >.active > a,
+#bjui-hnav > #bjui-hnav-navbar >.active > a:hover,
+#bjui-hnav > #bjui-hnav-navbar >.active > a:focus,
+#bjui-hnav > #bjui-hnav-navbar > .open > a,
+#bjui-hnav > #bjui-hnav-navbar > .open > a:hover,
+#bjui-hnav > #bjui-hnav-navbar > .open > a:focus{background-color:#c000ff; border-left-color:#c000ff;}
+#bjui-hnav > .hnav-form .form-control{border-color:#927ab5;}
+#bjui-hnav > .hnav-form .btn{background-color:#927ab5;}
+#bjui-hnav > .hnav-form .btn:hover,
+#bjui-hnav > .hnav-form .btn:focus{background-color:#c000ff;}
+#bjui-hnav > #bjui-hnav-navbar.menu{background:#927ab5;}
+#bjui-hnav > #bjui-hnav-navbar.menu > li > a{border-top-color:#f8f6fa;}
+#bjui-sidebar.shadown{box-shadow:2px 0 5px rgba(86, 61, 124, 0.5);}
 #bjui-sidebar{background:#f8f6fa; border-color:#927ab5;}
 #bjui-sidebar > .toggleCollapse{background:#eae7ef; border-bottom:1px #927ab5 solid;}
-#bjui-sidebar > .toggleCollapse div{color:#563d7c; background:#eae7ef;}
-#bjui-sidebar > .toggleCollapse div:hover{color:#f8f6fa; background:#563d7c;}
+#bjui-sidebar > .toggleCollapse .lock{color:#c000ff; background:#eae7ef;}
+#bjui-sidebar > .toggleCollapse .lock:hover{color:#f8f6fa; background:#c000ff;}
 #bjui-sidebar-s > .collapse{background:#f8f6fa; border:1px #927ab5 solid;}
-#bjui-sidebar-s > .collapse:hover{background:#eae7ef;}
-#bjui-sidebar-s > .collapse > .toggleCollapse{background:#f8f6fa;}
-#bjui-sidebar-s > .collapse > .toggleCollapse div{color:#563d7c; background:#f8f6fa;}
-#bjui-sidebar-s > .collapse > .toggleCollapse div:hover{color:#f8f6fa; background:#563d7c;}
+#bjui-sidebar-s > .collapse:hover{background:#c000ff; border-color:#c000ff;}
 #bjui-splitBar{background:#f8f6fa;}
 #bjui-splitBarProxy{border-color:#c0c0c0; background:#f8f6fa;}
 /* Pages */
@@ -144,7 +140,7 @@ fieldset{border-color:#927ab5;}
 #bjui-taskbar > .taskbarContent > ul > li > .close:hover{color:#FF0000;}
 #bjui-taskbar > .taskbarLeft, #bjui-taskbar > .taskbarRight{background:#f8f6fa;}
 #bjui-taskbar > .taskbarLeft:hover,
-#bjui-taskbar > .taskbarRight:hover{color:#FFF; background:#563d7c; border-color:#f8f6fa;}
+#bjui-taskbar > .taskbarRight:hover{color:#FFF; background:#563d7c;}
 #bjui-taskbar > .taskbarLeft.disabled,
 #bjui-taskbar > .taskbarRight.disabled{color:#999; background:#f8f6fa;}
 #bjui-taskbar > .taskbarLeft.disabled:hover,
