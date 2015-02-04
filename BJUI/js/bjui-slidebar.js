@@ -51,9 +51,10 @@
         that.$sbar.animate({left: -10}, 20)
         that.$bar.removeClass('shadown')
         that.isfloat = false
-        that.$navtab.animate({left:cleft, width:cwidth}, 500)
+        that.$navtab.animate({left:cleft, width:cwidth}, 500, function() {
+            $(window).trigger(BJUI.eventType.resizeGrid)
+        })
         that.$split.show()
-        $(window).trigger(BJUI.eventType.resizeGrid)
     }
     
     Slidebar.prototype.unlock = function() {

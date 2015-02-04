@@ -206,7 +206,7 @@
             .one('ajaxStart', function() {
                 ajaxMask.$bg.fadeIn()
                 ajaxMask.$pr.fadeIn()
-                ajaxMask.$pr.find('.progress').animate({width:'5%'}, 'slow')
+                ajaxMask.$pr.find('.progress').animate({width:'5%'}, 'fast')
             })
             .one('ajaxStop', function() {
                 //ajaxMask.$bg.fadeOut()
