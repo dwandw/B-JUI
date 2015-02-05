@@ -153,12 +153,8 @@
         $box.find('.bjui-pageHeader, .bjui-headBar, .bjui-footBar').attr('data-layout-fixed', true)
         $box.find('[data-layout-h]').layoutH()
         
-        
-        $box.find('.bjui-ajax-mask').remove()
-        
         //progress
         $box.find('.bjui-maskProgress').find('.progress').animate({width:'100%'}, 'fast', function() {
-            alert('aaa')
             $box.find('.bjui-ajax-mask').fadeOut('normal', function() { $(this).remove() })
         })
     })
