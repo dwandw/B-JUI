@@ -207,6 +207,8 @@
             })
         })
         .on('bjui.ajaxError', function(e) {
+            var ajaxMask = bjui_ajaxStatus($(e.target))
+            
             ajaxMask.$bg.remove()
             ajaxMask.$pr.remove()
         })
