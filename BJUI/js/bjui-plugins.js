@@ -600,6 +600,14 @@
             $(this).tooltip()
         })
         
+        /* fixed dropdown-menu width */
+        $box.find('[data-toggle="dropdown"]').parent().on('show.bs.dropdown', function(e) {
+            var $this = $(this), width = $this.outerWidth(), $menu = $this.find('> .dropdown-menu'), menuWidth = $menu.outerWidth()
+            
+            if (width > menuWidth) {
+                $menu.css('min-width', width)
+            }
+        })
         
         /* not validate */
         $box.find('form[data-toggle="ajaxform"]').each(function() {

@@ -155,7 +155,7 @@ th[align=right]{text-align:right;}
 #bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li{float:left; height:35px; border-right:1px #ddd solid;}
 #bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li:last-child{border-right:none;}
 #bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > div{padding:2px 8px 0; color:#FFF; line-height:1.3;}
-#bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > a{display:block; padding:0 8px; height:35px; line-height:35px; text-decoration:none; color:#FFF !important;}
+#bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > a{display:block; padding:0 10px; height:35px; line-height:35px; text-decoration:none; color:#FFF !important;}
 #bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > a:hover{color:#FFF;}
 #bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > a.theme.default{background-color:#929292;}
 #bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > a.theme.orange{background-color:#FF6600;}
