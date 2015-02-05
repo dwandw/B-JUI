@@ -128,6 +128,8 @@
             $target.trigger('bjui.ajaxStart')
         }).one('ajaxStop', function() {
             $target.trigger('bjui.ajaxStop')
+        }).one('ajaxError', function() {
+            $target.trigger('bjui.ajaxError')
         })
         
         var successFn = function(data, textStatus, jqXHR) {
@@ -212,9 +214,7 @@
                 type = $target.data('type') || 'GET'
             }
             
-            if (!url) return
-            
-            $target.ajaxUrl({url: url, type: type})
+            if (url) $target.ajaxUrl({url: url, type: type})
         }
         if (that.options.reloadNavtab)
             setTimeout(function() { that.$element.navtab('refresh') }, 100)

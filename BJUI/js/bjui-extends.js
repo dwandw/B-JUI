@@ -35,7 +35,7 @@
                 dataType : 'html',
                 timeout  : BJUI.ajaxTimeout,
                 success  : function(response) {
-                    var json = response.toJson(), $ajaxMask = $this.find('.bjui-ajax-mask')
+                    var json = response.toJson(), $ajaxMask = $this.find('> .bjui-ajax-mask')
                     
                     if (!json[BJUI.keys.statusCode]) {
                         $this.empty().html(response).append($ajaxMask).initui()
@@ -44,7 +44,7 @@
                         if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {
                             if (json[BJUI.keys.message]) $this.alertmsg('error', json[BJUI.keys.message])
                         } else if (json[BJUI.keys.statusCode] == BJUI.statusCode.timeout) {
-                            if (!$this.children().not('.bjui-maskBackground, .bjui-maskProgress').length) {
+                            if (!$ajaxMask.length) {
                                 if ($this.closest('.bjui-dialog').length) $this.dialog('closeCurrent')
                                 if ($this.closest('.navtab-panel').length) $this.navtab('closeCurrent')
                             }
@@ -52,6 +52,9 @@
                                 { okCall:function() { BJUI.loadLogin() } }
                             )
                         }
+                        $ajaxMask.fadeOut('normal', function() {
+                            $(this).remove()
+                        })
                     }
                 },
                 error      : function(xhr, ajaxOptions, thrownError) {

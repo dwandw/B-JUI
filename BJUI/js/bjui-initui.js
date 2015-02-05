@@ -28,9 +28,12 @@
     Initui.DEFAULTS = {}
     
     Initui.prototype.init = function() {
-        this.$element.trigger(BJUI.eventType.beforeInitUI)
-        this.$element.trigger(BJUI.eventType.initUI)
-        this.$element.trigger(BJUI.eventType.afterInitUI)
+        var $element = this.$element
+        
+        $element.trigger(BJUI.eventType.beforeInitUI)
+        $.when($element.trigger(BJUI.eventType.initUI)).done(function(){
+            $element.trigger(BJUI.eventType.afterInitUI)
+        })
     }
     
     // INITUI PLUGIN DEFINITION
@@ -150,9 +153,13 @@
         $box.find('.bjui-pageHeader, .bjui-headBar, .bjui-footBar').attr('data-layout-fixed', true)
         $box.find('[data-layout-h]').layoutH()
         
+        
+        $box.find('.bjui-ajax-mask').remove()
+        
         //progress
-        $box.find('> .bjui-maskProgress').find('.progress').animate({width:'100%'}, 'fast', function() {
-            $box.find('> .bjui-ajax-mask').fadeOut('normal', function() { $(this).remove() })
+        $box.find('.bjui-maskProgress').find('.progress').animate({width:'100%'}, 'fast', function() {
+            alert('aaa')
+            $box.find('.bjui-ajax-mask').fadeOut('normal', function() { $(this).remove() })
         })
     })
     
@@ -192,11 +199,16 @@
             ajaxMask.$pr.find('.progress').animate({width:'5%'}, 'fast')
         })
         .on('bjui.ajaxStop', function(e) {
-            //var ajaxMask = bjui_ajaxStatus($(e.target))
+            var ajaxMask = bjui_ajaxStatus($(e.target))
             
-            //ajaxMask.$bg.fadeOut()
-            //ajaxMask.$pr.fadeOut()
-            //ajaxMask.$pr.find('.progress').animate({width:'55%'}, 'fast')
+            ajaxMask.$pr.find('.progress').animate({width:'100%'}, 'fast', function() {
+                ajaxMask.$bg.remove()
+                ajaxMask.$pr.remove()
+            })
+        })
+        .on('bjui.ajaxError', function(e) {
+            ajaxMask.$bg.remove()
+            ajaxMask.$pr.remove()
         })
     
     $(document).on(BJUI.eventType.ajaxStatus, function(e) {
@@ -212,6 +224,10 @@
                 //ajaxMask.$bg.fadeOut()
                 //ajaxMask.$pr.fadeOut()
                 //ajaxMask.$pr.find('.progress').animate({width:'50%'}, 'slow')
+            })
+            .one('ajaxError', function() {
+                ajaxMask.$bg.remove()
+                ajaxMask.$pr.remove()
             })
     })
     
