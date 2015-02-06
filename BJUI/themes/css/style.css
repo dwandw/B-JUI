@@ -316,7 +316,7 @@ th[align=right]{text-align:right;}
 .bjui-dialog > .resizable_f_r{bottom:0; right:0; width:11px; height:11px; z-index:2; cursor:se-resize;}
 .bjui-dialog > .resizable_f_c{bottom:0; left:0; z-index:1; width:100%; cursor:s-resize;}
 /* Taskbar */
-#bjui-taskbar{position:absolute; bottom:0; z-index:30; width:100%; height:20px; overflow:hidden;}
+#bjui-taskbar{position:fixed; bottom:-50px; z-index:30; width:100%; height:20px; overflow:hidden;}
 #bjui-taskbar > .taskbarContent{position:relative; display:block; height:20px; overflow:hidden;}
 #bjui-taskbar > .taskbarContent.taskbarMargin{margin:0 20px;}
 #bjui-taskbar > .taskbarContent > ul{position:absolute; width:10000px;}

@@ -330,19 +330,18 @@
         return $taskList.find('#'+ id)
     }
     
+    Taskbar.prototype.changeTitle = function(id, title) {
+        var $task = this.getTask(id)
+        
+        if ($task && title) $task.find('.title').html(title)
+    }
+    
     Taskbar.prototype.show = function() {
-        if ($taskBar.is(':hidden')) {
-            $taskBar.css('top', $(window).height() - 34 + $taskBar.outerHeight()).show()
-            $taskBar.animate({top:$(window).height() - $taskBar.outerHeight()}, 500)
-        }
+        if ($taskBar.is(':hidden')) $taskBar.show().animate({bottom:0}, 500)
     }
     
     Taskbar.prototype.hide = function() {
-        $taskBar.animate({
-            top: $(window).height() - 29 + $taskBar.outerHeight(true)
-        }, 500, function() {
-            $taskBar.hide()
-        })
+        if ($taskBar.is(':visible')) $taskBar.animate({bottom:-50}, 500, function() { $taskBar.hide() })
     }
     
     // TASKBAR PLUGIN DEFINITION

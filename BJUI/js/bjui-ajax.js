@@ -29,7 +29,8 @@
     }
     
     Bjuiajax.DEFAULTS = {
-        reload: true
+        reload      : true,
+        loadingmask : true
     }
     
     Bjuiajax.NAVTAB = 'navtab'
@@ -63,88 +64,32 @@
         return tools
     }
     
-    Bjuiajax.prototype.ajaxForm4Iframe = function($form, successFn) {
-        $.ajax({
-            type        : $form.attr('method') || 'POST',
-            url         : $form.attr('action'),
-            data        : $form.serializeArray(),
-            dataType    : 'json',
-            timeout     : BJUI.ajaxTimeout,
-            files       : $form.find(':file'),
-            iframe      : true,
-            processData : false,
-            cache       : false,
-            success     : successFn,
-            error       : $.proxy(this.ajaxError, this)
-        })
-    }
-    
-    Bjuiajax.prototype.ajaxForm4Html5 = function($form, successFn) {
-        var formData = new FormData($form[0])
-        
-        $.ajax({
-            type        : $form.attr('method') || 'POST',
-            url         : $form.attr('action'),
-            data        : formData,
-            contentType : false,
-            processData : false,
-            dataType    : 'json',
-            timeout     : BJUI.ajaxTimeout,
-            cache       : false,
-            success     : successFn,
-            error       : $.proxy(this.ajaxError, this)
-        })
-    }
-    
-    Bjuiajax.prototype.ajaxForm4Serialize = function($form, successFn) {
-        $.ajax({
-            type        : $form.attr('method') || 'POST',
-            url         : $form.attr('action'),
-            data        : $form.serializeArray(),
-            dataType    : 'json',
-            timeout     : BJUI.ajaxTimeout,
-            cache       : false,
-            success     : successFn,
-            error       : $.proxy(this.ajaxError, this)
-        })
-    }
-    
     Bjuiajax.prototype.ajaxForm = function(options) {
         var that      = this
         var $form     = this.$element,
             callback  = options && options.callback,
-            enctype   = $form.attr('enctype'),
-            $target   = $form.closest('.bjui-layout')
+            enctype   = $form.attr('enctype')
         
         options = $.extend({}, that.options, typeof options == 'object' && options)
         
         if (callback) callback = callback.toFunc()
-        if (!$target || !$target.length) {
-            if (that.tools.getTarget() == Bjuiajax.NAVTAB) $target = $.CurrentNavtab
-            else $target = $.CurrentDialog
-        }
-        
-        $form.one('ajaxStart', function() {
-            $target.trigger('bjui.ajaxStart')
-        }).one('ajaxStop', function() {
-            $target.trigger('bjui.ajaxStop')
-        }).one('ajaxError', function() {
-            $target.trigger('bjui.ajaxError')
-        })
         
         var successFn = function(data, textStatus, jqXHR) {
             callback ? callback.apply(that, [data, $form]) : $.proxy(that.ajaxCallback(data), that)
         }
         var _submitFn = function() {
+            var op = {loadingmask:options.loadingmask, type:$form.attr('method'), url:$form.attr('action'), callback:successFn, error:$.proxy(that.ajaxError, that)}
+            
             if (enctype && enctype == 'multipart/form-data') {
                 if (window.FormData) {
-                    that.ajaxForm4Html5($form, successFn)
+                    $.extend(op, {data:new FormData($form[0]), contentType:false, processData:false}) 
                 } else {
-                    that.ajaxForm4Iframe($form, successFn)
+                    $.extend(op, {data:$form.serializeArray(), files:$form.find(':file'), iframe:true, processData:false})
                 }
             } else {
-                that.ajaxForm4Serialize($form, successFn)
+                $.extend(op, {data:$form.serializeArray()})
             }
+            $form.doAjax(op)
         }
         
         if (options.confirmMsg) {
@@ -294,23 +239,26 @@
     
     Bjuiajax.prototype.pageCallback = function(options, target) {
         var that    = this
-        var op      = options
+        var op      = $.extend({}, Bjuiajax.DEFAULTS, options)
         var $target = target || null
         var form    = null
         
         if ($target && $target.length) {
             form = that.tools.getPagerForm($target, op)
             if (form) {
-                that.reloadDiv($target, {type:$(form).attr('method') || 'POST', url:$(form).attr('action'), data:$(form).serializeArray()})
+                $.extend(op, $(form).data())
+                that.reloadDiv($target, {type:$(form).attr('method') || 'POST', url:$(form).attr('action'), data:$(form).serializeArray(), loadingmask:op.loadingmask})
             }
         } else {
             if (that.tools.getTarget() == Bjuiajax.NAVTAB) {
                 $target = $.CurrentNavtab
                 form    = that.tools.getPagerForm($target, op)
+                if (form) $.extend(op, $(form).data())
                 that.$element.navtab('reloadForm', false, op)
             } else {
                 $target = $.CurrentDialog
                 form    = that.tools.getPagerForm($target, op)
+                if (form) $.extend(op, $(form).data())
                 that.$element.dialog('reloadForm', false, op)
             }
         }
@@ -319,17 +267,18 @@
     Bjuiajax.prototype.doSearch = function(options) {
         var that = this, $element = that.$element, form = null, op = {pageCurrent:1}, $target = $element.closest('.bjui-layout')
         
+        options = $.extend({}, Bjuiajax.DEFAULTS, typeof options == 'object' && options)
         if (!options.url) options.url = $element.attr('action')
         if (!options.url) {
             BJUI.debug('Error trying to submit form action: action url is undefined!')
-            return false
+            return
         } else {
             options.url = decodeURI(options.url).replacePlh($element.closest('.unitBox'))
             
             if (!options.url.isFinishedTm()) {
                 $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('The submit form action is incorrect: '+ options.url)
-                return false
+                return
             }
             
             options.url = encodeURI(options.url)
@@ -348,7 +297,7 @@
                 }
                 data = _data
             }
-            that.reloadDiv($target, {type:$element.attr('method') || 'POST', url:options.url, data:data})
+            that.reloadDiv($target, {type:$element.attr('method') || 'POST', url:options.url, data:data, loadingmask:options.loadingmask})
         } else {
             if (that.tools.getTarget() == Bjuiajax.NAVTAB) {
                 $target = $.CurrentNavtab
@@ -363,18 +312,19 @@
     }
     
     Bjuiajax.prototype.doLoad = function(options) {
-        var that = this, $element = that.$element, type = options.type || 'GET', $target = options.target ? $(options.target) : null
+        var that = this, $element = that.$element, $target = options.target ? $(options.target) : null
         
+        options = $.extend({}, Bjuiajax.DEFAULTS, typeof options == 'object' && options)
         if (!options.url) {
             BJUI.debug('Error trying to open a ajax link: The url is undefined!')
-            return false
+            return
         } else {
             options.url = decodeURI(options.url).replacePlh($element.closest('.unitBox'))
             
             if (!options.url.isFinishedTm()) {
                 $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
                 BJUI.debug('The ajax link incorrect: '+ options.url)
-                return false
+                return
             }
             
             options.url = encodeURI(options.url)
@@ -382,7 +332,7 @@
         
         if (!$target || !$target.length) {
             BJUI.debug('Not set loaded \'ajax\' content container, like [data-target].')
-            return false
+            return
         }
         
         if ($target && $target.length) {
@@ -394,21 +344,22 @@
     Bjuiajax.prototype.refreshLayout = function(options) {
         var that = this, $element = that.$element, $target = options.target ? $(options.target) : null
         
+        options = $.extend({}, Bjuiajax.DEFAULTS, typeof options == 'object' && options)
         if (!$target || !$target.length) {
             BJUI.debug('Not set loaded \'ajax\' content container, like [data-target].')
-            return false
+            return
         }
         if ($target && $target.length) {
             $target.removeData('bjui.clientPaging')
-            that.reloadDiv($target, $.extend({}, {type:$target.data('type'), url:$target.data('url'), data:$target.data('data')}, options))
+            that.reloadDiv($target, $.extend({}, $target.data('options') || {}, options))
         }
     }
     
     Bjuiajax.prototype.reloadDiv = function($target, options) {
         $target
             .addClass('bjui-layout')
-            .data('url', options.url).data('type', options.type).data('data', options.data)
-            .ajaxUrl({ type:options.type, url:options.url, data:options.data, callback:function(html) {
+            .data('options', options)
+            .ajaxUrl({ type:options.type, url:options.url, data:options.data, loadingmask:options.loadingmask, callback:function(html) {
                     if (BJUI.ui.clientPaging && $target.data('bjui.clientPaging'))
                         $target.pagination('setPagingAndOrderby', $target)
                     if (options.callback)
@@ -432,6 +383,7 @@
     Bjuiajax.prototype.doAjax = function(options) {
         var that = this, $element = that.$element
         
+        options = $.extend({}, Bjuiajax.DEFAULTS, typeof options == 'object' && options)
         if (!options.url) {
             BJUI.debug('Error trying to open a ajax link: url is undefined!')
             return
@@ -449,18 +401,7 @@
         
         var callback = options.callback && options.callback.toFunc()
         var todo     = function() {
-            $.ajax({
-                type     : options.type || 'POST',
-                url      : options.url,
-                data     : options.data || {},
-                dataType : 'json',
-                timeout  : BJUI.ajaxTimeout,
-                cache    : false,
-                success  : function(data, textStatus, jqXHR) {
-                    callback ? callback.apply(that, [data]) : $.proxy(that.ajaxCallback(data), that)
-                },
-                error    : $.proxy(that.ajaxError, that)
-            })
+            $element.doAjax({type:options.type, url:options.url, data:options.data, callback:callback ? callback : $.proxy(function(data) {that.ajaxCallback(data)}, that)})
         }
         
         if (options.confirmMsg) {
@@ -555,7 +496,7 @@
                 ids.push($(this).val())
             })
             
-            options.url += (options.url.indexOf('?') == -1 ? '?' : '&') + (options.idname ? options.idname : 'ids') +'='+ ids.join(',')
+            options.url = options.url.setUrlParam((options.idname ? options.idname : 'ids'), ids.join(','))
             
             window.location = options.url
         }
@@ -574,6 +515,7 @@
     Bjuiajax.prototype.doAjaxChecked = function(options) {
         var that = this, $element = that.$element, $target = options.target ? $(options.target) : null
 
+        options = $.extend({}, Bjuiajax.DEFAULTS, typeof options == 'object' && options)
         if (!options.url) {
             BJUI.debug('Error trying to open a del link: url is undefined!')
             return
@@ -589,7 +531,7 @@
         
         var todo = function() {
             if (!options.group) {
-                that.$element.alertmsg('error', options.warn || FRAG.alertNoCheckGroup.replace('#nocheckgroup#', BJUI.regional.nocheckgroup))
+                $element.alertmsg('error', options.warn || FRAG.alertNoCheckGroup.replace('#nocheckgroup#', BJUI.regional.nocheckgroup))
                 return
             }
             if (!$target || !$target.length) {
@@ -605,26 +547,16 @@
             var callback = options.callback && options.callback.toFunc()
             
             if ($checks.length == 0) {
-                that.$element.alertmsg('error', FRAG.alertNotChecked.replace('#notchecked#', BJUI.regional.notchecked))
+                $element.alertmsg('error', FRAG.alertNotChecked.replace('#notchecked#', BJUI.regional.notchecked))
                 return
             }
             $checks.each(function() {
                 ids.push($(this).val())
             })
             
-            options.url += (options.url.indexOf('?') == -1 ? '?' : '&') + (options.idname ? options.idname : 'ids') +'='+ ids.join(',')
+            options.url = options.url.setUrlParam((options.idname ? options.idname : 'ids'), ids.join(','))
             
-            $.ajax({
-                type     : options.type || 'POST',
-                url      : options.url,
-                dataType : 'json',
-                timeout  : BJUI.ajaxTimeout,
-                cache    : false,
-                success  : function(data, textStatus, jqXHR) {
-                    callback ? callback.apply(that, [data]) : $.proxy(that.ajaxCallback(data), that)
-                },
-                error    : $.proxy(that.ajaxError, that)
-            })
+            $element.doAjax({type:options.type, url:options.url, data:options.data, callback:callback ? callback : $.proxy(function(data) {that.ajaxCallback(data)}, that)})
         }
         
         if (options.confirmMsg) {

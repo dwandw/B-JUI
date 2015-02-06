@@ -25,7 +25,11 @@
         ajaxUrl: function(op) {
             var $this = $(this)
             
-            $this.trigger(BJUI.eventType.beforeAjaxLoad).trigger(BJUI.eventType.ajaxStatus)
+            $this.trigger(BJUI.eventType.beforeAjaxLoad)
+            
+            if (op.loadingmask) {
+                $this.trigger(BJUI.eventType.ajaxStatus)
+            }
             
             $.ajax({
                 type     : op.type || 'GET',
@@ -73,6 +77,63 @@
         },
         loadUrl: function(url,data,callback) {
             $(this).ajaxUrl({url:url, data:data, callback:callback})
+        },
+        doAjax: function(op) {
+            var $this = $(this), $target, $ajaxMask
+            
+            if (!op.url) {
+                BJUI.debug('The ajax url is undefined!')
+                return
+            }
+            if (!op.callback) {
+                BJUI.debug('The ajax callback is undefined!')
+                return
+            } else {
+                op.callback = op.callback.toFunc()
+            }
+            if (op.loadingmask) {
+                $target = $this.getPageTarget()
+                $target.trigger(BJUI.eventType.ajaxStatus)
+                $ajaxMask = $target.find('> .bjui-ajax-mask')
+            }
+            $.ajax({
+                type        : op.type || 'POST',
+                url         : op.url,
+                data        : op.data || {},
+                files       : op.files || null,
+                iframe      : op.ifrane || false,
+                contentType : op.contentType || 'application/x-www-form-urlencoded',
+                processData : op.processData || true,
+                dataType    : op.dataType || 'json',
+                timeout     : BJUI.ajaxTimeout,
+                cache       : op.cache || false,
+                success     : function(response) {
+                    if ($ajaxMask) {
+                        if (op.callback) {
+                            $.when(op.callback(response)).done(function() {
+                                $target.trigger('bjui.ajaxStop')
+                            })
+                        } else {
+                            $target.trigger('bjui.ajaxStop')
+                        }
+                    } else {
+                        op.callback(response)
+                    }
+                },
+                error       : op.error || function(xhr, ajaxOptions, thrownError) {
+                    $this.bjuiajax('ajaxError', xhr, ajaxOptions, thrownError)
+                }
+            })
+            
+        },
+        getPageTarget: function() {
+            var $target
+            
+            if (this.closest('.bjui-layout').length) $target = this.closest('.bjui-layout')
+            else if (this.closest('.navtab-panel').length) $target = $.CurrentNavtab
+            else $target = $.CurrentDialog
+            
+            return $target
         },
         /**
          * adjust component inner reference box height
@@ -322,6 +383,54 @@
             }
             
             return undefined
+        },
+        setUrlParam: function(key, value) {
+            var str = '', url = this
+            
+            if (url.indexOf('?') != -1)
+                str = url.substr(url.indexOf('?') + 1)
+            else
+                return url + '?' + key + '=' + value
+            
+            var returnurl = '', setparam = '', arr, modify = '0'
+            
+            if (str.indexOf('&') != -1) {
+                arr = str.split('&')
+                
+                for (i in arr) {
+                    if (arr[i].split('=')[0] == key) {
+                        setparam = value
+                        modify = '1'
+                    } else {
+                        setparam = arr[i].split('=')[1]
+                    }
+                    returnurl = returnurl + arr[i].split('=')[0] + '=' + setparam + '&'
+                }
+                
+                returnurl = returnurl.substr(0, returnurl.length - 1)
+                if (modify == '0') {
+                    if (returnurl == str)
+                        returnurl = returnurl + '&' + key + '=' + value
+                }   
+            } else {
+                if (str.indexOf('=') != -1) {
+                    arr = str.split('=')
+                    if (arr[0] == key) {
+                        setparam = value
+                        modify = '1'
+                    } else {
+                        setparam = arr[1]
+                    }
+                    returnurl = arr[0] + '=' + setparam
+                    if (modify == '0') {
+                        if (returnurl == str)
+                            returnurl = returnurl + '&' + key + '=' + value
+                    }
+                } else {
+                    returnurl = key + '=' + value
+                }
+            }
+            return url.substr(0, url.indexOf('?')) + '?' + returnurl
         }
     })
     

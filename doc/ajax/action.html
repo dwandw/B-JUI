@@ -30,7 +30,7 @@
                 <li><b>doAjaxChecked(适用于 <code>选中项删除</code> 等)</b>：
                     <p>DOM示例代码：</p>
                     <pre class="brush: html">
-                        &lt;a type="button" class="btn btn-default" href="ajaxDone3.html" data-toggle="doajaxchecked" data-confirm-msg="确定要删除选中项吗？">批量删除动作&lt;/a>
+                        &lt;a type="button" class="btn btn-default" href="ajaxDone3.html" data-toggle="doajaxchecked" data-group="delids" data-confirm-msg="确定要删除选中项吗？">批量删除动作&lt;/a>
                     </pre>
                     <p>jQuery API:</p>
                     <pre class="brush: js">
@@ -88,6 +88,12 @@
                         <td>function(json)</td>
                         <td>null</td>
                         <td>[可选] 回调函数。</td>
+                    </tr>
+                    <tr>
+                        <td>loadingmask</td>
+                        <td>boolean</td>
+                        <td>true</td>
+                        <td>[可选] ajax请求时是否显示数据加载遮罩。</td>
                     </tr>
                     <tr>
                         <td>group</td>

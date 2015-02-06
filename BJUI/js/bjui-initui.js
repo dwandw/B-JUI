@@ -28,11 +28,18 @@
     Initui.DEFAULTS = {}
     
     Initui.prototype.init = function() {
+        var that = this, $element = that.$element
+        
+        $.when(that.initUI()).done(function(){
+            $element.trigger(BJUI.eventType.afterInitUI)
+        })
+    }
+    
+    Initui.prototype.initUI = function() {
         var $element = this.$element
         
-        $element.trigger(BJUI.eventType.beforeInitUI)
-        $.when($element.trigger(BJUI.eventType.initUI)).done(function(){
-            $element.trigger(BJUI.eventType.afterInitUI)
+        $.when($element.trigger(BJUI.eventType.beforeInitUI)).done(function(){
+            $element.trigger(BJUI.eventType.initUI)
         })
     }
     
@@ -40,13 +47,16 @@
     // =======================
     
     function Plugin(option) {
-        var args = arguments
+        var args     = arguments
+        var property = option
+        
         return this.each(function () {
             var $this   = $(this)
             var options = $.extend({}, Initui.DEFAULTS, $this.data(), typeof option == 'object' && option)
             var data    = $this.data('bjui.initui')
+            
             if (!data) $this.data('bjui.initui', (data = new Initui(this, options)))
-            var property = option
+            
             if (typeof property == 'string' && $.isFunction(data[property])) {
                 [].shift.apply(args)
                 if (!args) data[property]()

@@ -115,7 +115,6 @@
             setTimeout(function() {
                 $('#bjui-navtab .tabsPageContent').find('[data-layout-h]').not('.bjui-layout-h').layoutH()
             }, 10)
-            //$('#bjui-taskbar').css({top: iContentH + $('#bjui-header').height() + 5, width:$(window).width()})
             
             /* header navbar */
             var navbarWidth = $('body').data('bjui.navbar.width'),

@@ -83,6 +83,7 @@
         url         : undefined,
         type        : 'GET',
         data        : {},
+        loadingmask : true,
         fresh       : false,
         onLoad      : null,
         beforeClose : null,
@@ -299,7 +300,7 @@
                 $panel
                     .trigger(BJUI.eventType.beforeLoadNavtab)
                     .ajaxUrl({
-                        type:(options.type || 'GET'), url:options.url, data:options.data || {}, callback:function(response) {
+                        type:(options.type || 'GET'), url:options.url, data:options.data || {}, loadingmask:options.loadingmask, callback:function(response) {
                             that.tools.loadUrlCallback($panel)
                             if (onLoad) onLoad.apply(that, [$panel])
                             if (BJUI.ui.clientPaging && $panel.data('bjui.clientPaging')) $panel.pagination('setPagingAndOrderby', $panel)
@@ -500,17 +501,21 @@
         }
     }
     
-    Navtab.prototype.reload = function(option) {
+    Navtab.prototype.reload = function(option, initOptionFlag) {
         var that    = this
         var options = $.extend({}, typeof option == 'object' && option)
         var $tab    = options.id ? this.tools.getTab(options.id) : this.tools.getTabs().eq(currentIndex)
         
         if ($tab) {
-            var op = $tab.data('initOptions') || options
+            var initOptions = $tab.data('initOptions') || {}, op = $.extend({}, initOptions, options)
             var _reload = function() {
-                if (options.title != op.title) $tab.find('> a').attr('title', options.title).find('> span').html(options.title)
+                if (!$tab.data('tabid') && op.title)
+                    if (initOptions.title != op.title) $tab.find('> a').attr('title', op.title).find('> span').html(op.title)
                 
-                $tab.data('options', $.extend({}, op, options))
+                $tab.data('options', op)
+                
+                if (!initOptionFlag) $tab.data('initOptions', op)
+                
                 that.tools.reload($tab, true)
             }
             
@@ -556,7 +561,7 @@
                     options.data = $.extend({}, options.data || {}, data)
                 }
             }
-            this.reload(options)
+            this.reload(options, true)
         }
     }
     
