@@ -546,6 +546,7 @@
             if (!$tab.hasClass('external')) {
                 var $pagerForm = $panel.find('#pagerForm'), data = {}, pageData = {}
                 
+                if ($pagerForm.attr('action')) options.url = $pagerForm.attr('action')
                 if ($pagerForm && $pagerForm.length) {
                     pageData = $pagerForm.serializeJson()
                     if (!option || !option.type) options.type = $pagerForm.attr('method') || 'POST'
