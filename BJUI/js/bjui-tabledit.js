@@ -27,7 +27,7 @@
         this.tools    = this.TOOLS()
         this.$tbody   = this.$element.find('> tbody')
         if (!this.$tbody.length) {
-            this.$tbody = $('<tbody></tbody')
+            this.$tbody = $('<tbody></tbody>')
             this.$element.append(this.$tbody)
         }
         this.$numAdd =
@@ -168,6 +168,7 @@
                             
                             $tr.prev('input').remove()
                             $tr
+                                //.parent()
                                 .unwrap()
                                 .isValid(function(v) {
                                     if (v) {

@@ -182,7 +182,7 @@
                     bodH = refH - layH > 50 ? refH - layH : 50
                 }
                 if ($box.isTag('table') && !$box.parent('[data-layout-h]').length) {
-                    $box.removeAttr('data-layout-h').wrap('<div data-bjui-lay-h="'+ $box.data('bjuiLayH') +'" data-layout-h="'+ layH +'" style="overflow:auto;width:100%;height:'+ bodH +'px"></div>')
+                    $box.removeAttr('data-layout-h').attr({"data-bjui-lay-h":$box.data('bjuiLayH'),"data-layout-h":layH,"style":"overflow:auto;width:100%;height:"+bodH+"px;"});
                 } else {
                     $box.animate({ height:bodH }, 'fast', function() {
                         $box.css('overflow', 'auto')
@@ -397,7 +397,7 @@
             if (str.indexOf('&') != -1) {
                 arr = str.split('&')
                 
-                for (i in arr) {
+                for (var i in arr) {
                     if (arr[i].split('=')[0] == key) {
                         setparam = value
                         modify = '1'
