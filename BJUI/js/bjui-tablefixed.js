@@ -470,7 +470,7 @@
         var $this     = $(this),
             $table    = $this.closest('table'),
             multi     = $table.data('selectedMulti'),
-            id        = $this.data('id'),
+            id        = $this.attr('data-id'),
             clsName   = 'selected',
             $selected = $table.closest('.unitBox').find('#bjui-selected')
         
@@ -478,11 +478,12 @@
         if (multi) {
             id = []
             $this.siblings('.'+ clsName).add(($this.hasClass(clsName) ? $this : '')).each(function() {
-                id.push($(this).data('id'))
+                id.push($(this).attr('data-id'))
             })
             id = id.join(',')
         } else {
             $this.siblings().removeClass(clsName)
+            if (!$this.hasClass(clsName)) id = ''
         }
         if ($selected && $selected.length) {
             $selected.val(id)
