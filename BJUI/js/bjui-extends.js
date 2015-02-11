@@ -47,6 +47,10 @@
                     } else {
                         if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {
                             if (json[BJUI.keys.message]) $this.alertmsg('error', json[BJUI.keys.message])
+                            if (!$this.closest('.bjui-layout').length) {
+                                if ($this.closest('.navtab-panel').length) $this.navtab('closeCurrentTab')
+                                else $this.dialog('closeCurrent')
+                            }
                         } else if (json[BJUI.keys.statusCode] == BJUI.statusCode.timeout) {
                             if (!$ajaxMask.length) {
                                 if ($this.closest('.bjui-dialog').length) $this.dialog('closeCurrent')
@@ -314,7 +318,7 @@
             })
         },
         isFinishedTm: function() {
-            return !(new RegExp('{.*}').test(this))
+            return !(new RegExp('{\/?[^}]*}').test(this))
         },
         skipChar: function(ch) {
             if (!this || this.length===0) return ''

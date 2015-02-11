@@ -546,6 +546,7 @@
             if (!$tab.hasClass('external')) {
                 var $pagerForm = $panel.find('#pagerForm'), data = {}, pageData = {}
                 
+                if ($pagerForm.attr('action')) options.url = $pagerForm.attr('action')
                 if ($pagerForm && $pagerForm.length) {
                     pageData = $pagerForm.serializeJson()
                     if (!option || !option.type) options.type = $pagerForm.attr('method') || 'POST'
@@ -593,8 +594,8 @@
             var options = $.extend({}, Navtab.DEFAULTS, $this.data(), typeof option == 'object' && option)
             var data    = $this.data('bjui.navtab')
             
-            if (!data) $this.data('bjui.navtab', (data = new Navtab(this, options)))
-            else if (options.fresh) $this.data('bjui.navtab', (data = new Navtab(this, options)))
+            if (options.url && !options.url.isFinishedTm()) options.fresh = true
+            if (!data || options.fresh) $this.data('bjui.navtab', (data = new Navtab(this, options)))
             
             if (typeof property == 'string' && $.isFunction(data[property])) {
                 [].shift.apply(args)

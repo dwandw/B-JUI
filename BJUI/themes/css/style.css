@@ -447,9 +447,9 @@ th[align=right]{text-align:right;}
 .bjui-tags:hover{cursor:text;}
 .bjui-tags > input{margin-bottom:0; padding:0 5px; height:22px; line-height:22px; background:none transparent; border:none; outline:none; outline-width:0; box-shadow:none;}
 .bjui-tags > input:focus{background:none transparent; border:none; outline:none; outline-width:0; outline:0; -moz-appearance:none; box-shadow:none;}
-.bjui-tags > .tags-menu{position:absolute; top:100%; left:0; z-index:1000; display:none; float:left; margin:2px 0 0; padding:5px 0; min-width:160px; list-style:none; background-color:#ffffff; border:1px solid #ccc; border:1px solid rgba(0, 0, 0, 0.2); *border-right-width:2px; *border-bottom-width:2px; -webkit-border-radius:6px; -moz-border-radius:6px; border-radius:6px; -webkit-box-shadow:0 5px 10px rgba(0, 0, 0, 0.2); -moz-box-shadow:0 5px 10px rgba(0, 0, 0, 0.2); box-shadow:0 5px 10px rgba(0, 0, 0, 0.2); -webkit-background-clip:padding-box; -moz-background-clip:padding; background-clip:padding-box;}
+.bjui-tags > .tags-menu{position:absolute; top:100%; left:0; z-index:1000; display:none; float:left; margin:2px 0 0; padding:5px 0; list-style:none; background-color:#ffffff; border:1px solid #ccc; border:1px solid rgba(0, 0, 0, 0.2); *border-right-width:2px; *border-bottom-width:2px; -webkit-border-radius:6px; -moz-border-radius:6px; border-radius:6px; -webkit-box-shadow:0 5px 10px rgba(0, 0, 0, 0.2); -moz-box-shadow:0 5px 10px rgba(0, 0, 0, 0.2); box-shadow:0 5px 10px rgba(0, 0, 0, 0.2); -webkit-background-clip:padding-box; -moz-background-clip:padding; background-clip:padding-box;}
 .bjui-tags > .tags-menu > .tags-item{cursor:pointer;}
-.bjui-tags > .tags-menu > li{padding-left:12px; padding-right:12px; height:20px; line-height:20px;}
+.bjui-tags > .tags-menu > li{padding-left:12px; padding-right:12px; min-height:20px; line-height:20px;}
 .bjui-tags > .form-control:-moz-placeholder{color:#999999;}
 .bjui-tags > .form-control::-moz-placeholder{color:#999999; opacity:1;}
 .bjui-tags > .form-control:-ms-input-placeholder{color:#999999;}

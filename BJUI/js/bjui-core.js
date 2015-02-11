@@ -46,7 +46,7 @@
             afterCloseDialog  : 'bjui.afterCloseDialog'
         },
         pageInfo: {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'},
-        ajaxTimeout: 3000,
+        ajaxTimeout: 30000,
         alertTimeout: 6000, //alertmsg close timeout
         statusCode: {ok:200, error:300, timeout:301},
         keys: {statusCode:'statusCode', message:'message'},
@@ -160,6 +160,9 @@
                     $htoggle.hide()
                 }
             }
+            
+            /* dialog - wrap - height */
+            $('body').find('> .bjui-dialog-wrap').height($(window).height())
         },
         regional: {},
         setRegional: function(key, value) {

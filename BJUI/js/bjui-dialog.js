@@ -276,6 +276,8 @@
             $mask = $(FRAG.dialogMask)
             $mask.appendTo('body').css('zIndex', zindex - 1).show()
             $dialog.data('bjui.dialog.mask', $mask)
+            $('body').addClass('modal-open')
+            $dialog.wrap('<div style="position:fixed; top:0; left:0; z-index:'+ zindex +'; width:100%; height:'+ $(window).height() +'px; overflow:auto;" class="bjui-dialog-wrap"></div>')
         }
         $dialog.find('> .dialogHeader > a.minimize').hide()
     }
@@ -383,6 +385,7 @@
             }
             var $pagerForm = $dialog.find('#pagerForm'), data = {}, pageData = {}
             
+            if ($pagerForm.attr('action')) options.url = $pagerForm.attr('action')
             if ($pagerForm && $pagerForm.length) {
                 pageData = $pagerForm.serializeJson()
                 if (!option || !option.type) options.type = $pagerForm.attr('method') || 'POST'
@@ -439,8 +442,12 @@
             return
         }
         if (options.target && target) $(options.target).html(target) 
-        if ($mask && $mask.length) $mask.remove()
-        else if ($.fn.taskbar) this.$element.taskbar('closeDialog', options.id)
+        if ($mask && $mask.length) {
+            $mask.remove()
+            $dialog.unwrap()
+        } else if ($.fn.taskbar) {
+            this.$element.taskbar('closeDialog', options.id)
+        }
         
         $dialog.animate({top:-$dialog.outerHeight(), opacity:0.1}, 'normal', function() {
             $('body').removeData(options.id)
@@ -546,6 +553,8 @@
         if (target == 'n' || target == 'nw') tmove = parseInt($dialog.css('top')) - otop
         else tmove = height - parseInt($dialog.css('height'))
         
+        if (otop < 0) otop = 0
+        
         $dialog
             .css({top:otop, left:oleft, width:width + 2, height:height + 1})
             .find('> .dialogContent').css('width', (width - 0))
@@ -602,7 +611,10 @@
         var lmove     = (e.pageX || e.screenX) - current.ox
         var tmove     = (e.pageY || e.clientY) - current.oy
         
-        if ((e.pageY || e.clientY) <= 0 || (e.pageY || e.clientY) >= ($(window).height() - current.$dialog.find('> .dialogHeader').outerHeight())) return
+        var $mask = current.$dialog.data('bjui.dialog.mask')
+        
+        if (!$mask || !$mask.length)
+            if ((e.pageY || e.clientY) <= 0 || (e.pageY || e.clientY) >= ($(window).height() - current.$dialog.find('> .dialogHeader').outerHeight())) return
         
         var target = current.target
         var width  = current.owidth
@@ -651,8 +663,8 @@
             var options = $.extend({}, Dialog.DEFAULTS, $this.data(), typeof option == 'object' && option)
             var data    = $this.data('bjui.dialog')
             
-            if (!data) $this.data('bjui.dialog', (data = new Dialog(this, options)))
-            else if (options.fresh) $this.data('bjui.dialog', (data = new Dialog(this, options)))
+            if (options.url && !options.url.isFinishedTm()) options.fresh = true
+            if (!data || options.fresh) $this.data('bjui.dialog', (data = new Dialog(this, options)))
             
             if (typeof property == 'string' && $.isFunction(data[property])) {
                 [].shift.apply(args)

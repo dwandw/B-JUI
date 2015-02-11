@@ -114,7 +114,7 @@
         var $noinit = $box.find('[data-noinit]')
         
         //progress
-        $box.find('> .bjui-maskProgress').find('.progress').animate({width:'70%'}, 'fast')
+        $box.find('> .bjui-maskProgress').find('.progress').stop().animate({width:'85%'}, 'normal')
         
         // Hide not need to initialize the UI DOM
         $noinit.each(function(i) {
@@ -139,7 +139,7 @@
         var $box    = $(e.target)
         
         //progress
-        $box.find('> .bjui-maskProgress').find('.progress').animate({width:'80%'}, 'fast')
+        $box.find('> .bjui-maskProgress').find('.progress').stop().animate({width:'95%'}, 'fast')
     })
     
     /* afterInitUI */
@@ -164,7 +164,7 @@
         $box.find('[data-layout-h]').layoutH()
         
         //progress
-        $box.find('.bjui-maskProgress').find('.progress').animate({width:'100%'}, 'fast', function() {
+        $box.find('.bjui-maskProgress').find('.progress').stop().animate({width:'100%'}, 'fast', function() {
             $box.find('.bjui-ajax-mask').fadeOut('normal', function() { $(this).remove() })
         })
     })
@@ -202,7 +202,7 @@
             
             ajaxMask.$bg.fadeIn()
             ajaxMask.$pr.fadeIn()
-            ajaxMask.$pr.find('.progress').animate({width:'5%'}, 'fast')
+            ajaxMask.$pr.find('.progress').animate({width:'80%'}, 5000)
         })
         .on('bjui.ajaxStop', function(e) {
             var ajaxMask = bjui_ajaxStatus($(e.target))
@@ -226,7 +226,7 @@
             .one('ajaxStart', function() {
                 ajaxMask.$bg.fadeIn()
                 ajaxMask.$pr.fadeIn()
-                ajaxMask.$pr.find('.progress').animate({width:'5%'}, 'fast')
+                ajaxMask.$pr.find('.progress').animate({width:'80%'}, 5000)
             })
             .one('ajaxStop', function() {
                 //ajaxMask.$bg.fadeOut()
@@ -254,6 +254,5 @@
     }).on(BJUI.eventType.beforeCloseDialog, function(e) {
         bodyClear($(e.target))
     })
-    
     
 }(jQuery);
