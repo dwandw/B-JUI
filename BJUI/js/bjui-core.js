@@ -51,8 +51,9 @@
         statusCode: {ok:200, error:300, timeout:301},
         keys: {statusCode:'statusCode', message:'message'},
         ui: {
-            showSlidebar : true,      // After the B-JUI initialization, display slidebar
-            clientPaging : true       // Response paging and sorting information on the client
+            showSlidebar     : true,      // After the B-JUI initialization, display slidebar
+            clientPaging     : true,      // Response paging and sorting information on the client
+            overwriteHomeTab : false      // When open an undefined id of navtab, whether overwrite the home navtab
         },
         debug: function(msg) {
             if (this.IS_DEBUG) {
@@ -160,9 +161,6 @@
                     $htoggle.hide()
                 }
             }
-            
-            /* dialog - wrap - height */
-            $('body').find('> .bjui-dialog-wrap').height($(window).height())
         },
         regional: {},
         setRegional: function(key, value) {

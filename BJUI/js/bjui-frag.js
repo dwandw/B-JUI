@@ -116,16 +116,6 @@
                 '    <div class="resizable_f_c" tar="s"></div>' +
                 '</div>'
         ,
-        dialogProxy: '<div id="bjui-dialogProxy" class="bjui-dialog dialogProxy" style="display:none;">' +
-                     '    <div class="dialogHeader">' +
-                     '        <a class="close" href="#close" title="#close#"><i class="fa fa-times-circle"></i></a>' +
-                     '        <a class="maximize" href="#maximize" title="#maximize#"><i class="fa fa-plus-circle"></i></a>' +
-                     '        <a class="minimize" href="#minimize" title="#minimize#"><i class="fa fa-minus-circle"></i></a>' +
-                     '        <h1><span><i class="fa fa-th-large"></i></span> <span class="title">#title#</span></h1>' +
-                     '    </div>' +
-                     '    <div class="dialogContent"></div>' +
-                     '</div>'
-        ,
         taskbar: '<div id="bjui-taskbar" style="left:0px; display:none;">' +
                  '    <div class="taskbarContent">' +
                  '        <ul></ul>' +

@@ -150,7 +150,9 @@
                 var $fixedBox = null
                 
                 if (!$refBox || !$refBox.length) $refBox = $box.closest('.bjui-layout')
-                if (!$refBox || !$refBox.length) $refBox = $box.closest('div.layoutBox')
+                if (!$refBox || !$refBox.length) $refBox = $box.closest('div.unitBox')
+                
+                $refBox.css('overflow-y', 'hidden')
                 
                 var refH = $refBox.height() || parseInt($refBox.css('height'))
                 var layH = $box.data('bjuiLayH') || parseInt($box.data('layoutH')) || 0
@@ -401,7 +403,7 @@
             if (str.indexOf('&') != -1) {
                 arr = str.split('&')
                 
-                for (i in arr) {
+                for (var i in arr) {
                     if (arr[i].split('=')[0] == key) {
                         setparam = value
                         modify = '1'

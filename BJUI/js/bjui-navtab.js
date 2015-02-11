@@ -25,7 +25,7 @@
     
     $(function() {
         var INIT_NAVTAB = function() {
-            currentIndex = 1
+            currentIndex = 0
             $box         = $('#bjui-navtab')
             $tabs        = $box.find('.navtab-tab')
             $panels      = $box.find('.navtab-panel')
@@ -46,14 +46,20 @@
                 if ($moreBtn[0] != $target[0]) $moreBox.hide()
             })
             
+            var mainTit, options
+            
             $main
                 .navtab('contextmenu', $main)
                 .click(function() { $(this).navtab('switchTab', 'main') })
-                .find('> a').html(function(n, c) { return c.replace('#maintab#', BJUI.regional.maintab) })
+                .find('> a > span').html(function(n, c) { return (mainTit = c.replace('#maintab#', BJUI.regional.maintab)) })
+            
+            options = $.extend({}, Navtab.DEFAULTS, $main.data(), {id:'main', title:mainTit})
+            
+            $main.data('initOptions', options).data('options', options)
             
             if ($main.attr('data-url')) {
                 $(document).one(BJUI.eventType.initUI, function(e) {
-                    $main.navtab({id:'main', url:$main.data('url'), fresh:true})
+                    $main.removeAttr('data-url').navtab('reload', options)
                 })
             }
                 
@@ -128,11 +134,11 @@
             },
             indexTabId: function(tabid) {
                 if (!tabid) return -1
-                if (tabid == 'main') return 0
+                
                 var iOpenIndex = -1
                 
                 this.getTabs().each(function(index) {
-                    if ($(this).data('options') && $(this).data('options').id == tabid) {
+                    if ($(this).data('initOptions').id == tabid) {
                         iOpenIndex = index
                         return
                     }
@@ -217,7 +223,7 @@
                 if ($tab.data('reloadFlag')) {
                     $panels.hide()
                     $panel.show()
-                    that.refresh($tab.data('options').id)
+                    that.refresh($tab.data('initOptions').id)
                 } else {
                     $panels.hide()
                     if ($panel.find('.bjui-ajax-mask').length) {
@@ -230,8 +236,6 @@
                             $panel.removeClass('fade')
                     }
                 }
-                
-                $panel.find('.bjui-layout [data-layout-h]').layoutH()
                 
                 this.getMoreLi().removeClass('active').eq(iTabIndex).addClass('active')
                 currentIndex = iTabIndex
@@ -318,19 +322,16 @@
             id: 'navtabCM',
             bindings: {
                 reload: function(t, m) {
-                    if (!t.data('tabid')) that.refresh(t.data('initOptions').id)
-                    else if (t.data('url')) that.refresh(t)
+                    that.refresh(t.data('initOptions').id)
                 },
                 closeCurrent: function(t, m) {
-                    if (!t.data('tabid')) {
-                        var tabId = t.data('initOptions').id
-                        
-                        if (tabId) that.closeTab(tabId)
-                        else that.closeCurrentTab()
-                    }
+                    var tabId = t.data('initOptions').id
+                    
+                    if (tabId) that.closeTab(tabId)
+                    else that.closeCurrentTab()
                 },
                 closeOther: function(t, m) {
-                    if (t.data('tabid') == 'main') {
+                    if (t.index() == 0) {
                         that.closeAllTab()
                     } else {
                         var index = that.tools.indexTabId(t.data('initOptions').id)
@@ -349,7 +350,7 @@
                 var mAll    = m.find('[rel="closeAll"]')
                 var $tabLi  = that.tools.getTabs()
                 
-                if (t.data('tabid') == 'main') {
+                if (t.index() == 0) {
                     mCur.addClass('disabled')
                     if (!t.data('url')) mReload.addClass('disabled')
                 }
@@ -376,21 +377,23 @@
             options.url = encodeURI(options.url)
         }
         
-        if (!options.id) {
-            BJUI.debug('Navtab Plugin: Error trying to open a navtab, the id is undefined!')
-            return
+        var iOpenIndex = options.id ? tools.indexTabId(options.id) : currentIndex
+        
+        if (!options.id && !BJUI.ui.overwriteHomeTab && iOpenIndex == 0) {
+            options.id = 'navtab'
+            iOpenIndex = -1
         }
         
-        var iOpenIndex = tools.indexTabId(options.id)
-        
         if (iOpenIndex >= 0) {
+            if (!options.id) delete options.id
+            
             var $tab   = tools.getTabs().eq(iOpenIndex)
             var $panel = tools.getPanels().eq(iOpenIndex)
-            var op     = $tab.data('initOptions') || options
+            var initOp = $tab.data('initOptions')
+            var op     = $.extend({}, initOp, options)
             
-            if (op.fresh || options.fresh || op.url != options.url) {
-                that.reload(options)
-                $tab.data('initOptions', options)
+            if (initOp.fresh || options.fresh || initOp.url != options.url) {
+                that.reload(op)
             }
             
             currentIndex = iOpenIndex
@@ -403,7 +406,9 @@
             $tab.appendTo($tabs)
             $panel.appendTo($panels)
             $more.appendTo($moreBox)
-             
+            
+            $tab.data('options', options).data('initOptions', options)
+            
             if (options.external || (options.url && options.url.isExternalUrl())) {
                 $tab.addClass('external')
                 this.openExternal(options.url, $panel)
@@ -429,8 +434,6 @@
             $more.on('click', function() {
                 that.switchTab(options.id)
             })
-            $tab.data('options', options)
-                .data('initOptions', options)
         }
         
         tools.switchTab(currentIndex)
@@ -509,13 +512,9 @@
         if ($tab) {
             var initOptions = $tab.data('initOptions') || {}, op = $.extend({}, initOptions, options)
             var _reload = function() {
-                if (!$tab.data('tabid') && op.title)
-                    if (initOptions.title != op.title) $tab.find('> a').attr('title', op.title).find('> span').html(op.title)
-                
-                $tab.data('options', op)
-                
+                if (initOptions.title != op.title) $tab.find('> a').attr('title', op.title).find('> span').html(op.title)
                 if (!initOptionFlag) $tab.data('initOptions', op)
-                
+                $tab.data('options', op)
                 that.tools.reload($tab, true)
             }
             

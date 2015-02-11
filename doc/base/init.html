@@ -17,7 +17,11 @@
                         alertTimeout : 3000, //[可选]信息提示[info/correct]自动关闭延时(毫秒)
                         pageInfo     : {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'}, //[可选]分页参数key
                         keys         : {statusCode:'statusCode', message:'message'}, //[可选] ajax回调函数的key
-                        ui           : {showSlidebar:true, clientPaging:true}, //[可选]showSlidebar:左侧菜单栏默认显示状态[true|false]；clientPaging:在客户端响应分页及排序参数
+                        ui           : {
+                                         showSlidebar     : true, //[可选]左侧导航栏锁定/隐藏
+                                         clientPaging     : true, //[可选]是否在客户端响应分页及排序参数
+                                         overwriteHomeTab : false //[可选]当打开一个未定义id的navtab时，是否可以覆盖主navtab(我的主页)
+                                       },
                         debug        : true,    // [可选]调试模式 [true|false，默认false]
                         theme        : 'purple' // 若有Cookie['bjui_theme'],优先选择Cookie['bjui_theme']。皮肤[六种皮肤:default, orange, purple, blue, red, green]
                     })
