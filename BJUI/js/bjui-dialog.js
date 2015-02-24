@@ -125,9 +125,8 @@
                 var $dialogContent = $dialog.find('> .dialogContent')
                 
                 $dialogContent
-                    .css({width:(width - 0), height:(height - $dialog.find('> .dialogHeader').outerHeight() - 6)})
-                    .find('[data-layout-h]')
-                    .layoutH($dialogContent)
+                    .css({width:(width - 12), height:(height - $dialog.find('> .dialogHeader').outerHeight() - 6)})
+                    .resizePageH()
                 
                 $(window).trigger(BJUI.eventType.resizeGrid)
             }
@@ -308,7 +307,7 @@
                 if (initOptions.height != op.height) {
                     if (!op.max) {
                         $dialog.animate({ height:op.height }, 'normal', function() {
-                            $dialogContent.height(op.height - $dialog.find('> .dialogHeader').outerHeight() - 6).find('[data-layout-h]').layoutH($dialogContent)
+                            $dialogContent.height(op.height - $dialog.find('> .dialogHeader').outerHeight() - 6).resizePageH()
                         })
                     } else {
                         $dialog.height(op.height)
@@ -509,14 +508,14 @@
         
         $dialog.find('> .dialogContent').css('opacity', '.3')
         $dialog.basedrag({
-            selector: '> .dialogHeader',
-            stop: function() {
+            selector : '> .dialogHeader',
+            stop     : function() {
                 $dialog
                     .css({left:$dialog.css('left'), top:$dialog.css('top')})
                     .find('> .dialogContent').css('opacity', 1)
             },
-            event: e,
-            nounbind: true
+            event    : e,
+            nounbind : true
         })
     }
     
@@ -534,15 +533,14 @@
         
         $dialog
             .css({top:otop, left:oleft, width:width + 2, height:height + 1})
-            .find('> .dialogContent').css('width', (width - 0))
+            .find('> .dialogContent').css('width', (width - 10))
         
         if (target != 'w' && target != 'e') {
             var $dialogContent = $dialog.find('> .dialogContent')
             
             $dialogContent
                 .css({height:height - $dialog.find('> .dialogHeader').outerHeight() - 6})
-                .find('[data-layout-h]')
-                .layoutH($dialogContent)
+                .resizePageH()
         }
         $(window).trigger(BJUI.eventType.resizeGrid)
     }

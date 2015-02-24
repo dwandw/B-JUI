@@ -94,7 +94,7 @@
         initEnv: function() {
             $(window).resize(function() {
                 BJUI.initLayout()
-                $(this).trigger(BJUI.eventType.resizeGrid)
+                setTimeout(function() {$(this).trigger(BJUI.eventType.resizeGrid)}, 30)
             })
 
             setTimeout(function() {
@@ -113,8 +113,11 @@
             $('#bjui-navtab').width(iContentW)
             $('#bjui-leftside, #bjui-sidebar, #bjui-sidebar-s, #bjui-splitBar, #bjui-splitBarProxy').css({height:'100%'})
             $('#bjui-navtab .tabsPageContent').height(iContentH - navtabH)
+            
+            /* fixed pageFooter */
             setTimeout(function() {
-                $('#bjui-navtab .tabsPageContent').find('[data-layout-h]').not('.bjui-layout-h').layoutH()
+                $('#bjui-navtab > .tabsPageContent > .navtabPage').resizePageH()
+                $('#bjui-navtab > .tabsPageContent > .navtabPage').find('.bjui-layout').resizePageH()
             }, 10)
             
             /* header navbar */

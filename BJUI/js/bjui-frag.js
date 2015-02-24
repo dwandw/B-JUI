@@ -105,7 +105,7 @@
                 '        <a class="minimize" href="#minimize" title="#minimize#"><i class="fa fa-minus-circle"></i></a>' +
                 '        <h1><span><i class="fa fa-th-large"></i></span> <span class="title">#title#</span></h1>' +
                 '    </div>' +
-                '    <div class="dialogContent layoutBox unitBox"></div>' +
+                '    <div class="dialogContent unitBox"></div>' +
                 '    <div class="resizable_h_l" tar="nw"></div>' +
                 '    <div class="resizable_h_r" tar="ne"></div>' +
                 '    <div class="resizable_h_c" tar="n"></div>' +
@@ -247,20 +247,20 @@
         lookupBtn: '<a class="bjui-lookup" href="javascript:;" data-toggle="lookupbtn"><i class="fa fa-search"></i></a>',
         dateBtn: '<a class="bjui-lookup" href="javascript:;" data-toggle="datepickerbtn"><i class="fa fa-calendar"></i></a>',
         navtabCM: '<ul id="bjui-navtabCM">' +
-                  '    <li rel="reload">#refresh#</li>' +
-                  '    <li rel="closeCurrent">#close#</li>' +
-                  '    <li rel="closeOther">#closeother#</li>' +
-                  '    <li rel="closeAll">#closeall#</li>' +
+                  '    <li rel="reload"><span class="icon"><i class="fa fa-refresh"></i></span><span class="title">#refresh#</span></li>' +
+                  '    <li rel="closeCurrent"><span class="icon"><i class="fa fa-remove"></i></span><span class="title">#close#</li>' +
+                  '    <li rel="closeOther"><span class="icon"><i class="fa fa-remove"></i></span><span class="title">#closeother#</li>' +
+                  '    <li rel="closeAll"><span class="icon"><i class="fa fa-remove"></i></span><span class="title">#closeall#</li>' +
                   '</ul>'
         ,
         dialogCM: '<ul id="bjui-dialogCM">' +
-                  '    <li rel="reload">#refresh#</li>' +          
-                  '    <li rel="closeCurrent">#close#</li>' +
-                  '    <li rel="closeOther">#closeother#</li>' +
-                  '    <li rel="closeAll">#closeall#</li>' +
+                  '    <li rel="reload"><span class="icon"><i class="fa fa-refresh"></i></span><span class="title">#refresh#</span></li>' +          
+                  '    <li rel="closeCurrent"><span class="icon"><i class="fa fa-remove"></i></span><span class="title">#close#</span></li>' +
+                  '    <li rel="closeOther"><span class="icon"><i class="fa fa-remove"></i></span><span class="title">#closeother#</span></li>' +
+                  '    <li rel="closeAll"><span class="icon"><i class="fa fa-remove"></i></span><span class="title">#closeall#</span></li>' +
                   '</ul>'
         ,
-        externalFrag: '<iframe src="{url}" data-layout-h="0" style="width:100%;height:{height};" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>',
+        externalFrag: '<iframe src="{url}" style="width:100%;height:{height};" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>',
         uploadTemp: '<div id="{fileId}" class="item">' +
                     '    <div class="info">' + 
                     '        <span class="up_filename">{fileName}</span><span class="up_confirm" title="#upConfirm#"><i class="fa fa-play-circle-o"></i></span><span class="up_pause" title="#upPause#"><span class="glyphicon glyphicon-pause"></span></span><span class="up_cancel" title="#upCancel#"><i class="fa fa-times-circle-o"></i></span>' +

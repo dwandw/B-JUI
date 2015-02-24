@@ -22,6 +22,7 @@
     // ======================
     
     var currentIndex, $currentTab, $currentPanel, $box, $tabs, $panels, $prevBtn, $nextBtn, $moreBtn, $moreBox, $main, $mainLi
+    var autorefreshTimer
     
     $(function() {
         var INIT_NAVTAB = function() {
@@ -33,7 +34,7 @@
             $nextBtn     = $box.find('.tabsRight')
             $moreBtn     = $box.find('.tabsMore')
             $moreBox     = $box.find('.tabsMoreList')
-            $main        = $tabs.find('li.main')
+            $main        = $tabs.find('li:first')
             $mainLi      = $moreBox.find('li:first')
             
             $prevBtn.click(function() { $(this).navtab('scrollPrev') })
@@ -62,6 +63,7 @@
                     $main.removeAttr('data-url').navtab('reload', options)
                 })
             }
+            $main.navtab('switchTab', 'main')
                 
             $mainLi
                 .click(function() {
@@ -91,6 +93,7 @@
         data        : {},
         loadingmask : true,
         fresh       : false,
+        autorefresh : false,
         onLoad      : null,
         beforeClose : null,
         onClose     : null
@@ -299,7 +302,8 @@
                 }
             },
             reloadTab: function($panel, options) {
-                var onLoad = options.onLoad ? options.onLoad.toFunc() : null
+                var onLoad = options.onLoad ? options.onLoad.toFunc() : null,
+                    arefre = options.autorefresh && (isNaN(String(options.autorefresh)) ? 15 : options.autorefresh)
                 
                 $panel
                     .trigger(BJUI.eventType.beforeLoadNavtab)
@@ -307,6 +311,10 @@
                         type:(options.type || 'GET'), url:options.url, data:options.data || {}, loadingmask:options.loadingmask, callback:function(response) {
                             that.tools.loadUrlCallback($panel)
                             if (onLoad) onLoad.apply(that, [$panel])
+                            if (arefre) {
+                                if (autorefreshTimer) clearInterval(autorefreshTimer)
+                                autorefreshTimer = setInterval(function() { $panel.navtab('refresh') }, arefre * 1000)
+                            }
                             if (BJUI.ui.clientPaging && $panel.data('bjui.clientPaging')) $panel.pagination('setPagingAndOrderby', $panel)
                         }
                     })
@@ -400,7 +408,7 @@
         } else {
             var tabFrag = '<li><a href="javascript:" title="#title#"><span>#title#</span></a><span class="close">&times;</span></li>'
             var $tab = $(tabFrag.replaceAll('#title#', options.title))
-            var $panel = $('<div class="page unitBox"></div>')
+            var $panel = $('<div class="navtabPage unitBox"></div>')
             var $more  = $('<li><a href="javascript:" title="#title#">#title#</a></li>'.replaceAll('#title#', options.title))
             
             $tab.appendTo($tabs)

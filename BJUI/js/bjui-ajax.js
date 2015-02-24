@@ -364,8 +364,6 @@
                         $target.pagination('setPagingAndOrderby', $target)
                     if (options.callback)
                         options.callback.apply(this, [$target])
-                    
-                    $target.find('[data-layout-h]').addClass('bjui-layout-h')
                 }
             })
     }

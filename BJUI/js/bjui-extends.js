@@ -139,62 +139,26 @@
             
             return $target
         },
-        /**
-         * adjust component inner reference box height
-         * @param {Object} refBox: reference box jQuery Obj
-         */
-        layoutH: function($refBox) {
-            return this.each(function(i) {
-                var $box      = $(this)
-                var $unitBox  = null
-                var $fixedBox = null
+        resizePageH: function() {
+            return this.each(function() {
+                if ($(this).closest('.tab-content').length) return
                 
-                if (!$refBox || !$refBox.length) $refBox = $box.closest('.bjui-layout')
-                if (!$refBox || !$refBox.length) $refBox = $box.closest('div.unitBox')
+                var $box         = $(this),
+                    $pageHeader  = $box.find('> .bjui-pageHeader'),
+                    $pageContent = $box.find('> .bjui-pageContent'),
+                    $pageFooter  = $box.find('> .bjui-pageFooter'),
+                    headH        = $pageHeader.outerHeight() || 0,
+                    footH        = $pageFooter.outerHeight() || 0
                 
-                $refBox.css('overflow-y', 'hidden')
-                
-                var refH = $refBox.height() || parseInt($refBox.css('height'))
-                var layH = $box.data('bjuiLayH') || parseInt($box.data('layoutH')) || 0
-                var bodH = 0
-                
-                if (!layH) {
-                    $unitBox  = $box.closest('div.bjui-layout')
-                    if (!$unitBox || !$unitBox.length) $unitBox = $box.closest('div.unitBox')
-                    
-                    $unitBox.find('.bjui-layout').find('[data-layout-fixed]').hide()
-                    $unitBox.find('.bjui-layout').find('.bjui-tablefixed').hide()
-                    
-                    var fixedH     = 0
-                    var fixedBoxH  = 0
-                    var fixedTh    = 0
-                    
-                    $unitBox.find('[data-layout-fixed]:visible').each(function() {
-                        fixedH += $(this).outerHeight() || 0
-                    })
-                    
-                    $fixedBox = $unitBox.find('.bjui-tablefixed:visible')
-                    if (!$fixedBox.hasClass('fixedH') && $fixedBox.length) {
-                        if ($fixedBox[0].scrollWidth > $fixedBox[0].clientWidth || $fixedBox[0].scrollWidth > $fixedBox[0].offsetWidth) {
-                            fixedBoxH = $fixedBox[0].offsetHeight - $fixedBox[0].clientHeight
-                        }
-                        fixedTh = $fixedBox.find('.fixedtableHeader').outerHeight() || 0
-                    }
-                    $unitBox.find('.bjui-layout').find('[data-layout-fixed]').show()
-                    $unitBox.find('.bjui-layout').find('.bjui-tablefixed').show()
-                    bodH = refH - fixedH - fixedBoxH - fixedTh
-                    $box.data('bjuiLayH', (fixedH + fixedBoxH + fixedTh))
-                } else {
-                    bodH = refH - layH > 50 ? refH - layH : 50
+                if ($box.hasClass('navtabPage') && $box.is(':hidden')) {
+                    $box.show()
+                    headH = $pageHeader.outerHeight() || 0
+                    footH = $pageFooter.outerHeight() || 0
+                    $box.hide()
                 }
-                if ($box.isTag('table') && !$box.parent('[data-layout-h]').length) {
-                    $box.removeAttr('data-layout-h').wrap('<div data-bjui-lay-h="'+ $box.data('bjuiLayH') +'" data-layout-h="'+ layH +'" style="overflow:auto;width:100%;height:'+ bodH +'px"></div>')
-                } else {
-                    $box.animate({ height:bodH }, 'fast', function() {
-                        $box.css('overflow', 'auto')
-                        $box.find('.bjui-layout').find('[data-layout-h]').layoutH()
-                    })
-                }
+                if ($pageFooter.css('bottom')) footH += parseInt($pageFooter.css('bottom')) || 0
+                if (footH == 0 && $box.hasClass('dialogContent')) footH = 5
+                $pageContent.css({top:headH, bottom:footH})
             })
         },
         getMaxIndexObj: function($elements) {
