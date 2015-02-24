@@ -272,7 +272,7 @@
                     .find('.fixedtableScroller').height(_height - that.$fixed.find('.fixedtableHeader').height())
             }
             
-            $(document).on(BJUI.eventType.afterInitUI, function(e) {
+            $(document).one(BJUI.eventType.afterInitUI, function(e) {
                 resizeH()
             })
         }
@@ -405,9 +405,21 @@
         var that = this
         var _resizeGrid = function() {
             $('div.bjui-resizeGrid').each(function() {
-                var $this = $(this), width  = $(this).innerWidth(), newWidth = that.options.newWidth
+                var $this  = $(this), $navtab = $this.closest('.navtabPage'),
+                    width  = $this.innerWidth(),
+                    height = $this.height(),
+                    $fixed = $this.find('.bjui-tablefixed'),
+                    fixedH = $fixed.find('.fixedtableThead').height(),
+                    newWidth = that.options.newWidth
                 var realWidth
                 
+                if ($this.length && $this.is(':hidden')) {
+                    $navtab.show()
+                    width  = $this.innerWidth()
+                    height = $this.height()
+                    fixedH = $fixed.find('.fixedtableHeader').height()
+                    $navtab.hide()
+                }
                 if (width) {
                     $this.find('.bjui-tablefixed').each(function() {
                         var $fixed = $(this)
@@ -423,11 +435,9 @@
                 }
                 
                 /* resizeH */
-                var height = $this.height(), $fixed = $this.find('.bjui-tablefixed')
-                
                 $this.css('overflow', 'hidden')
                 $fixed.height(height)
-                    .find('.fixedtableScroller').height(height - $fixed.find('.fixedtableHeader').height())
+                    .find('.fixedtableScroller').height(height - fixedH)
                 
             })
             
