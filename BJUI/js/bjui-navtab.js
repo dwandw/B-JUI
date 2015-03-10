@@ -264,6 +264,7 @@
                 $more.remove()
                 $panel.trigger(BJUI.eventType.beforeCloseNavtab).remove()
                 
+                if (autorefreshTimer) clearInterval(autorefreshTimer)
                 if (onClose) onClose.apply(that)
                 if (currentIndex >= index) currentIndex--
                 if (openTabid) {
@@ -311,10 +312,8 @@
                         type:(options.type || 'GET'), url:options.url, data:options.data || {}, loadingmask:options.loadingmask, callback:function(response) {
                             that.tools.loadUrlCallback($panel)
                             if (onLoad) onLoad.apply(that, [$panel])
-                            if (arefre) {
-                                if (autorefreshTimer) clearInterval(autorefreshTimer)
-                                autorefreshTimer = setInterval(function() { $panel.navtab('refresh') }, arefre * 1000)
-                            }
+                            if (autorefreshTimer) clearInterval(autorefreshTimer)
+                            if (arefre) autorefreshTimer = setInterval(function() { $panel.navtab('refresh') }, arefre * 1000)
                             if (BJUI.ui.clientPaging && $panel.data('bjui.clientPaging')) $panel.pagination('setPagingAndOrderby', $panel)
                         }
                     })

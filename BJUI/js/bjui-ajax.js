@@ -18,6 +18,11 @@
 +function ($) {
     'use strict';
     
+    // BJUIAJAX GLOBAL ELEMENTS
+    // ======================
+    
+    var autorefreshTimer
+    
     // BJUIAJAX CLASS DEFINITION
     // ======================
     
@@ -346,6 +351,7 @@
         
         options = $.extend({}, Bjuiajax.DEFAULTS, typeof options == 'object' && options)
         if (!$target || !$target.length) {
+            if (autorefreshTimer) clearInterval(autorefreshTimer)
             BJUI.debug('Not set loaded \'ajax\' content container, like [data-target].')
             return
         }
@@ -356,6 +362,8 @@
     }
     
     Bjuiajax.prototype.reloadDiv = function($target, options) {
+        var arefre = options.autorefresh && (isNaN(String(options.autorefresh)) ? 15 : options.autorefresh)
+        
         $target
             .addClass('bjui-layout')
             .data('options', options)
@@ -364,6 +372,10 @@
                         $target.pagination('setPagingAndOrderby', $target)
                     if (options.callback)
                         options.callback.apply(this, [$target])
+                    if (autorefreshTimer)
+                        clearInterval(autorefreshTimer)
+                    if (arefre)
+                        autorefreshTimer = setInterval(function() { $target.bjuiajax('refreshLayout', options) }, arefre * 1000)
                 }
             })
     }
