@@ -100,35 +100,28 @@
                 $target.trigger(BJUI.eventType.ajaxStatus)
                 $ajaxMask = $target.find('> .bjui-ajax-mask')
             }
-            $.ajax({
-                type        : op.type || 'POST',
-                url         : op.url,
-                data        : op.data || {},
-                files       : op.files || null,
-                iframe      : op.ifrane || false,
-                contentType : op.contentType || 'application/x-www-form-urlencoded',
-                processData : op.processData || true,
-                dataType    : op.dataType || 'json',
-                timeout     : BJUI.ajaxTimeout,
-                cache       : op.cache || false,
-                success     : function(response) {
-                    if ($ajaxMask) {
-                        if (op.callback) {
-                            $.when(op.callback(response)).done(function() {
-                                $target.trigger('bjui.ajaxStop')
-                            })
-                        } else {
+            if (!op.type) op.type = 'POST'
+            if (!op.dataType) op.dataType = 'json'
+            if (!op.cache) op.cache = false
+            op.timeout = BJUI.ajaxTimeout
+            op.success = function(response) {
+                if ($ajaxMask) {
+                    if (op.callback) {
+                        $.when(op.callback(response)).done(function() {
                             $target.trigger('bjui.ajaxStop')
-                        }
+                        })
                     } else {
-                        op.callback(response)
+                        $target.trigger('bjui.ajaxStop')
                     }
-                },
-                error       : op.error || function(xhr, ajaxOptions, thrownError) {
-                    $this.bjuiajax('ajaxError', xhr, ajaxOptions, thrownError)
+                } else {
+                    op.callback(response)
                 }
-            })
+            }
+            op.error = op.error || function(xhr, ajaxOptions, thrownError) {
+                $this.bjuiajax('ajaxError', xhr, ajaxOptions, thrownError)
+            }
             
+            $.ajax(op)
         },
         getPageTarget: function() {
             var $target
