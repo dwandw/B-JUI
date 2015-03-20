@@ -120,7 +120,7 @@
          * 
          */
         /* nice validate - Global configuration */
-        $.validator.config({
+        $.validator && $.validator.config({
             //stopOnError: false,
             //theme: 'yellow_right',
             defaultMsg: "{0}格式不正确",
@@ -161,7 +161,7 @@
         })
 
         /* nice validate - Default error messages */
-        $.validator.config({
+        $.validator && $.validator.config({
             messages: {
                 required: '{0}不能为空',
                 remote: '{0}已被使用',

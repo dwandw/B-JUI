@@ -205,4 +205,9 @@
         }
     })
     
+    $.validator.config({
+        theme     : 'red_right_effect',
+        formClass : 'n-red'
+    })
+    
 }(jQuery);
