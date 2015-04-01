@@ -635,10 +635,11 @@
     
     $(document).on('submit.bjui.bjuiajax.data-api', '[data-toggle="ajaxform"]', function(e) {
         var $this   = $(this)
+        var options = $this.data()
         
         if (!$this.isTag('form')) return
         
-        Plugin.call($this, 'ajaxForm')
+        Plugin.call($this, 'ajaxForm', options)
         
         e.preventDefault()
     })
