@@ -454,7 +454,7 @@
             $dialog.trigger(BJUI.eventType.beforeCloseDialog).remove()
             if (onClose) onClose.apply(that)
             
-            var $dialogs  = $('body').find('> .bjui-dialog-container')
+            var $dialogs  = $('body').find('div > .bjui-dialog-container')
             var $_current = undefined
             
             if ($dialogs.length) {
