@@ -215,51 +215,40 @@ th[align=right]{text-align:right;}
 #bjui-splitBarProxy{position:absolute; top:0; left:201px; z-index:2; display:none; width:3px; overflow:hidden; border-style:solid; border-width:1px; cursor:col-resize; float:left;}
 #bjui-footer{position:absolute; bottom:0; left:0; padding-top:8px; width:100%; height:24px; text-align:center;}
 /* Pages */
-.bjui-pageHeader{position:relative; padding:5px; height:auto;}
+.bjui-pageHeader{position:relative; padding:2px 5px;}
 .bjui-pageHeader:before, .bjui-pageHeader:after{display:table; content:" ";}
 .bjui-pageHeader:after{clear:both;}
-.bjui-headBar,
-.bjui-footBar{clear:both; padding:1px 5px; height:28px;}
-.bjui-headBar > ul,
-.bjui-footBar > ul{height:28px;}
-.bjui-headBar > ul > li,
-.bjui-footBar > ul > li{float:right; margin-left:5px;}
-.bjui-headBar > ul > li.left,
-.bjui-footBar > ul > li.left{float:left; margin-left:0; margin-right:5px;}
-.bjui-headBar > ul > li .btn,
-.bjui-footBar > ul > li .btn{height:25px;}
-.bjui-headBar > .pages,
-.bjui-footBar > .pages{float:left; padding:1px 5px;}
-.bjui-headBar > .pages > span,
-.bjui-footBar > .pages > span{float:left; line-height:24px;}
-.bjui-headBar > .pages > .selectPagesize,
-.bjui-footBar > .pages > .selectPagesize{float:left; display:inline-block; padding-top:1px;}
-.bjui-footBar > .pages > .selectPagesize > .btn-group > .btn{padding:2px; height:21px; border-radius:2px;}
-.bjui-footBar > .pages > .selectPagesize > .btn-group > .btn > .filter-option{line-height:1.278;}
-.bjui-headBar > .pagination-box,
-.bjui-footBar > .pagination-box{float:right; padding-right:5px;}
-.bjui-headBar > .pagination-box > ul,
-.bjui-footBar > .pagination-box > ul{display:inline-block; margin:0;}
-.bjui-headBar > .pagination-box > ul > li > span,
-.bjui-footBar > .pagination-box > ul > li > span{height:25px;}
-.bjui-headBar > .pagination-box > ul > li > a,
-.bjui-headBar > .pagination-box > ul > li > span,
-.bjui-footBar > .pagination-box > ul > li > a,
-.bjui-footBar > .pagination-box > ul > li > span{position:relative; float:left; margin-left:-1px; padding:3px 8px; line-height:1.428571429; text-decoration:none; background-color:#ffffff; border:1px solid #dddddd;}
-.bjui-headBar > .pagination-box > ul > li > .p-input,
-.bjui-footBar > .pagination-box > ul > li > .p-input{padding:1px;}
-.bjui-headBar > .pagination-box > ul > li > .p-input > .input-sm-pages,
-.bjui-footBar > .pagination-box > ul > li > .p-input > .input-sm-pages{padding:0; height:21px;}
-.bjui-headBar > .pagination-box > ul > li.jumpto .goto,
-.bjui-footBar > .pagination-box > ul > li.jumpto .goto{margin-left:-1px; height:25px; line-height:17px;}
-.bjui-pageContent{position:relative;}
+.bjui-pageHeader label, .bjui-pageFooter label{margin-bottom:0;}
+.bjui-pageFooter{position:absolute; bottom:0; padding:1px 5px; width:100%; min-height:28px;}
+.bjui-pageFooter > ul > li{float:right; margin-left:5px;}
+.bjui-pageFooter > ul > li.left{float:left; margin-left:0; margin-right:5px;}
+.bjui-dialog .bjui-pageContent,
+.bjui-dialog .bjui-pageFooter{bottom:5px;}
+.bjui-pageFooter > .pages{float:left; padding:1px 5px 0;}
+.bjui-pageFooter > .pages > span{float:left; line-height:24px;}
+.bjui-pageFooter > .pages > .selectPagesize{float:left; display:inline-block; padding-top:1px;}
+.bjui-pageFooter > .pages > .selectPagesize > .btn-group > .btn{padding:2px; height:21px; border-radius:2px;}
+.bjui-pageFooter > .pages > .selectPagesize > .btn-group > .btn > .filter-option{line-height:1.278;}
+.bjui-pageFooter > .pagination-box{float:right;}
+.bjui-pageFooter > .pagination-box > ul{display:inline;}
+.bjui-pageFooter > .pagination-box > ul > li > a,
+.bjui-pageFooter > .pagination-box > ul > li > span{position:relative; float:left; margin-left:-1px; padding:3px 8px; line-height:1.428571429; text-decoration:none; background-color:#ffffff; border:1px solid #dddddd;}
+.bjui-pageFooter > .pagination-box > ul > li > .p-input{padding:1px;}
+.bjui-pageFooter > .pagination-box > ul > li > .p-input > .input-sm-pages{padding:0; height:21px;}
+.bjui-pageFooter > .pagination-box > ul > li.jumpto .goto{margin-left:-1px; height:25px; line-height:17px;}
+.bjui-pageHeader li .btn,
+.bjui-pageFooter li .btn{height:25px;}
+.bjui-pageContent{position:absolute; top:0; bottom:0; width:100%; overflow:auto;}
 .bjui-pageContent p{line-height:1.5;}
 .bjui-pageFormContent{position:relative; display:block; padding:10px 5px; overflow:auto;}
 .bjui-searchBar > .showMoreSearch{padding:0 3px; font-size:22px; line-height:1; color:red; background:none;}
 .bjui-searchBar > .showMoreSearch:hover{border:1px red solid; border-radius:3px;}
 .bjui-pageHeader .bjui-moreSearch{position:absolute; top:1px; left:0; z-index:1; display:none; padding:5px; width:100%; background:#f7f7f7; box-shadow:0 3px 7px rgba(0,0,0,0.5);}
 .bjui-pageHeader .bjui-moreSearch label{display:inline-block; margin-bottom:0; vertical-align:middle;}
-.bjui-layout{position:relative;}
+.bjui-layout{position:relative; overflow:auto;}
+.tab-content > .tab-pane .bjui-pageHeader,
+.tab-content > .tab-pane .bjui-pageContent,
+.tab-content > .tab-pane .bjui-pageFooter{position:static;}
 /* Navtab */
 #bjui-navtab > .tabsPageHeader{position:relative; display:block; width:100%; height:26px; border-style:solid; border-width:0;}
 #bjui-navtab > .tabsPageHeader > .tabsPageHeaderContent{position:relative; display:block; margin-right:20px; height:26px; overflow:hidden;}
@@ -286,6 +275,7 @@ th[align=right]{text-align:right;}
 #bjui-navtab > .tabsMoreList > li a{display:block; padding:0 10px; height:21px; white-space:nowrap; line-height:21px;}
 #bjui-navtab > .tabsMoreList > li a:hover{text-decoration:none;}
 #bjui-navtab > .tabsPageContent{position:relative; display:block; overflow:hidden; border-style:solid; border-width:0 1px 1px 1px;}
+#bjui-navtab > .tabsPageContent > .navtabPage{height:100%; overflow:hidden;}
 /* Dialog */
 .bjui-dialog{position:absolute; display:block; text-align:left; border-radius:3px; box-shadow:0 2px 2px rgba(0, 0, 0, 0.3);}
 .bjui-dialog > .dialogHeader{position:relative; padding:0 5px; cursor:move;}
@@ -300,8 +290,9 @@ th[align=right]{text-align:right;}
 .bjui-dialog > .dialogHeader .maximize{right:23px;}
 .bjui-dialog > .dialogHeader .restore{right:23px; display:none;}
 .bjui-dialog > .dialogHeader .minimize{right:42px;}
-.bjui-dialog > .dialogContent{display:block; padding:5px 5px 2px 5px; overflow:hidden;}
+.bjui-dialog > .dialogContent{position:relative; margin:5px;}
 .bjui-dialog.dialogProxy{opacity:0.8; filter:alpha(opacity=80);}
+.bjui-dialog-wrap{position:fixed; top:0; right:0; bottom:0; left:0; overflow:auto; outline:0;}
 /* Dialog resizable */
 .bjui-resizable{position:absolute; top:0; left:0; z-index:100; display:none; overflow:hidden; border-style:dotted; border-width:1px; opacity:0.5; filter:alpha(opacity=50);}
 .bjui-dialog > .resizable_h_l, .bjui-dialog > .resizable_h_r, .bjui-dialog > .resizable_h_c,
@@ -397,13 +388,14 @@ th[align=right]{text-align:right;}
 .bjui-alertBackground{position:absolute; top:0; left:0; z-index:1010; display:none; width:100%; height:100%; opacity:0.4; filter:alpha(opacity=40); background:#FFF;}
 .bjui-dialogBackground{position:absolute; top:0; left:0; z-index:900; display:none; width:100%; height:100%; opacity:0.4; filter:alpha(opacity=40); background:#FFF;}
 /* Contextmenu */
-#bjui-contextmenu{position:absolute; z-index:1000; left:0; top:0; display:none;}
-#bjui-contextmenu ul{margin:0; padding:1px; width:150px;}
-#bjui-contextmenu li{display:block; margin:0; padding:3px; text-align:left; cursor:default;}
-#bjui-contextmenu li:hover{font-weight:bold; cursor:pointer;}
-#bjui-contextmenu li.diver{margin-top:2px; margin-bottom:1px; padding:0px 3px;}
+#bjui-contextmenu{position:absolute; z-index:1000; left:0; top:0; display:none; border-radius:4px;}
+#bjui-contextmenu ul{margin:0; padding:1px 0; min-width:40px; border-radius:4px;}
+#bjui-contextmenu li{display:block; margin:0; padding:0px 10px 0 8px; height:22px; line-height:22px; text-align:left; cursor:default; white-space:nowrap;}
+#bjui-contextmenu li .icon{display:inline-block; width:18px;}
+#bjui-contextmenu li:hover{cursor:pointer;}
+#bjui-contextmenu li.diver{margin:4px 0; height:0px; border-top:1px solid #bbb; border-bottom:1px solid #fff;}
 #bjui-contextmenu li.diver:hover{background:transparent !important; cursor:default;}
-#bjui-contextmenuShadow{position:absolute; z-index:999; display:none; opacity:0.2; filter:alpha(opacity=20); background-color:#000;}
+#bjui-contextmenuShadow{position:absolute; z-index:999; display:none; opacity:0.2; filter:alpha(opacity=20); background-color:#000; border-radius:4px;}
 /* Calendar */
 #bjui-calendar{position:absolute; z-index:1001; display:none; margin:0; width:208px; border-radius:2px;}
 #bjui-calendar > .main{position:relative; margin:auto; padding:2px; text-align:center; background:#ffffff;}

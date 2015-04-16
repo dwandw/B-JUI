@@ -458,7 +458,7 @@
                 }
             })
             
-            var $scroll = $this.closest('[data-layout-h]')
+            var $scroll = $this.closest('.bjui-pageContent')
             
             if ($scroll && $scroll.length) {
                 $scroll.scroll(function() {

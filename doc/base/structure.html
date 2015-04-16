@@ -1,68 +1,64 @@
 <div class="bjui-pageContent">
-    <div class="pageFormContent" data-layout-h="0">
-        <div class="bjui-doc">
-            <h3 class="page-header">页面结构</h3>
-            <blockquote>
-                <p>B-JUI仅有一个主页面(document)，框架内的所有子页面将通过Ajax获取后作为一个页面片段附加到主页面上，外部页面则通过iframe嵌入主页面， 本节介绍 B-JUI的主页面结构。</p>
-            </blockquote>
-            <h4>HTML5 文档类型</h4>
-            <blockquote>
-                <p>同Bootstrap， B-JUI使用 HTML5 文档类型，参照下面的格式进行设置。</p>
-            </blockquote>
-            <pre class="brush: html">
-                &lt;!DOCTYPE html>
-                &lt;html lang="zh-CN">
-                  ...
-                &lt;/html>
-            </pre>
-            <h4>主页面结构(仅body部分)</h4>
-            <blockquote>
-                <p>主页面由上（页头）、中左（导航菜单）、中右（工作区）、下（页脚）四部分组成，其中左侧导航菜单可收缩。结构如下：</p>
-            </blockquote>
-            <pre class="brush: html">
-                <header class="bjui-header" id="bjui-header">
-                    <!-- 页头 -->
-                </header>
-                <div class="bjui-leftside" id="bjui-leftside">
-                    <!-- 导航菜单 -->
+    <div class="bjui-doc">
+        <h3 class="page-header">页面结构</h3>
+        <blockquote>
+            <p>B-JUI仅有一个主页面(document)，框架内的所有子页面将通过Ajax获取后作为一个页面片段附加到主页面上，外部页面则通过iframe嵌入主页面， 本节介绍 B-JUI的主页面结构。</p>
+        </blockquote>
+        <h4>HTML5 文档类型</h4>
+        <blockquote>
+            <p>同Bootstrap， B-JUI使用 HTML5 文档类型，参照下面的格式进行设置。</p>
+        </blockquote>
+        <pre class="brush: html">
+            &lt;!DOCTYPE html>
+            &lt;html lang="zh-CN">
+              ...
+            &lt;/html>
+        </pre>
+        <h4>主页面结构(仅body部分)</h4>
+        <blockquote>
+            <p>主页面由上（页头）、中左（导航菜单）、中右（工作区）、下（页脚）四部分组成，其中左侧导航菜单可收缩。结构如下：</p>
+        </blockquote>
+        <pre class="brush: html">
+            <header id="bjui-header">
+                <!-- 页头 -->
+            </header>
+            <div id="bjui-hnav">
+                <!-- 横向菜单 -->
+            </div>
+            <div id="bjui-container" class="clearfix">
+                <div id="bjui-leftside">
+                    <!-- 导航栏 -->
                 </div>
-                <div id="bjui-container">
-                    <!-- 工作区 -->
+                <div id="bjui-navtab" class="tabsPage">
+                    <!-- 工作区(navtab) -->
                 </div>
-                <footer class="bjui-footer" id="bjui-footer">
-                    <!-- 页脚 -->
-                </footer>
-            </pre>
-            <h4>子页面（即页面片段[后面简称：页片]）结构</h4>
-            <blockquote>
-                <p>页片通常由两部分组成，也可以只保留bjui-pageContent部分，其中bjui-pageContent部分可选bjui-headBar（顶部工具条）和bjui-footBar（底部工具条）。结构如下：</p>
-            </blockquote>
-            <pre class="brush: html">
-                <div class="bjui-pageHeader">
-                    <!-- 顶部模块[如：功能按钮、搜索面板] -->
-                </div>
-                <div class="bjui-pageContent">
-                    <div class="bjui-headBar">
-                        <!-- 顶部工具条 -->
-                    </div>
-                    <div data-layout-h="0">
-                        <!-- 内容区 -->
-                    </div>
-                    <div class="bjui-footBar">
-                        <!-- 底部工具条  -->
-                    </div>
-                </div>
-            </pre>
-            <ul>
-                <li><code>data-layout-h</code> 属性表示该容器为页片自适应布局，当值为<code>0</code>时，B-JUI会为该容器的高度自动赋值为：本页片总高度减去本页片中的固定元素(bjui-pageHeader\bjui-headBar\bjui-footBar)高度。</li>
-                <li><code>data-layout-h</code> 属性值<code>不等于0</code>时，该容器高度为本页片总高度减去属性值。</li>
-                <li>需要自定义固定元素(块级元素有效)，请为该元素添加属性<code>data-layout-fixed="true"</code></li>
-            </ul>
-        </div>
+            </div>
+            <footer id="bjui-footer">
+                <!-- 页脚 -->
+            </footer>
+        </pre>
+        <h4>子页面（即页面片段[后面简称：页片]）标准结构</h4>
+        <blockquote>
+            <p>页片通常由三部分组成，也可以只保留bjui-pageContent部分，或者自定义内容。一个标准的页片结构如下：</p>
+        </blockquote>
+        <pre class="brush: html">
+            <div class="bjui-pageHeader">
+                <!-- 顶部模块[如：功能按钮、搜索面板] -->
+            </div>
+            <div class="bjui-pageContent">
+                <!-- 内容区 -->
+            </div>
+            <div class="bjui-pageFooter">
+                <!-- 底部模块[如：工具条、分页组件]  -->
+            </div>
+        </pre>
+        <blockquote class="point">
+            <strong>注意：</strong>在标准结构中，<code>bjui-pageHeader</code> 和 <code>bjui-pageFooter</code> 部分是固定在页片中的，<code>bjui-pageContent</code>部分的内容溢出会出现滚动条。
+        </blockquote>
     </div>
-    <div class="bjui-footBar">
-        <ul>
-            <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
-        </ul>
-    </div>
+</div>
+<div class="bjui-pageFooter">
+    <ul>
+        <li><button type="button" class="btn-close" data-icon="close">关闭</button></li>
+    </ul>
 </div>

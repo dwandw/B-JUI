@@ -79,23 +79,16 @@ fieldset{border-color:#587fa1;}
 #bjui-splitBar{background:#f1f9fe;}
 #bjui-splitBarProxy{border-color:#aad7fd; background:#f1f9fe;}
 /* Pages */
-.bjui-pageHeader{background:#f1f9fe; border-bottom:1px #587fa1 solid;}
-.bjui-pageHeader .moreSearch{background:#f1f9fe; border-bottom:1px #587fa1 solid;}
-.bjui-pageHeader .j-showMoreSearch:hover{color:#0024ff;}
-.bjui-headBar{background:#e0f0fb; border-bottom:1px #587fa1 solid;}
-.bjui-footBar{background:#e0f0fb; border-top:1px #587fa1 solid;}
-.bjui-headBar > .pagination-box > ul > li > a,
-.bjui-footBar > .pagination-box > ul > li > a{color:#0024ff;}
-.bjui-headBar > .pagination-box > ul > li > a:hover,
-.bjui-footBar > .pagination-box > ul > li > a:hover{color:#013969;}
-.bjui-headBar > .pagination-box > ul > .selected > a,
-.bjui-headBar > .pagination-box > ul > .selected > span,
-.bjui-headBar > .pagination-box > ul > li > a:hover,
-.bjui-headBar > .pagination-box > ul > .selected > span:hover,
-.bjui-footBar > .pagination-box > ul > .selected > a,
-.bjui-footBar > .pagination-box > ul > .selected > span,
-.bjui-footBar > .pagination-box > ul > li > a:hover,
-.bjui-footBar > .pagination-box > ul > .selected > span:hover{z-index:2; color:#ffffff; background-color:#587fa1; border-color:#e0f0fb;}
+.bjui-pageHeader{background:#e0f0fb; border-bottom:1px #587fa1 solid;}
+.bjui-pageHeader .bjui-moreSearch{background:#f1f9fe; border-bottom:1px #587fa1 solid;}
+.bjui-pageHeader .showMoreSearch:hover{color:#0024ff;}
+.bjui-pageFooter{background:#e0f0fb; border-top:1px #587fa1 solid;}
+.bjui-pageFooter > .pagination-box > ul > li > a{color:#0024ff;}
+.bjui-pageFooter > .pagination-box > ul > li > a:hover{color:#587fa1;}
+.bjui-pageFooter > .pagination-box > ul > .selected > a,
+.bjui-pageFooter > .pagination-box > ul > .selected > span,
+.bjui-pageFooter > .pagination-box > ul > li > a:hover,
+.bjui-pageFooter > .pagination-box > ul > .selected > span:hover{z-index:2; color:#ffffff; background-color:#587fa1; border-color:#e0f0fb;}
 /* MaskProgress */
 .bjui-maskProgress{color:#013969; background:#FAFAFA; border:2px solid #587fa1;}
 /* Navtab */
@@ -126,6 +119,7 @@ fieldset{border-color:#587fa1;}
 .bjui-dialog > .dialogHeader h1{color:#013969;}
 .bjui-dialog > .dialogContent .bjui-pageHeader{margin-bottom:0; border:1px #587fa1 solid; border-bottom:none;}
 .bjui-dialog > .dialogContent .bjui-pageContent{background-color:#fff; border:1px #587fa1 solid;}
+.bjui-dialog > .dialogContent .bjui-pageFooter{border:1px #587fa1 solid; border-top:none;}
 /* Dialog resizable */
 .bjui-resizable{border-color:#587fa1; background:#f1f9fe;}
 /* Taskbar */
@@ -156,12 +150,12 @@ fieldset{border-color:#587fa1;}
 .bjui-alert > .alertContent > .info > .alertInner{border-color:#587fa1;}
 .bjui-alert > .alertContent > .info > .alertInner > h1{color:#013969; background-color:#e0f0fb; border-bottom:1px #005094 solid;}
 /* Contextmenu */
-#bjui-contextmenu ul{background-color:#fff; border:1px solid #999;}
-#bjui-contextmenu li{color:#013969; background-color:transparent; border:1px solid #fff;}
-#bjui-contextmenu li:hover{background-color:#f1f9fe; border:1px solid #587fa1;}
+#bjui-contextmenu ul{background-color:#f1f9fe; border:1px solid #587fa1;}
+#bjui-contextmenu li{color:#563d7c; background-color:transparent;}
+#bjui-contextmenu li:hover{color:#fff; background-color:#587fa1;}
 #bjui-contextmenu li.disabled{color:#999;}
-#bjui-contextmenu li.disabled:hover{cursor:default;}
-#bjui-contextmenu li.diver{border-top:1px solid #587fa1; border-bottom:1px solid #e0f0fb; border-left:none; border-right:none;}
+#bjui-contextmenu li.disabled:hover{cursor:default; background-color:transparent;}
+#bjui-contextmenu li.diver{ border-left:none; border-right:none;}
 #bjui-contextmenu li.diver:hover{background-color:transparent !important; cursor:default;}
 /* Calendar */
 #bjui-calendar{border:1px solid #587fa1;}

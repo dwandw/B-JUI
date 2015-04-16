@@ -89,24 +89,6 @@
         e.preventDefault()
     })
     
-    /* Lateral Navigation */
-    $(document).on('click.bjui.lnav.data-api', '[data-toggle="leftbar"]', function(e) {
-        var $this = $(this)
-        var $box  = $($this.attr('href'))
-        var $hnav = $('#bjui-hnav')
-        
-        if ($box.length) {
-            $('#bjui-sidebar').find('.panel-group').addClass('hide')
-            $box.removeClass('hide')
-            $this.parent().addClass('active').siblings().removeClass('active')
-            if ($hnav.find('button[data-toggle="collapse"]').is(':visible')) {
-                $this.closest('.navbar-collapse').removeClass('in')
-            }
-        }
-        
-        e.preventDefault()
-    })
-    
     /* beforeInitUI */
     $(document).on(BJUI.eventType.beforeInitUI, function(e) {
         var $box    = $(e.target)
@@ -146,6 +128,7 @@
     $(document).on(BJUI.eventType.afterInitUI, function(e) {
         var $box    = $(e.target)
         var noinits = $box.data('bjui.noinit')
+        var $form   = $box.find('> .bjui-pageContent').find('form')
         
         // Recovery not need to initialize the UI DOM
         if (noinits) {
@@ -160,13 +143,48 @@
             })
         }
         
-        $box.find('.bjui-pageHeader, .bjui-headBar, .bjui-footBar').attr('data-layout-fixed', true)
-        $box.find('[data-layout-h]').layoutH()
+        /* resizePageH */
+        $box.resizePageH()
+        
+        //submit
+        if ($form.length == 1) {
+            $box.find('> .bjui-pageFooter').find(':submit').on('click.bjui.submit', function(e) {
+                e.preventDefault()
+                
+                $form.submit()
+            })
+        }
         
         //progress
         $box.find('.bjui-maskProgress').find('.progress').stop().animate({width:'100%'}, 'fast', function() {
             $box.find('.bjui-ajax-mask').fadeOut('normal', function() { $(this).remove() })
         })
+    })
+    
+    /* Lateral Navigation */
+    $(document).one(BJUI.eventType.afterInitUI, function(e) {
+        var $hnavbar = $('#bjui-hnav-navbar'), $active = $hnavbar.find('> li.active')
+        
+        if ($active.length && $active.find('> ul.ztree').length) {
+            $active.find('> a').trigger('click')
+        }
+    })
+    
+    $(document).on('click.bjui.lnav.data-api', '[data-toggle="leftbar"]', function(e) {
+        var $this = $(this)
+        var $box  = $($this.attr('href'))
+        var $hnav = $('#bjui-hnav')
+        
+        if ($box.length) {
+            $('#bjui-sidebar').find('.panel-group').addClass('hide')
+            $box.removeClass('hide')
+            $this.parent().addClass('active').siblings().removeClass('active')
+            if ($hnav.find('button[data-toggle="collapse"]').is(':visible')) {
+                $this.closest('.navbar-collapse').removeClass('in')
+            }
+        }
+        
+        e.preventDefault()
     })
     
     /* ajaxStatus */

@@ -18,6 +18,11 @@
 +function ($) {
     'use strict';
     
+    // BJUIAJAX GLOBAL ELEMENTS
+    // ======================
+    
+    var autorefreshTimer
+    
     // BJUIAJAX CLASS DEFINITION
     // ======================
     
@@ -265,7 +270,7 @@
     }
     
     Bjuiajax.prototype.doSearch = function(options) {
-        var that = this, $element = that.$element, form = null, op = {pageCurrent:1}, $target = $element.closest('.bjui-layout')
+        var that = this, $element = that.$element, form = null, op = {pageCurrent:1}, $target = $element.closest('.bjui-layout'), isValid = options.isValid
         
         options = $.extend({}, Bjuiajax.DEFAULTS, typeof options == 'object' && options)
         if (!options.url) options.url = $element.attr('action')
@@ -284,30 +289,44 @@
             options.url = encodeURI(options.url)
         }
         
-        if ($target && $target.length) {
-            form = that.tools.getPagerForm($target, op)
-            
-            var data = $element.serializeJson(), _data = {}
-            
-            if (options.clearQuery) {
-                var pageInfo = BJUI.pageInfo
+        var search = function() {
+            if ($target && $target.length) {
+                form = that.tools.getPagerForm($target, op)
                 
-                for (var key in pageInfo) {
-                    _data[pageInfo[key]] = data[pageInfo[key]]
+                var data = $element.serializeJson(), _data = {}
+                
+                if (options.clearQuery) {
+                    var pageInfo = BJUI.pageInfo
+                    
+                    for (var key in pageInfo) {
+                        _data[pageInfo[key]] = data[pageInfo[key]]
+                    }
+                    data = _data
                 }
-                data = _data
-            }
-            that.reloadDiv($target, {type:$element.attr('method') || 'POST', url:options.url, data:data, loadingmask:options.loadingmask})
-        } else {
-            if (that.tools.getTarget() == Bjuiajax.NAVTAB) {
-                $target = $.CurrentNavtab
-                form    = that.tools.getPagerForm($target, op)
-                $element.navtab('reloadForm', options.clearQuery, options)
+                that.reloadDiv($target, {type:$element.attr('method') || 'POST', url:options.url, data:data, loadingmask:options.loadingmask})
             } else {
-                $target = $.CurrentDialog
-                form    = that.tools.getPagerForm($target, op)
-                $element.dialog('reloadForm', options.clearQuery, options)
+                if (that.tools.getTarget() == Bjuiajax.NAVTAB) {
+                    $target = $.CurrentNavtab
+                    form    = that.tools.getPagerForm($target, op)
+                    $element.navtab('reloadForm', options.clearQuery, options)
+                } else {
+                    $target = $.CurrentDialog
+                    form    = that.tools.getPagerForm($target, op)
+                    $element.dialog('reloadForm', options.clearQuery, options)
+                }
             }
+        }
+        
+        if (!isValid) {
+            if ($.validator) {
+                $element.isValid(function(v) {
+                    if (v) search()
+                })
+            } else {
+                search()
+            }
+        } else {
+            search()
         }
     }
     
@@ -346,6 +365,7 @@
         
         options = $.extend({}, Bjuiajax.DEFAULTS, typeof options == 'object' && options)
         if (!$target || !$target.length) {
+            if (autorefreshTimer) clearInterval(autorefreshTimer)
             BJUI.debug('Not set loaded \'ajax\' content container, like [data-target].')
             return
         }
@@ -356,6 +376,8 @@
     }
     
     Bjuiajax.prototype.reloadDiv = function($target, options) {
+        var arefre = options.autorefresh && (isNaN(String(options.autorefresh)) ? 15 : options.autorefresh)
+        
         $target
             .addClass('bjui-layout')
             .data('options', options)
@@ -364,8 +386,10 @@
                         $target.pagination('setPagingAndOrderby', $target)
                     if (options.callback)
                         options.callback.apply(this, [$target])
-                    
-                    $target.find('[data-layout-h]').addClass('bjui-layout-h')
+                    if (autorefreshTimer)
+                        clearInterval(autorefreshTimer)
+                    if (arefre)
+                        autorefreshTimer = setInterval(function() { $target.bjuiajax('refreshLayout', options) }, arefre * 1000)
                 }
             })
     }
@@ -611,23 +635,39 @@
     
     $(document).on('submit.bjui.bjuiajax.data-api', '[data-toggle="ajaxform"]', function(e) {
         var $this   = $(this)
-        
-        if (!$this.isTag('form')) return
-        
-        Plugin.call($this, 'ajaxForm')
-        
-        e.preventDefault()
-    })
-    
-    $(document).on('submit.bjui.bjuiajax.data-api', '[data-toggle="ajaxsearch"]', function(e) {
-        var $this   = $(this)
         var options = $this.data()
         
         if (!$this.isTag('form')) return
         
-        Plugin.call($this, 'doSearch', options)
+        Plugin.call($this, 'ajaxForm', options)
         
         e.preventDefault()
+    })
+    
+    /* doSearch */
+    $(function() {
+        if ($.validator) {
+            $(document).on(BJUI.eventType.initUI, function(e) {
+                $(e.target).find('form[data-toggle="ajaxsearch"]').each(function() {
+                    var $form = $(this), options = $form.data()
+                    
+                    options.isValid = true
+                    $form.validator({
+                        valid: function(form) {
+                            Plugin.call($form, 'doSearch', options)
+                        }
+                    })
+                })
+            })
+        } else {
+            $(document).on('submit.bjui.bjuiajax.data-api', 'form[data-toggle="ajaxsearch"]', function(e) {
+                var $this   = $(this), options = $this.data()
+                
+                Plugin.call($this, 'doSearch', options)
+                
+                e.preventDefault()
+            })
+        }
     })
     
     $(document).on('click.bjui.bjuiajax.data-api', '[data-toggle="reloadsearch"]', function(e) {

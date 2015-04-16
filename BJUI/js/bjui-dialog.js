@@ -30,19 +30,7 @@
             shadow     = 'dialogShadow'
             zindex     = Dialog.ZINDEX
             
-            var dr          = BJUI.regional.dialog
-            var dialogProxy = 
-                FRAG.dialogProxy
-                    .replace('#close#', dr.close)
-                    .replace('#maximize#', dr.maximize)
-                    .replace('#restore#', dr.restore)
-                    .replace('#minimize#', dr.minimize)
-                    .replace('#title#', dr.title)
-            
-            $('body')
-                .append('<!-- dialog resizable -->').append(FRAG.resizable)
-                .append('<!-- dialog drag  -->').append(dialogProxy)
-                .append('<!-- dialog mask -->').append(FRAG.dialogMask)
+            $('body').append('<!-- dialog resizable -->').append(FRAG.resizable)
         }
         
         INIT_DIALOG()
@@ -137,9 +125,8 @@
                 var $dialogContent = $dialog.find('> .dialogContent')
                 
                 $dialogContent
-                    .css({width:(width - 0), height:(height - $dialog.find('> .dialogHeader').outerHeight() - 6)})
-                    .find('[data-layout-h]')
-                    .layoutH($dialogContent)
+                    .css({width:(width - 12), height:(height - $dialog.find('> .dialogHeader').outerHeight() - 6)})
+                    .resizePageH()
                 
                 $(window).trigger(BJUI.eventType.resizeGrid)
             }
@@ -192,7 +179,7 @@
             $dialog = $(dialog)
                 .data('options', options)
                 .data('initOptions', options)
-                .css('zIndex', (zindex += 2))
+                .css('zIndex', (zindex += 1))
                 .hide()
                 .appendTo($body)
             
@@ -272,14 +259,13 @@
     Dialog.prototype.addMask = function($dialog) {
         var $mask = $dialog.data('bjui.dialog.mask')
         
+        $dialog.wrap('<div style="z-index:'+ zindex +'" class="bjui-dialog-wrap"></div>')
+        $dialog.find('> .dialogHeader > a.minimize').hide()
         if (!$mask || !$mask.length) {
             $mask = $(FRAG.dialogMask)
-            $mask.appendTo('body').css('zIndex', zindex - 1).show()
+            $mask.css('zIndex', 1).show().insertBefore($dialog)
             $dialog.data('bjui.dialog.mask', $mask)
-            $('body').addClass('modal-open')
-            $dialog.wrap('<div style="position:fixed; top:0; left:0; z-index:'+ zindex +'; width:100%; height:'+ $(window).height() +'px; overflow:auto;" class="bjui-dialog-wrap"></div>')
         }
-        $dialog.find('> .dialogHeader > a.minimize').hide()
     }
     
     Dialog.prototype.refresh = function(id) {
@@ -321,7 +307,7 @@
                 if (initOptions.height != op.height) {
                     if (!op.max) {
                         $dialog.animate({ height:op.height }, 'normal', function() {
-                            $dialogContent.height(op.height - $dialog.find('> .dialogHeader').outerHeight() - 6).find('[data-layout-h]').layoutH($dialogContent)
+                            $dialogContent.height(op.height - $dialog.find('> .dialogHeader').outerHeight() - 6).resizePageH()
                         })
                     } else {
                         $dialog.height(op.height)
@@ -520,26 +506,16 @@
     Dialog.prototype.drag = function(e, $dialog) {
         var $shadow = $('#bjui-dialogProxy')
         
-        if (!$shadow.size()) $shadow = $(FRAG.dialogProxy).appendTo($('body'))
-        $shadow.find('> div.dialogHeader > h1').html($dialog.find('> div.dialogHeader > h1').html())
-        $shadow.find('> div.dialogContent').css('height', $dialog.find('> div.dialogContent').css('height'))
-        $shadow
-            .css({
-                left   : $dialog.css('left'),
-                top    : $dialog.css('top'),
-                height : $dialog.css('height'),
-                width  : $dialog.css('width'),
-                zIndex : parseInt($dialog.css('zIndex'))
-            })
-            .show()
-        $dialog.css({left:'-10000px', top:'-10000px'})
-        $shadow.basedrag({
-            selector: '> .dialogHeader',
-            stop: function() {
-                $dialog.css({left:$shadow.css('left'), top:$shadow.css('top')})
-                $shadow.hide()
+        $dialog.find('> .dialogContent').css('opacity', '.3')
+        $dialog.basedrag({
+            selector : '> .dialogHeader',
+            stop     : function() {
+                $dialog
+                    .css({left:$dialog.css('left'), top:$dialog.css('top')})
+                    .find('> .dialogContent').css('opacity', 1)
             },
-            event: e
+            event    : e,
+            nounbind : true
         })
     }
     
@@ -557,17 +533,15 @@
         
         $dialog
             .css({top:otop, left:oleft, width:width + 2, height:height + 1})
-            .find('> .dialogContent').css('width', (width - 0))
+            .find('> .dialogContent').css('width', (width - 10))
         
         if (target != 'w' && target != 'e') {
             var $dialogContent = $dialog.find('> .dialogContent')
             
             $dialogContent
                 .css({height:height - $dialog.find('> .dialogHeader').outerHeight() - 6})
-                .find('[data-layout-h]')
-                .layoutH($dialogContent)
+                .resizePageH()
         }
-        
         $(window).trigger(BJUI.eventType.resizeGrid)
     }
     

@@ -254,13 +254,32 @@
     }
     
     Tablefixed.prototype.initBody = function() {
+        var that      = this
         var $tbody    = this.$fixed.find('> tbody')
-        var layoutStr = ' data-layout-h="'+ (this.options.layoutH || 0) +'"'
         var styles    = this.options.styles
+        var style, height
         
-        if (this.options.height) layoutStr = 'style="height:'+ (this.options.height - this.$fixed.find('.fixedtableHeader').height()) +'px; overflow-y:auto;"'
+        if (this.options.height) {
+            height = (this.options.height - this.$fixed.find('.fixedtableHeader').height()) +'px'
+        } else {
+            height = '100%'
+            
+            var resizeH = function() {
+                var _height = that.$fixed.parent().height()
+                
+                that.$fixed.parent().css('overflow', 'hidden')
+                that.$fixed.height(_height)
+                    .find('.fixedtableScroller').height(_height - that.$fixed.find('.fixedtableHeader').height())
+            }
+            
+            $(document).one(BJUI.eventType.afterInitUI, function(e) {
+                resizeH()
+            })
+        }
+            
+        style = 'style="height:'+ height +'; overflow-y:auto;"'
         
-        $tbody.wrap('<div class="fixedtableScroller"'+ layoutStr +' style="width:'+ (this.options.newWidth) +'px;"><div class="fixedtableTbody"><table style="width:'+ (this.options.newWidth - Tablefixed.SCROLLW) +'px; max-width:'+ (this.options.newWidth - Tablefixed.SCROLLW) +'px;"></table></div></div>')
+        $tbody.wrap('<div class="fixedtableScroller"'+ style +' style="width:'+ (this.options.newWidth) +'px;"><div class="fixedtableTbody"><table style="width:'+ (this.options.newWidth - Tablefixed.SCROLLW) +'px; max-width:'+ (this.options.newWidth - Tablefixed.SCROLLW) +'px;"></table></div></div>')
         
         if (!this.$element.attr('class')) $tbody.parent().addClass('table table-striped table-bordered table-hover')
         else $tbody.parent().addClass(this.$element.attr('class'))
@@ -386,9 +405,21 @@
         var that = this
         var _resizeGrid = function() {
             $('div.bjui-resizeGrid').each(function() {
-                var $this = $(this), width  = $(this).innerWidth(), newWidth = that.options.newWidth
+                var $this  = $(this), $navtab = $this.closest('.navtabPage'),
+                    width  = $this.innerWidth(),
+                    height = $this.height(),
+                    $fixed = $this.find('.bjui-tablefixed'),
+                    fixedH = $fixed.find('.fixedtableThead').height(),
+                    newWidth = that.options.newWidth
                 var realWidth
                 
+                if ($this.length && $this.is(':hidden')) {
+                    $navtab.show()
+                    width  = $this.innerWidth()
+                    height = $this.height()
+                    fixedH = $fixed.find('.fixedtableHeader').height()
+                    $navtab.hide()
+                }
                 if (width) {
                     $this.find('.bjui-tablefixed').each(function() {
                         var $fixed = $(this)
@@ -402,7 +433,21 @@
                         $fixed.find('.fixedtableScroller').width(realWidth)
                     })
                 }
+                
+                /* resizeH */
+                $this.css('overflow', 'hidden')
+                $fixed.height(height)
+                    .find('.fixedtableScroller').height(height - fixedH)
+                
             })
+            
+            var resizeH = function() {
+                var _height = that.$fixed.parent().height()
+                
+                that.$fixed.parent().css('overflow', 'hidden')
+                that.$fixed.height(_height)
+                    .find('.fixedtableScroller').height(_height - that.$fixed.find('.fixedtableHeader').height())
+            }
         }
         
         $(window).off(BJUI.eventType.resizeGrid).on(BJUI.eventType.resizeGrid, _resizeGrid)

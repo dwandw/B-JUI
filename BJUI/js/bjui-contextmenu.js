@@ -114,7 +114,25 @@
         
         if (options.items && options.items.length) {
             that.$element.on('contextmenu', function(e) {
-                that.custom(options.items, e)
+                var isShow = true
+                
+                /*exclude*/
+                if (options.exclude) {
+                    that.$element.find(options.exclude).each(function() {
+                        if (this == e.target || $(this).find(e.target).length) {
+                            isShow = false
+                            return
+                        }
+                    })
+                }
+                
+                if (!isShow) {
+                    e.stopPropagation()
+                    return !isShow
+                } else {
+                    that.custom(options.items, e)
+                }
+                
                 return false
             })
         }
@@ -128,10 +146,13 @@
         var $ul     = $menu.find('> ul'), $li
         
         $.each(items, function(i, n) {
+            var icon = ''
+            
+            if (n.icon) icon = '<i class="fa fa-'+ n.icon +'"></i>'
             if (n.title == 'diver') {
                 $li = $('<li class="diver"></li>')
             } else {
-                $li = $('<li>'+ n.title +'</li>')
+                $li = $('<li><span class="icon">'+ icon +'</span><span class="title">'+ n.title +'</span></li>')
                 if (n.func) {
                     $li.on('click', function(evt) {
                         that.hide()

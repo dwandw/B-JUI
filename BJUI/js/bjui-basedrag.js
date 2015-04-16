@@ -97,7 +97,8 @@
     }
     
     Basedrag.prototype.destroy = function() {
-        this.$element.removeData('bjui.basedrag').unbind('mousedown')
+        this.$element.removeData('bjui.basedrag')
+        if (!this.options.nounbind) this.$element.unbind('mousedown')
     }
     
     // BASEDRAG PLUGIN DEFINITION

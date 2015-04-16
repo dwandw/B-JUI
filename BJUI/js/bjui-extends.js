@@ -100,35 +100,28 @@
                 $target.trigger(BJUI.eventType.ajaxStatus)
                 $ajaxMask = $target.find('> .bjui-ajax-mask')
             }
-            $.ajax({
-                type        : op.type || 'POST',
-                url         : op.url,
-                data        : op.data || {},
-                files       : op.files || null,
-                iframe      : op.ifrane || false,
-                contentType : op.contentType || 'application/x-www-form-urlencoded',
-                processData : op.processData || true,
-                dataType    : op.dataType || 'json',
-                timeout     : BJUI.ajaxTimeout,
-                cache       : op.cache || false,
-                success     : function(response) {
-                    if ($ajaxMask) {
-                        if (op.callback) {
-                            $.when(op.callback(response)).done(function() {
-                                $target.trigger('bjui.ajaxStop')
-                            })
-                        } else {
+            if (!op.type) op.type = 'POST'
+            if (!op.dataType) op.dataType = 'json'
+            if (!op.cache) op.cache = false
+            op.timeout = BJUI.ajaxTimeout
+            op.success = function(response) {
+                if ($ajaxMask) {
+                    if (op.callback) {
+                        $.when(op.callback(response)).done(function() {
                             $target.trigger('bjui.ajaxStop')
-                        }
+                        })
                     } else {
-                        op.callback(response)
+                        $target.trigger('bjui.ajaxStop')
                     }
-                },
-                error       : op.error || function(xhr, ajaxOptions, thrownError) {
-                    $this.bjuiajax('ajaxError', xhr, ajaxOptions, thrownError)
+                } else {
+                    op.callback(response)
                 }
-            })
+            }
+            op.error = op.error || function(xhr, ajaxOptions, thrownError) {
+                $this.bjuiajax('ajaxError', xhr, ajaxOptions, thrownError)
+            }
             
+            $.ajax(op)
         },
         getPageTarget: function() {
             var $target
@@ -139,60 +132,26 @@
             
             return $target
         },
-        /**
-         * adjust component inner reference box height
-         * @param {Object} refBox: reference box jQuery Obj
-         */
-        layoutH: function($refBox) {
-            return this.each(function(i) {
-                var $box      = $(this)
-                var $unitBox  = null
-                var $fixedBox = null
+        resizePageH: function() {
+            return this.each(function() {
+                if ($(this).closest('.tab-content').length) return
                 
-                if (!$refBox || !$refBox.length) $refBox = $box.closest('.bjui-layout')
-                if (!$refBox || !$refBox.length) $refBox = $box.closest('div.layoutBox')
+                var $box         = $(this),
+                    $pageHeader  = $box.find('> .bjui-pageHeader'),
+                    $pageContent = $box.find('> .bjui-pageContent'),
+                    $pageFooter  = $box.find('> .bjui-pageFooter'),
+                    headH        = $pageHeader.outerHeight() || 0,
+                    footH        = $pageFooter.outerHeight() || 0
                 
-                var refH = $refBox.height() || parseInt($refBox.css('height'))
-                var layH = $box.data('bjuiLayH') || parseInt($box.data('layoutH')) || 0
-                var bodH = 0
-                
-                if (!layH) {
-                    $unitBox  = $box.closest('div.bjui-layout')
-                    if (!$unitBox || !$unitBox.length) $unitBox = $box.closest('div.unitBox')
-                    
-                    $unitBox.find('.bjui-layout').find('[data-layout-fixed]').hide()
-                    $unitBox.find('.bjui-layout').find('.bjui-tablefixed').hide()
-                    
-                    var fixedH     = 0
-                    var fixedBoxH  = 0
-                    var fixedTh    = 0
-                    
-                    $unitBox.find('[data-layout-fixed]:visible').each(function() {
-                        fixedH += $(this).outerHeight() || 0
-                    })
-                    
-                    $fixedBox = $unitBox.find('.bjui-tablefixed:visible')
-                    if (!$fixedBox.hasClass('fixedH') && $fixedBox.length) {
-                        if ($fixedBox[0].scrollWidth > $fixedBox[0].clientWidth || $fixedBox[0].scrollWidth > $fixedBox[0].offsetWidth) {
-                            fixedBoxH = $fixedBox[0].offsetHeight - $fixedBox[0].clientHeight
-                        }
-                        fixedTh = $fixedBox.find('.fixedtableHeader').outerHeight() || 0
-                    }
-                    $unitBox.find('.bjui-layout').find('[data-layout-fixed]').show()
-                    $unitBox.find('.bjui-layout').find('.bjui-tablefixed').show()
-                    bodH = refH - fixedH - fixedBoxH - fixedTh
-                    $box.data('bjuiLayH', (fixedH + fixedBoxH + fixedTh))
-                } else {
-                    bodH = refH - layH > 50 ? refH - layH : 50
+                if ($box.hasClass('navtabPage') && $box.is(':hidden')) {
+                    $box.show()
+                    headH = $pageHeader.outerHeight() || 0
+                    footH = $pageFooter.outerHeight() || 0
+                    $box.hide()
                 }
-                if ($box.isTag('table') && !$box.parent('[data-layout-h]').length) {
-                    $box.removeAttr('data-layout-h').attr({"data-bjui-lay-h":$box.data('bjuiLayH'),"data-layout-h":layH,"style":"overflow:auto;width:100%;height:"+bodH+"px;"});
-                } else {
-                    $box.animate({ height:bodH }, 'fast', function() {
-                        $box.css('overflow', 'auto')
-                        $box.find('.bjui-layout').find('[data-layout-h]').layoutH()
-                    })
-                }
+                if ($pageFooter.css('bottom')) footH += parseInt($pageFooter.css('bottom')) || 0
+                if (footH == 0 && $box.hasClass('dialogContent')) footH = 5
+                $pageContent.css({top:headH, bottom:footH})
             })
         },
         getMaxIndexObj: function($elements) {
@@ -210,7 +169,7 @@
             return $elements.eq(index)
         },
         /**
-         * 将表单数据转成JSON对象 用法：$(form).serializeJson() Author: K'naan
+         * 将表单数据转成JSON对象 用法�(form).serializeJson() Author: K'naan
          */
         serializeJson: function () {
             var o = {}
@@ -290,7 +249,7 @@
         replaceAll: function(os, ns) {
             return this.replace(new RegExp(os,'gm'), ns)
         },
-        /*替换占位符为对应选择器的值*/ //{^(.|\#)[A-Za-z0-9_-\s]*}
+        /*替换占位符为对应选择器的�/ //{^(.|\#)[A-Za-z0-9_-\s]*}
         replacePlh: function($box) {
             $box = $box || $(document)
             return this.replace(/{\/?[^}]*}/g, function($1) {
@@ -364,7 +323,7 @@
         },
         /**
          * String to Function
-         * 参数(方法字符串或方法名)： 'function(){...}' 或 'getName' 或 'USER.getName' 均可
+         * 参数(方法字符串或方法��'function(){...}' �'getName' �'USER.getName' 均可
          * Author: K'naan
          */
         toFunc: function() {
