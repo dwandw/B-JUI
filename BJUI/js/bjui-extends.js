@@ -20,7 +20,7 @@
     
     $.fn.extend({
         /**
-         * @param {Object} op: {type:GET/POST, url:ajax璇锋眰鍦板潃, data:ajax璇锋眰鍙傛暟鍒楄〃, callback:鍥炶皟鍑芥暟 }
+         * @param {Object} op: {type:GET/POST, url:ajax请求地址, data:ajax请求参数列表, callback:回调函数 }
          */
         ajaxUrl: function(op) {
             var $this = $(this)
@@ -169,7 +169,7 @@
             return $elements.eq(index)
         },
         /**
-         * 灏嗚〃鍗曟暟鎹浆鎴怞SON瀵硅薄 鐢ㄦ硶锛(form).serializeJson() Author: K'naan
+         * 将表单数据转成JSON对象 用法：$(form).serializeJson() Author: K'naan
          */
         serializeJson: function () {
             var o = {}
@@ -193,7 +193,7 @@
             return $(this)[0].tagName.toLowerCase() == tn ? true : false
         },
         /**
-         * 鍒ゆ柇褰撳墠鍏冪礌鏄惁宸茬粡缁戝畾鏌愪釜浜嬩欢
+         * 判断当前元素是否已经绑定某个事件
          * @param {Object} type
          */
         isBind: function(type) {
@@ -201,7 +201,7 @@
             return _events && type && _events[type]
         },
         /**
-         * 杈撳嚭firebug鏃ュ織
+         * 输出firebug日志
          * @param {Object} msg
          */
         log: function(msg) {
@@ -212,7 +212,7 @@
     })
     
     /**
-     * 鎵╁睍String鏂规硶
+     * 扩展String方法
      */
     $.extend(String.prototype, {
         isPositiveInteger: function() {
@@ -249,7 +249,7 @@
         replaceAll: function(os, ns) {
             return this.replace(new RegExp(os,'gm'), ns)
         },
-        /*鏇挎崲鍗犱綅绗︿负瀵瑰簲閫夋嫨鍣ㄧ殑鍊/ //{^(.|\#)[A-Za-z0-9_-\s]*}
+        /*替换占位符为对应选择器的值*/ //{^(.|\#)[A-Za-z0-9_-\s]*}
         replacePlh: function($box) {
             $box = $box || $(document)
             return this.replace(/{\/?[^}]*}/g, function($1) {
@@ -323,7 +323,7 @@
         },
         /**
          * String to Function
-         * 鍙傛暟(鏂规硶瀛楃涓叉垨鏂规硶鍚锛'function(){...}' 鎴'getName' 鎴'USER.getName' 鍧囧彲
+         * 参数(方法字符串或方法名)： 'function(){...}' 或 'getName' 或 'USER.getName' 均可
          * Author: K'naan
          */
         toFunc: function() {
