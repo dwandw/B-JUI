@@ -183,33 +183,45 @@
         
         Slidebar.prototype.initHnav = function() {
             var that   = this,
-                title  = that.$element.html(),
+                title  = that.$element.text().trim(),
                 $li    = that.$element.parent(),
                 $trees = $li.find('> ul.ztree'),
                 $box   = $('#bjui-accordionmenu'),
                 $group = $box.find('> .panel:first-child'),
                 $first
             
+            if (!$trees.length) $trees = $li.find('> .trees > ul.ztree')
             if ($trees.length) $box.empty()
             else return
             
             $trees.each(function(i) {
-                var $tree      = $(this).clone().attr('id', 'bjui-sidebar-tree'+ i)
-                var $newGroup  = $group.clone()
-                var $panelHead = $newGroup.find('.panel-heading')
-                var $panelBody = $newGroup.find('.panel-collapse').attr('id', 'bjui-accordionmenu-hnav-'+ i).find('> .panel-body').empty()
-                var $paneltit  = $newGroup.find('.panel-heading > h4 > a').attr('href', '#bjui-accordionmenu-hnav-'+ i).html(title)
+                var $t = $(this), $tree = $t.clone().attr('id', 'bjui-sidebar-tree'+ i), faicon = $t.data('faicon'), faiconClose = $t.data('faiconClose'), icon = faicon ? faicon : 'caret-square-o-down'
                 
-                if (i == 0) $first = $paneltit
+                if ($t.data('title')) title = $t.data('title')
                 
-                $paneltit.find('> i').attr('class', 'fa fa-caret-square-o-down')
-                $tree.removeAttr('data-noinit').css('display', 'block').appendTo($panelBody)
+                var $newGroup  = $group.clone(),
+                    $panelHead = $newGroup.find('.panel-heading'),
+                    $panelBody = $newGroup.find('.panel-collapse'),
+                    $paneltit  = $newGroup.find('.panel-heading > h4 > a').attr('href', '#bjui-accordionmenu-hnav-'+ i).attr('data-faicon', faicon).attr('data-faicon-close', faiconClose).html(title)
+                
+                $panelBody.attr('id', 'bjui-accordionmenu-hnav-'+ i).find('> .panel-body').empty()
+                if (i == 0) {
+                    $paneltit.addClass('active')
+                    $panelBody.addClass('in').css('height', '')
+                    $first = $paneltit
+                } else {
+                    $paneltit.removeClass('active')
+                    $panelBody.removeClass('in')
+                    icon = faiconClose ? faiconClose : (faicon ? faicon : 'caret-square-o-right')
+                }
+                
+                $paneltit.prepend('<i class="fa fa-'+ icon +'"></i>&nbsp;')
+                $tree.removeAttr('data-noinit').css('display', 'block').appendTo($panelBody.find('> .panel-body'))
                 $box.append($newGroup)
             })
             
             $('#bjui-sidebar').initui()
             $li.addClass('active').siblings().removeClass('active')
-            if ($first && $first.hasClass('collapsed')) $first.trigger('click')
         }
         
     }

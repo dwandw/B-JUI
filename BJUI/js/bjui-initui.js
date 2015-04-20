@@ -165,26 +165,9 @@
     $(document).one(BJUI.eventType.afterInitUI, function(e) {
         var $hnavbar = $('#bjui-hnav-navbar'), $active = $hnavbar.find('> li.active')
         
-        if ($active.length && $active.find('> ul.ztree').length) {
+        if ($active.length && $active.find('ul.ztree').length) {
             $active.find('> a').trigger('click')
         }
-    })
-    
-    $(document).on('click.bjui.lnav.data-api', '[data-toggle="leftbar"]', function(e) {
-        var $this = $(this)
-        var $box  = $($this.attr('href'))
-        var $hnav = $('#bjui-hnav')
-        
-        if ($box.length) {
-            $('#bjui-sidebar').find('.panel-group').addClass('hide')
-            $box.removeClass('hide')
-            $this.parent().addClass('active').siblings().removeClass('active')
-            if ($hnav.find('button[data-toggle="collapse"]').is(':visible')) {
-                $this.closest('.navbar-collapse').removeClass('in')
-            }
-        }
-        
-        e.preventDefault()
     })
     
     /* ajaxStatus */

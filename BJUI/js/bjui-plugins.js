@@ -273,7 +273,7 @@
                 view: {
                     addHoverDom    : op.addHoverDom || null,
                     removeHoverDom : op.removeHoverDom || null,
-                    addDiyDom      : (op.addDiyDom != null) ? op.addDiyDom.toFunc() : null
+                    addDiyDom      : op.addDiyDom ? op.addDiyDom.toFunc() : null
                 },
                 edit: {
                     enable        : op.editEnable,
@@ -286,13 +286,16 @@
                     radioType : op.radioType
                 },
                 callback: {
-                    onClick      : op.onClick      != null ? op.onClick.toFunc()      : null,
-                    beforeDrag   : op.beforeDrag   != null ? op.beforeDrag.toFunc()   : _beforeDrag,
-                    beforeDrop   : op.beforeDrop   != null ? op.beforeDrop.toFunc()   : _beforeDrop,
-                    onDrop       : op.onDrop       != null ? op.onDrop.toFunc()       : null,
-                    onCheck      : op.onCheck      != null ? op.onCheck.toFunc()      : null,
-                    beforeRemove : op.beforeRemove != null ? op.beforeRemove.toFunc() : null,
-                    onRemove     : op.onRemove     != null ? op.onRemove.toFunc()     : null
+                    onClick       : op.onClick      ? op.onClick.toFunc()      : null,
+                    beforeDrag    : op.beforeDrag   ? op.beforeDrag.toFunc()   : _beforeDrag,
+                    beforeDrop    : op.beforeDrop   ? op.beforeDrop.toFunc()   : _beforeDrop,
+                    onDrop        : op.onDrop       ? op.onDrop.toFunc()       : null,
+                    onCheck       : op.onCheck      ? op.onCheck.toFunc()      : null,
+                    beforeRemove  : op.beforeRemove ? op.beforeRemove.toFunc() : null,
+                    onRemove      : op.onRemove     ? op.onRemove.toFunc()     : null,
+                    onNodeCreated : _onNodeCreated,
+                    onCollapse    : _onCollapse,
+                    onExpand      : _onExpand
                 },
                 data: {
                     simpleData: {
@@ -311,6 +314,39 @@
             
             if (op.expandAll) zTree.expandAll(true)
             
+            // onCreated
+            function _onNodeCreated(event, treeId, treeNode) {
+                if (treeNode.faicon) {
+                    var $a    = $('#'+ treeNode.tId +'_a')
+                    
+                    if (!$a.data('faicon')) {
+                        $a.data('faicon', true)
+                          .addClass('faicon')
+                          .find('> span.button').append('<i class="fa fa-'+ treeNode.faicon +'"></i>')
+                    }
+                }
+                if (op.onNodeCreated) {
+                    op.onNodeCreated.toFunc().call(this, event, treeId, treeNode)
+                }
+            }
+            // onCollapse
+            function _onCollapse(event, treeId, treeNode) {
+                if (treeNode.faiconClose) {
+                    $('#'+ treeNode.tId +'_ico').find('> i').attr('class', 'fa fa-'+ treeNode.faiconClose)
+                }
+                if (op.onCollapse) {
+                    op.onCollapse.toFunc().call(this, event, treeId, treeNode)
+                }
+            }
+            // onExpand
+            function _onExpand(event, treeId, treeNode) {
+                if (treeNode.faicon && treeNode.faiconClose) {
+                    $('#'+ treeNode.tId +'_ico').find('> i').attr('class', 'fa fa-'+ treeNode.faicon)
+                }
+                if (op.onExpand) {
+                    op.onExpand.toFunc().call(this, event, treeId, treeNode)
+                }
+            }
             // add button, del button
             function _addHoverDom(treeId, treeNode) {
                 var level = treeNode.level
@@ -499,10 +535,13 @@
             }
             
             $this.on('shown.bs.collapse', function() {
-                var $collapse = $this.find('[data-toggle=collapse]')
-                
-                $collapse.find('i').removeClass('fa-caret-square-o-down').addClass('fa-caret-square-o-right')
-                $collapse.removeClass('active').not('.collapsed').addClass('active').find('i').removeClass('fa-caret-square-o-right').addClass('fa-caret-square-o-down')
+                $(this).find('[data-toggle=collapse]').each(function() {
+                    var $collapse = $(this), faicon = $collapse.data('faicon'), faiconClose = $collapse.data('faiconClose'),
+                        icon = faicon ? faicon : 'caret-square-o-down', iconClose = faiconClose ? faiconClose : (faicon ? faicon : 'caret-square-o-right')
+                    
+                    $collapse.find('i').attr('class', 'fa fa-'+ icon)
+                    $collapse.removeClass('active').not('.collapsed').addClass('active').find('i').attr('class', 'fa fa-'+ iconClose)
+                })
             })
         })
         

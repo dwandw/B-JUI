@@ -190,16 +190,16 @@ function M_AddDiyDom(treeId, treeNode) {
             <div class="clearfix">
                 <div style="float:left; width:220px; height:240px; overflow:auto;">
                     <ul id="ztree1" class="ztree" data-toggle="ztree" data-expand-all="true" data-on-click="ZtreeClick">
-                        <li data-id="1" data-pid="0">表单元素</li>
-                        <li data-id="10" data-pid="1" data-url="form-button.html" data-tabid="form-button">按钮</li>
-                        <li data-id="11" data-pid="1" data-url="form-input.html" data-tabid="form-input">文本框</li>
-                        <li data-id="12" data-pid="1" data-url="form-select.html" data-tabid="form-select">下拉选择框</li>
-                        <li data-id="13" data-pid="1" data-url="form-checkbox.html" data-tabid="table">复选、单选框</li>
-                        <li data-id="14" data-pid="1" data-url="form.html" data-tabid="form">表单综合演示</li>
+                        <li data-id="1" data-pid="0" data-faicon="rss" data-faicon-close="cab">表单元素</li>
+                        <li data-id="10" data-pid="1" data-url="form-button.html" data-tabid="form-button" data-faicon="bell">按钮</li>
+                        <li data-id="11" data-pid="1" data-url="form-input.html" data-tabid="form-input" data-faicon="info-circle">文本框</li>
+                        <li data-id="12" data-pid="1" data-url="form-select.html" data-tabid="form-select" data-faicon="ellipsis-v">下拉选择框</li>
+                        <li data-id="13" data-pid="1" data-url="form-checkbox.html" data-tabid="table" data-faicon="soccer-ball-o">复选、单选框</li>
+                        <li data-id="14" data-pid="1" data-url="form.html" data-tabid="form" data-faicon="comments">表单综合演示</li>
                         <li data-id="2" data-pid="0">表格</li>
-                        <li data-id="20" data-pid="2" data-url="table.html" data-tabid="table">普通表格</li>
-                        <li data-id="21" data-pid="2" data-url="table-fixed.html" data-tabid="table-fixed">固定表头表格</li>
-                        <li data-id="22" data-pid="2" data-url="table-edit.html" data-tabid="table-edit">可编辑表格</li>
+                        <li data-id="20" data-pid="2" data-url="table.html" data-tabid="table" data-faicon="signal">普通表格</li>
+                        <li data-id="21" data-pid="2" data-url="table-fixed.html" data-tabid="table-fixed" data-faicon="rss-square">固定表头表格</li>
+                        <li data-id="22" data-pid="2" data-url="table-edit.html" data-tabid="table-edit" data-faicon="bookmark-o">可编辑表格</li>
                     </ul>
                 </div>
                 <div id="ztree-detail" style="display:none; margin-left:230px; width:300px; height:240px;">
@@ -393,6 +393,9 @@ function M_AddDiyDom(treeId, treeNode) {
             <hr>
             <h5>nodes结构：(简单JSON数据)： </h5>
             <pre>&lt;li data-id=&quot;13&quot; data-pid=&quot;1&quot; data-url=&quot;form-checkbox.html&quot; data-tabid=&quot;table&quot;&gt;复选、单选框&lt;/li&gt;</pre>
+            <p>关于<code>自定义ICON（采用的图标字体<a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank">Font Awesome</a>）</code>，li元素上添加属性：<code>data-faicon</code>，如下示例的tree节点将会显示 <i class="fa fa-check-square-o"></i> 图标：</p>
+            <pre>&lt;li data-id=&quot;13&quot; data-pid=&quot;1&quot; data-url=&quot;form-checkbox.html&quot; data-tabid=&quot;table&quot; data-faicon=&quot;check-square-o&quot;&gt;复选、单选框&lt;/li&gt;</pre>
+            <p>关于<code>自定义折叠后的父节点图标</code>，li元素上添加属性：<code>data-faicon-close</code>。
             <hr>
             <h5>更多API及DEMO：<a href="http://www.ztree.me/" target="_blank">http://www.ztree.me/</a></h5>
         </fieldset>

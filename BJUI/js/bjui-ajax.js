@@ -633,11 +633,8 @@
     // BJUIAJAX DATA-API
     // ==============
     
-    $(document).on('submit.bjui.bjuiajax.data-api', '[data-toggle="ajaxform"]', function(e) {
-        var $this   = $(this)
-        var options = $this.data()
-        
-        if (!$this.isTag('form')) return
+    $(document).on('submit.bjui.bjuiajax.data-api', 'form[data-toggle="ajaxform"]', function(e) {
+        var $this = $(this), options = $this.data()
         
         Plugin.call($this, 'ajaxForm', options)
         

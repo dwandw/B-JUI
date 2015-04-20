@@ -123,6 +123,8 @@ $(function() {
 //console.log('IE:'+ (!$.support.leadingWhitespace))
 //菜单-事件
 function MainMenuClick(event, treeId, treeNode) {
+    event.preventDefault()
+    
     if (treeNode.isParent) {
         var zTree = $.fn.zTree.getZTreeObj(treeId)
         
@@ -134,7 +136,6 @@ function MainMenuClick(event, treeId, treeNode) {
         $(event.target).dialog({id:treeNode.tabid, url:treeNode.url, title:treeNode.name})
     else
         $(event.target).navtab({id:treeNode.tabid, url:treeNode.url, title:treeNode.name, fresh:treeNode.fresh, external:treeNode.external})
-    event.preventDefault()
 }
 </script>
 <!-- for doc begin -->
@@ -195,6 +196,7 @@ $(function(){
             <i class="fa fa-bars"></i>
         </button>
         <ul id="bjui-hnav-navbar">
+            <li style="width:204px;"><a>欢迎您，超级管理员！</a></li>
             <li><a href="javascript:;" data-toggle="slidebar"><i class="fa fa-check-square-o"></i> 表单元素</a>
                 <ul id="bjui-hnav-tree1" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true" data-noinit="true">
                     <li data-id="1" data-pid="0">表单元素</li>
@@ -281,12 +283,12 @@ $(function(){
                         <div id="bjui-collapse0" class="panel-collapse panelContent collapse in">
                             <div class="panel-body" >
                                 <ul id="bjui-tree0" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true">
-                                    <li data-id="1" data-pid="0">表单元素</li>
-                                    <li data-id="10" data-pid="1" data-url="form-button.html" data-tabid="form-button">按钮</li>
-                                    <li data-id="11" data-pid="1" data-url="form-input.html" data-tabid="form-input">文本框</li>
-                                    <li data-id="12" data-pid="1" data-url="form-select.html" data-tabid="form-select">下拉选择框</li>
-                                    <li data-id="13" data-pid="1" data-url="form-checkbox.html" data-tabid="table">复选、单选框</li>
-                                    <li data-id="14" data-pid="1" data-url="form.html" data-tabid="form">表单综合演示</li>
+                                    <li data-id="1" data-pid="0" data-faicon="th-large">表单元素</li>
+                                    <li data-id="10" data-pid="1" data-url="form-button.html" data-tabid="form-button" data-faicon="hand-o-up">按钮</li>
+                                    <li data-id="11" data-pid="1" data-url="form-input.html" data-tabid="form-input" data-faicon="terminal">文本框</li>
+                                    <li data-id="12" data-pid="1" data-url="form-select.html" data-tabid="form-select" data-faicon="caret-square-o-down">下拉选择框</li>
+                                    <li data-id="13" data-pid="1" data-url="form-checkbox.html" data-tabid="table" data-faicon="check-square-o">复选、单选框</li>
+                                    <li data-id="14" data-pid="1" data-url="form.html" data-tabid="form" data-faicon="list">表单综合演示</li>
                                     <li data-id="2" data-pid="0">表格</li>
                                     <li data-id="20" data-pid="2" data-url="table.html" data-tabid="table">普通表格</li>
                                     <li data-id="21" data-pid="2" data-url="table-fixed.html" data-tabid="table-fixed">固定表头表格</li>
@@ -300,7 +302,7 @@ $(function(){
                                     <li data-id="5" data-pid="0">框架组件</li>
                                     <li data-id="51" data-pid="5" data-url="tabs.html" data-tabid="tabs">选项卡</li>
                                     <li data-id="6" data-pid="0">其他插件</li>
-                                    <li data-id="61" data-pid="6" data-url="ztree.html" data-tabid="ztree">zTree</li>
+                                    <li data-id="61" data-pid="6" data-url="ztree.html" data-tabid="ztree" data-update="true">zTree ★</li>
                                     <li data-id="62" data-pid="6" data-url="ztree-select.html" data-tabid="ztree-select">zTree下拉选择</li>
                                     <li data-id="8" data-pid="0">综合应用</li>
                                     <li data-id="80" data-pid="8" data-url="table-layout.html" data-tabid="table-layout">局部刷新1</li>
@@ -318,16 +320,17 @@ $(function(){
                                 <ul id="bjui-tree1" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="false">
                                     <li data-id="99" data-pid="0">文件列表</li>
                                     <li data-id="100" data-pid="99" data-url="doc/base/filelist.html" data-tabid="doc-file">文件详解</li>
-                                    <li data-id="1" data-pid="0">框架介绍</li>
+                                    <li data-id="1" data-pid="0">框架介绍 ★</li>
                                     <li data-id="10" data-pid="1" data-url="doc/base/structure.html" data-tabid="doc-base">页面结构</li>
                                     <li data-id="11" data-pid="1" data-url="doc/base/init.html" data-tabid="doc-base">框架初始化</li>
-                                    <li data-id="12" data-pid="1" data-url="doc/base/navtab.html" data-tabid="doc-base">标签工作区(navtab)</li>
-                                    <li data-id="13" data-pid="1" data-url="doc/base/dialog.html" data-tabid="doc-base">弹窗工作区(dialog)</li>
-                                    <li data-id="14" data-pid="1" data-url="doc/base/idname.html" data-tabid="doc-base">元素ID命名规范</li>
-                                    <li data-id="15" data-pid="1" data-url="doc/base/data.html" data-tabid="doc-base">data属性</li>
-                                    <li data-id="16" data-pid="1" data-url="doc/base/api.html" data-tabid="doc-base">jQuery API调用</li>
-                                    <li data-id="17" data-pid="1" data-url="doc/base/event.html" data-tabid="doc-base">事件</li>
-                                    <li data-id="18" data-pid="1" data-url="doc/base/url.html" data-tabid="doc-base">URL动态赋值</li>
+                                    <li data-id="12" data-pid="1" data-url="doc/base/hnav.html" data-tabid="doc-base">横向导航菜单 ★</li>
+                                    <li data-id="13" data-pid="1" data-url="doc/base/navtab.html" data-tabid="doc-base">标签工作区(navtab)</li>
+                                    <li data-id="14" data-pid="1" data-url="doc/base/dialog.html" data-tabid="doc-base">弹窗工作区(dialog)</li>
+                                    <li data-id="15" data-pid="1" data-url="doc/base/idname.html" data-tabid="doc-base">元素ID命名规范</li>
+                                    <li data-id="16" data-pid="1" data-url="doc/base/data.html" data-tabid="doc-base">data属性</li>
+                                    <li data-id="17" data-pid="1" data-url="doc/base/api.html" data-tabid="doc-base">jQuery API调用</li>
+                                    <li data-id="18" data-pid="1" data-url="doc/base/event.html" data-tabid="doc-base">事件</li>
+                                    <li data-id="19" data-pid="1" data-url="doc/base/url.html" data-tabid="doc-base" data-update="true">URL动态赋值</li>
                                     <li data-id="2" data-pid="0">标签navtab</li>
                                     <li data-id="20" data-pid="2" data-url="doc/navtab/navtab.html" data-tabid="doc-navtab">创建navtab</li>
                                     <li data-id="21" data-pid="2" data-url="doc/navtab/navtab-op.html" data-tabid="doc-navtab">参数及方法</li>
@@ -396,19 +399,30 @@ $(function(){
                                 <span class="label label-default" style="vertical-align:middle;">(1群已满)</span>　
                                 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=96974f9b311cb8566e371703e2e4c2abb23c4835f4ec6c2893652f7a3b920c32"><img border="0" src="images/group.png" alt="B-JUI前端框架-群2" title="B-JUI前端框架-群2" style="vertical-align:top;"></a>
                             </h4>
-                            <div class="alert alert-success" role="alert" style="margin:0 0 5px; padding:5px 15px 0;">
-                                <strong>B-JUI开发团队欢迎你!</strong> <a href="http://weibo.com/xknaan" target="_blank">@萧克南</a>　<a href="http://www.topstack.cn" target="_blank">@小策一喋</a>
-                            </div>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <h5>官方论坛：<a href="http://www.b-jui.com/" target="_blank">http://www.b-jui.com/</a></h5>
-                                    <h5>项目地址：<a href="http://git.oschina.net/xknaan/B-JUI" target="_blank">GIT</a>　<a href="http://www.oschina.net/p/bootstrap-for-DWZ" target="_blank">OSCHINA</a></h5>
-                                    <h5>微博地址：<a href="http://weibo.com/xknaan" target="_blank">http://weibo.com/xknaan</a></h5>                                  
+                                <div class="col-md-4">
+                                    <div class="alert alert-success" role="alert" style="margin:0 0 5px; padding:5px 15px;">
+                                        <strong>B-JUI团队欢迎你!</strong>
+                                        <br><span class="label label-default">开发：</span> <a href="http://weibo.com/xknaan" target="_blank">@萧克南 （成都锦杨）</a>
+                                        <br><span class="label label-default">开发：</span> <a href="http://www.topstack.cn" target="_blank">@小策一喋 （北京）</a>
+                                        <br><span class="label label-default">测试 & 推广：</span> <a href="#" target="_blank">@Jack Yuan （成都锦杨）</a>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <h5>框架演示：<a href="http://b-jui.com/" target="_blank">http://b-jui.com/</a></h5>
-                                    <h5>DWZ(J-UI)官网：<a href="http://www.j-ui.com/" target="_blank">http://www.j-ui.com/</a></h5>
-                                    <h5>Bootstrap中文网：<a href="http://www.bootcss.com/" target="_blank">http://www.bootcss.com/</a></h5>
+                                <div class="col-md-4">
+                                    <div class="alert alert-info" role="alert" style="margin:0 0 5px; padding:5px 15px;">
+                                        <h5>官方论坛：<a href="http://www.b-jui.com/" target="_blank">http://www.b-jui.com/</a></h5>
+                                        <h5>项目地址：<a href="http://git.oschina.net/xknaan/B-JUI" target="_blank">GIT</a>　<a href="http://www.oschina.net/p/bootstrap-for-DWZ" target="_blank">OSCHINA</a></h5>
+                                        <h5>微博地址：<a href="http://weibo.com/xknaan" target="_blank">http://weibo.com/xknaan</a></h5>
+                                        <h5>PHP整合：</h5>
+                                    </div>                                  
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="alert alert-info" role="alert" style="margin:0 0 5px; padding:5px 15px;">
+                                        <h5>框架演示：<a href="http://b-jui.com/" target="_blank">http://b-jui.com/</a></h5>
+                                        <h5>DWZ(J-UI)官网：<a href="http://www.j-ui.com/" target="_blank">http://www.j-ui.com/</a></h5>
+                                        <h5>Bootstrap中文网：<a href="http://www.bootcss.com/" target="_blank">http://www.bootcss.com/</a></h5>
+                                        <h5>JAVA整合：</h5>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -417,7 +431,7 @@ $(function(){
             </div>
         </div>
     </div>
-    <footer id="bjui-footer">Copyright &copy; 2013 - 2015　<a href="http://b-jui.com/" target="_blank">B-JUI 前端框架</a>　
+    <footer id="bjui-footer">Copyright &copy; 2013 - 2015　<a href="http://www.cdjinyang.com/" target="_blank">成都锦杨科技</a>　
         <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1252983288'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/stat.php%3Fid%3D1252983288%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
     </footer>
 </body>

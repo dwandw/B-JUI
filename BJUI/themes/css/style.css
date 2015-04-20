@@ -541,6 +541,7 @@ span.tmpzTreeMove_arrow,.ztree .tree_add, .ztree .tree_del,
 .ztree li span.button.edit:hover{background-position:-265px -25px;}
 .ztree li span.button.remove:hover{background-position:-265px -46px;}
 .ztree li span.button.ico_loading{margin-right:2px; background:url(./img/loading.gif) no-repeat scroll 0 0 transparent; vertical-align:middle;}
+.ztree li a.faicon > span.button{text-indent:-3px; font-size:14px; line-height:17px; text-align:center; background:none !important;}
 ul.tmpTargetzTree{background-color:#e5e5e5; opacity:0.8; filter:alpha(opacity=80);}
 span.tmpzTreeMove_arrow{position:absolute; display:inline-block; margin:2px 0 0 1px; padding:0; width:30px; height:20px; border:0 none; background-color:transparent; background-repeat:no-repeat; background-attachment:scroll; background-position:-196px -81px;}
 ul.ztree.zTreeDragUL{position:absolute; margin:0; padding:0; width:auto; height:auto; overflow:hidden; background-color:#cfcfcf; border:1px #929292 dotted; opacity:0.8; filter:alpha(opacity=80);}
