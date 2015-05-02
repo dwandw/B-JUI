@@ -35,7 +35,7 @@
     }
     
     Tabledit.DEFAULTS = {
-        
+        singleNoindex : true
     }
     
     Tabledit.EVENTS = {
@@ -138,6 +138,11 @@
                                     $pic.html($td.html())
                                 } else if ($child.hasClass('wrap_bjui_btn_box')) {
                                     $child.find('input[data-toggle]').attr('value', val +'')
+                                } else if ($child.is('textarea')) {
+                                    $child.html(val)
+                                    if ($child.attr('data-toggle') == 'kindeditor') {
+                                        $child.attr('data-toggle-old', 'kindeditor').removeAttr('data-toggle')
+                                    }
                                 } else {
                                     $child.attr('value', val +'')
                                 }
@@ -156,16 +161,24 @@
                         _doEdit($(this).closest('tr'))
                     })
                     .on('click.bjui.tabledit.readonly', '[data-toggle="dosave"]', function(e) {
-                        var $tr = $(this).closest('tr'), callback = that.options.callback
+                        var $tr = $(this).closest('tr'), index = $tr.index(), callback = that.options.callback
                         
                         if (that.options.action) {
                             $tr.wrap('<form action="" method="POST"></form>')
                             if ($tr.attr('data-id')) {
                                 var name = $table.find('> thead > tr:eq(0)').data('idname') || 'id'
-                                $tr.before('<input type="hidden" name="'+ name.replaceSuffix($tr.index()) +'" value="'+ $tr.attr('data-id') +'">')
+
+                                $tr.before('<input type="hidden" name="'+ name.replaceSuffix(index) +'" value="'+ $tr.attr('data-id') +'">')
                             }
+                            
                             var data = $tr.parent().serializeArray()
                             
+                            if (that.options.singleNoindex) {
+                                $.each(data, function(ii, nn) {
+                                    $.extend(nn, {name:nn.name.replaceSuffix(0)})
+                                })
+                            }
+
                             $tr.prev('input').remove()
                             $tr
                                 .unwrap()
@@ -194,18 +207,18 @@
                 
                 function _doEdit($tr) {
                     $tr.removeClass('readonly').find('> td *').each(function() {
-                        var $this = $(this), $td = $this.closest('td'), val = $td.data('val'), toggle = $this.attr('data-toggle-old')
+                        var $this = $(this), $td = $this.closest('td'), val = $td.data('val'), toggle = $this.attr('data-toggle-old'), readonly = $td.data('readonly')
                         
                         if (typeof val == 'undefined') val = $td.html()
                         if ($td.data('notread')) return true
                         if ($this.isTag('select'))
                             $this.val($td.attr('data-val')).selectpicker('refresh').nextAll('.bootstrap-select').removeClass('readonly').find('button').removeClass('disabled')
                         if ($this.is(':checkbox')) {
-                            $this.val($td.attr('data-val')).closest('.icheckbox_minimal-purple').removeClass('disabled')
+                            $this.closest('.icheckbox_minimal-purple').removeClass('disabled')
                             $this.closest('.icheckbox_minimal-purple').find('ins').removeClass('readonly')
                         }
                         if ($this.is(':radio')) {
-                            $this.val($td.attr('data-val')).closest('.iradio_minimal-purple').removeClass('disabled')
+                            $this.closest('.iradio_minimal-purple').removeClass('disabled')
                             $this.closest('.iradio_minimal-purple').find('ins').removeClass('readonly')
                         }
                         if (toggle) {
@@ -214,9 +227,15 @@
                             if (toggle == 'spinner') {
                                 $this.spinner('destroy').spinner()
                             }
+                            if (toggle == 'kindeditor') {
+                                //$this.attr('data-toggle', 'kindeditor')
+                                $td.initui()
+                            }
                         }
-                        if ($this.is(':text') || $this.is('textarea'))
+                        if ($this.is(':text') || $this.is('textarea')) {
                             $this.off('keydown.readonly')
+                            if (readonly) $this.prop('readonly', true)
+                        }
                         
                         $this.find('.bjui-lookup, .bjui-spinner, .bjui-upload').show()
                     })
@@ -243,10 +262,13 @@
                         if (toggle) {
                             if (toggle == 'doedit' || toggle == 'dosave') return true
                             else $this.removeAttr('data-toggle').attr('data-toggle-old', toggle)
+                            if (toggle == 'kindeditor') {
+                                KindEditor.remove($this)
+                            }
                         }
                         if ($this.is(':text') || $this.is('textarea'))
                             $this.on('keydown.readonly', function(e) { e.preventDefault() })
-                            
+                        
                         $this.find('.bjui-lookup, .bjui-spinner, .bjui-upload').hide()
                     })
                     
@@ -305,13 +327,14 @@
                 }
                 
                 if ($btnDel.is('[href^=javascript:]') || $btnDel.is('[href^="#"]')) {
-                    if ($btnDel.data('confirmMsg')) {
+                    /*if ($btnDel.data('confirmMsg')) {
                         $btnDel.alertmsg('confirm', $btnDel.data('confirmMsg'), {okCall: function() {
                             _delRow()
                         }})
                     } else {
                         _delRow()
-                    }
+                    }*/
+                    _delRow()
                 } else {
                     $btnDel.bjuiajax('doAjax', {
                         url      : $btnDel.attr('href'),

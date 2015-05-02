@@ -549,7 +549,8 @@
         $box.find('[data-toggle="kindeditor"]').each(function() {
             var $editor = $(this), options = $editor.data()
             
-            if (options.items)                     options.items = options.items.replaceAll('\'', '').replaceAll(' ', '').split(',')
+            if (options.items && typeof options.items == 'string')
+                options.items = options.items.replaceAll('\'', '').replaceAll(' ', '').split(',')
             if (options.afterUpload)         options.afterUpload = options.afterUpload.toFunc()
             if (options.afterSelectFile) options.afterSelectFile = options.afterSelectFile.toFunc()
             if (options.confirmSelect)     options.confirmSelect = options.confirmSelect.toFunc()
