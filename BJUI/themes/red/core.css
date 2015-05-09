@@ -9,6 +9,7 @@ fieldset{border-color:#fc5555;}
 .btn-sel:active,
 .btn-sel.active{background-color:#fee6e6; border-color:#fc5555;}
 .btn-default{color:#fc5555; background-color:#fff9f3; border-color:#fc5555;}
+.btn-default.selectpicker{background-color:#fff;}
 .btn-default:hover,
 .btn-default:focus,
 .btn-default:active,
@@ -138,6 +139,41 @@ fieldset{border-color:#fc5555;}
 #bjui-taskbar > .taskbarRight.disabled{color:#999; background:#fff9f3;}
 #bjui-taskbar > .taskbarLeft.disabled:hover,
 #bjui-taskbar > .taskbarRight.disabled:hover{color:#999; background:#fff9f3;}
+/*  datagrid */
+.bjui-datagrid .datagrid-title{color:#fc5555; background-color:#fee6e6;}
+.bjui-datagrid .datagrid-toolbar{background-color:#fff9f3;}
+.bjui-datagrid .table > thead > tr > th:first-child{border-left-color:#fff9f3;}
+.bjui-datagrid .datagrid-box-h{background-color:#fee6e6; border-bottom-color:#fc5555;}
+.bjui-datagrid .datagrid-box-f{background-color:#fff9f3;}
+.bjui-datagrid .datagrid-box-f .table > thead > tr > th .datagrid-calcbox{color:red; background-color:#fee6e6;}
+.bjui-datagrid .table > tbody > tr > td.datagrid-linenumber-td{color:red;}
+.bjui-datagrid .table.table-hover > tbody > tr:hover > td.datagrid-linenumber-td{background-color:#fee6e6;}
+.bjui-datagrid .table > tbody > tr.datagrid-hover > td{background-color:#fee6e6;}
+.bjui-datagrid .table > thead > tr > th > div > .datagrid-cell > .datagrid-column-menu-btn > .btn.active,
+.bjui-datagrid .table > thead > tr > th > div > .datagrid-cell > .datagrid-column-menu-btn > .btn:hover,
+.bjui-datagrid .table > thead > tr > th:hover > div > .datagrid-cell > .datagrid-column-menu-btn > .btn:hover,
+.bjui-datagrid .table > thead > tr > th > div > .datagrid-cell > .datagrid-column-menu-btn > .btn:focus{background-color:red;}
+.bjui-datagrid .table > thead > tr > th:hover > div > .datagrid-cell > .datagrid-column-menu-btn > .btn{color:red;}
+.bjui-datagrid .table > thead > tr > th.filter-active > div > .datagrid-cell > .datagrid-column-menu-btn > .btn{background-color:red;}
+.bjui-datagrid .table > thead > tr > th.datagrid-quicksort-th:hover{background-color:#fee6e6;}
+.bjui-datagrid .table > thead > tr > th.datagrid-quicksort-th > div > .datagrid-label > i{color:red;}
+.bjui-datagrid > .datagrid-menu-box > ul > li > a{color:#fc5555;}
+.bjui-datagrid > .datagrid-menu-box > ul > li > a:hover,
+.bjui-datagrid > .datagrid-menu-box > ul > li.active > a{background-color:#fc5555;}
+.bjui-datagrid .datagrid-filter-box fieldset > span input{border-color:#fc5555;}
+.datagrid-showhide-box > li > a{color:#fc5555;}
+.datagrid-showhide-box > li > a:hover{background-color:#fc5555;}
+.bjui-datagrid .table > thead > tr > th.datagrid-sortable:hover a:hover{background-color:red;}
+.bjui-datagrid .table > tbody > tr.datagrid-selected-tr > td{background-color:#ffb584 !important;}
+.bjui-datagrid .table > tbody > tr > td.datagrid-td-selected{border-color:red;}
+.bjui-datagrid .table > tbody > tr > td.datagrid-td-selected-drag{border-color:#d285e5;}
+.bjui-datagrid > .datagrid-paging-box{background-color:#fee6e6;}
+.bjui-datagrid > .datagrid-paging-box > .paging-content > .datagrid-paging > .pagination > li > a:focus{color:red;}
+.bjui-datagrid > .datagrid-paging-box > .paging-content > .datagrid-paging > .pagination > li.active > a,
+.bjui-datagrid > .datagrid-paging-box > .paging-content > .datagrid-paging > .pagination > li.active > a:focus,
+.bjui-datagrid > .datagrid-paging-box > .paging-content > .datagrid-paging > .pagination > li.active > a:hover{background-color:#fc5555;}
+.bjui-datagrid > .resizeProxy{background-color:red;}
+.datagrid-dialog-edit-form > p:hover{background-color:#fff9f3;}
 /* Tablefixed */
 .bjui-tablefixed > .resizeMarker,
 .bjui-tablefixed > .resizeProxy{background:#fc5555;}

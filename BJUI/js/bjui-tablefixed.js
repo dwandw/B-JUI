@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI v1.1 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-tablefixed.js v1.0
+ * B-JUI: bjui-tablefixed.js v1.1
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.stable.js (author:ZhangHuihua@msn.com, Roger Wu)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-tablefixed.js
@@ -410,15 +410,17 @@
                     height = $this.height(),
                     $fixed = $this.find('.bjui-tablefixed'),
                     fixedH = $fixed.find('.fixedtableThead').height(),
-                    newWidth = that.options.newWidth
-                var realWidth
+                    newWidth = that.options.newWidth,
+                    realWidth
                 
                 if ($this.length && $this.is(':hidden')) {
-                    $navtab.show()
-                    width  = $this.innerWidth()
-                    height = $this.height()
-                    fixedH = $fixed.find('.fixedtableHeader').height()
-                    $navtab.hide()
+                    if (!$this.hasClass('tab-pane')) {
+                        $navtab.show()
+                        width  = $this.innerWidth()
+                        height = $this.height()
+                        fixedH = $fixed.find('.fixedtableHeader').height()
+                        $navtab.hide()
+                    }
                 }
                 if (width) {
                     $this.find('.bjui-tablefixed').each(function() {

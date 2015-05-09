@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI v1.1 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-lookup.js v1.0
+ * B-JUI: bjui-lookup.js v1.1
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.database.js (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-lookup.js
@@ -85,7 +85,7 @@
             $box.css({'position':'relative', 'display':'inline-block'})
             
             $.each(that.options, function(key, val) {
-                if (key != 'toggle') that.$lookBtn.attr('data-'+ key, val)
+                if (key != 'toggle') that.$lookBtn.data(key, val)
             })
             this.$lookBtn.css({'height':height, 'lineHeight':height +'px'}).appendTo($box)
             this.$lookBtn.on('selectstart', function() { return false })
@@ -130,33 +130,38 @@
         this.setVal(args,type)
     }
     
-    Lookup.prototype.setVal = function(args,type) {
+    Lookup.prototype.setVal = function(args, type) {
         var that = this
         var $box = $currentLookup.closest('.unitBox')
         var newValue  /* @description 增加 @author 小策一喋 */
         
-        $box.find(':input').each(function() {
-            var $input = $(this), inputName = $input.attr('name')
-            
-            for (var key in args) {
-                var name = that.getField(key)
+        // for datagrid
+        if ($currentLookup.data('customEvent')) {
+            $currentLookup.trigger('customEvent.bjui.lookup', [args])
+        } else {
+            $box.find(':input').each(function() {
+                var $input = $(this), inputName = $input.attr('name')
                 
-                if (name == inputName) {
+                for (var key in args) {
+                    var name = that.getField(key)
+                    
+                    if (name == inputName) {
 
-                    /* @description 增加 追加参数 @author 小策一喋 */
-                    if(type == 1)
-                        newValue = $input.val() ? $input.val() + ',' + args[key] : args[key]
-                    else
-                        newValue = args[key]
+                        /* @description 增加 追加参数 @author 小策一喋 */
+                        if(type == 1)
+                            newValue = $input.val() ? $input.val() + ',' + args[key] : args[key]
+                        else
+                            newValue = args[key]
 
-                    $input
-                        .val(newValue) /* @description 修改 args[key] 为 newValue @author 小策一喋 */
-                        .trigger(Lookup.EVENTS.afterChange, {value:args[key]})
-                        
-                    break
+                        $input
+                            .val(newValue) /* @description 修改 args[key] 为 newValue @author 小策一喋 */
+                            .trigger(Lookup.EVENTS.afterChange, {value:args[key]})
+                            
+                        break
+                    }
                 }
-            }
-        })
+            })
+        }
         
         this.$element.dialog('closeCurrent')
     }

@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI v1.1 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-navtab.js v1.0
+ * B-JUI: bjui-navtab.js v1.1
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.navTab.js (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-navtab.js
@@ -369,7 +369,11 @@
     Navtab.prototype.openTab = function() {
         var that = this, $element = this.$element, options = this.options, tools = this.tools
         
-        if (!(options.url)) {
+        if (options.options && typeof options.options == 'string') options.options = options.options.toObj()
+        $.extend(that.options, typeof options.options == 'object' && options.options)
+        
+        if (!options.url && options.href) options.url = options.href
+        if (!options.url) {
             BJUI.debug('Navtab Plugin: Error trying to open a navtab, url is undefined!')
             return
         } else {
@@ -630,16 +634,10 @@
     // ==============
 
     $(document).on('click.bjui.navtab.data-api', '[data-toggle="navtab"]', function(e) {
-        var $this   = $(this)
-        var href    = $this.attr('href')
-        var options = $this.data()
+        var $this   = $(this), href = $this.attr('href'), options = $this.data()
         
         if (!options.title) options.title = $this.text()
-        if (href) {
-            if (!options.url) options.url = href
-            if (options.url && options.url != href)
-                options.url = href
-        }
+        if (href) options.href = href
         
         Plugin.call($this, options)
         

@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI v1.1 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-dialog.js v1.0
+ * B-JUI: bjui-dialog.js v1.1
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.dialog.js, dwz.dialogDrag.js, dwz.resize.js (author:Roger Wu)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-dialog.js
@@ -140,8 +140,12 @@
         var $body   = $('body')
         var $dialog = $body.data(options.id)
         
+        if (options.options && typeof options.options == 'string') options.options = options.options.toObj()
+        $.extend(that.options, typeof options.options == 'object' && options.options)
+        
         if (!options.target || !$(options.target).length) {
-            if (!(options.url)) {
+            if (!options.url && options.href) options.url = options.href
+            if (!options.url) {
                 BJUI.debug('Dialog Plugin: Error trying to open a dialog, url is undefined!')
                 return
             } else {
@@ -667,16 +671,10 @@
     // ==============
 
     $(document).on('click.bjui.dialog.data-api', '[data-toggle="dialog"]', function(e) {
-        var $this   = $(this)
-        var href    = $this.attr('href')
-        var options = $this.data()
+        var $this   = $(this), href = $this.attr('href'), options = $this.data()
         
         if (!options.title) options.title = $this.text()
-        if (href) {
-            if (!options.url) options.url = href
-            if (options.url && options.url != href)
-                options.url = href
-        }
+        if (href) options.href = href
         
         Plugin.call($this, options)
         

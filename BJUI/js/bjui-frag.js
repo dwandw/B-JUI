@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI v1.1 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-frag.js v1.0
+ * B-JUI: bjui-frag.js v1.1
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.frag.xml (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-frag.js
@@ -43,6 +43,36 @@
         next   : 'Next page',
         jumpto : 'Jump page number',
         jump   : 'Jump'
+    })
+    
+    BJUI.setRegional('datagrid', {
+        asc       : 'ASC',
+        desc      : 'DESC',
+        showhide  : 'Show/Hide columns',
+        filter    : 'Filter',
+        clear     : 'Clear',
+        lock      : 'Lock',
+        unlock    : 'Unlock',
+        add       : 'Add',
+        edit      : 'Edit',
+        save      : 'Save',
+        update    : 'Update',
+        cancel    : 'Cancel',
+        del       : 'Delete',
+        prev      : 'Prev',
+        next      : 'Next',
+        refresh   : 'Refresh',
+        query     : 'Query',
+        import    : 'Import',
+        'export'  : 'Export',
+        all       : 'All',
+        'true'    : 'True',
+        'false'   : 'False',
+        selectMsg : 'Not selected any rows!',
+        saveMsg   : 'No rows need to save!',
+        editMsg   : 'Please save the edited row!',
+        delMsg    : 'Sure you want to delete this row?',
+        delMsgM   : 'Sure you want to delete selected rows?'
     })
     
     BJUI.setRegional('progressmsg', 'Data loading, please waiting...')
@@ -155,6 +185,61 @@
                     '    </li>' +
                     '    <li class="jumpto"><span class="p-input"><input class="form-control input-sm-pages" type="text" size="2.6" value="#pageCurrent#" title="#jumpto#"></span><a class="goto" href="javascript:;" title="#jump#"><i class="fa fa-chevron-right"></i></a></li>' +
                     '</ul>'
+        ,
+        gridPaging: '<ul class="pagination">' +
+                    '    <li class="page-total">' +
+                    '        <span title="#total#">#count#</span>' +
+                    '    </li>' +
+                    '    <li class="page-jumpto"><span class="page-input"><input class="form-control input-sm-pages" type="text" size="3.2" value="#pageCurrent#" title="#jumpto#"></span></li>' +
+                    '    <li class="page-first btn-nav">' +
+                    '        <a href="javascript:;" title="#first#"><i class="fa fa-step-backward"></i></a>' +
+                    '    </li>' +
+                    '    <li class="page-prev btn-nav">' +
+                    '        <a href="javascript:;" title="#prev#"><i class="fa fa-backward"></i></a>' +
+                    '    </li>' +
+                    '    <li class="page-next btn-nav">' +
+                    '        <a href="javascript:;" title="#next#"><i class="fa fa-forward"></i></a>' +
+                    '    </li>' +
+                    '    <li class="page-last btn-nav">' +
+                    '        <a href="javascript:;" title="#last#"><i class="fa fa-step-forward"></i></a>' +
+                    '    </li>' +
+                    '</ul>'
+        ,
+        gridPageNum : '<li class="page-num#active#"><a href="javascript:;">#num#</a></li>',
+        gridMenu : '<div class="datagrid-menu-box">'
+                 + '    <ul>'
+                 + '        <li class="datagrid-li-asc"><a href="javascript:;"><span class="icon"><i class="fa fa-sort-amount-asc"></i></span><span class="title">#asc#</span></a></li>'
+                 + '        <li class="datagrid-li-desc"><a href="javascript:;"><span class="icon"><i class="fa fa-sort-amount-desc"></i></span><span class="title">#desc#</span></a></li>'
+                 + '        <li class="datagrid-li-filter"><a href="javascript:;"><span class="icon"><i class="fa fa-filter"></i></span><span class="title">#filter#</span><span class="arrow"></span></a></li>'
+                 + '        <li class="datagrid-li-showhide"><a href="javascript:;"><span class="icon"><i class="fa fa-check-square-o"></i></span><span class="title">#showhide#</span><span class="arrow"></span></a></li>'
+                 + '        <li class="datagrid-li-lock"><a href="javascript:;"><span class="icon"><i class="fa fa-lock"></i></span><span class="title">#lock#</span></a></li>'
+                 + '        <li class="datagrid-li-unlock disable"><a href="javascript:;"><span class="icon"><i class="fa fa-unlock"></i></span><span class="title">#unlock#</span></a></li>'
+                 + '    </ul>'
+                 + '</div>'
+        ,
+        gridFilter: '<div class="datagrid-filter-box">'
+                  + '<fieldset>'
+                  + '<legend>#label#</legend>'
+                  + '<span class="filter-a"></span>'
+                  + '<span class="filter-and"><select data-toggle="selectpicker" data-container="true" data-width="100%"><option value="and">AND</option><option value="or">OR</option></select></span>'
+                  + '<span class="filter-b"></span>'
+                  + '<span class="filter-ok"><button type="button" class="btn-green ok" data-icon="check">#filter#</button><button type="button" class="btn-orange clear" data-icon="remove">#clear#</button></span>'
+                  + '</fieldset>'
+                  + '</div>'
+        ,
+        gridShowhide: '<li data-index="#index#" class="datagrid-col-check"><a href="javascript:;"><i class="fa fa-check-square-o"></i>#label#</a></li>',
+        gridEditBtn : '<button type="button" class="btn-green edit" data-icon="edit">#edit#</button>'
+                    + '<button type="button" class="btn-green update" data-icon="edit">#update#</button>'
+                    + '<button type="button" class="btn-green save" data-icon="check">#save#</button>'
+                    + '<button type="button" class="btn-orange cancel" data-icon="undo">#cancel#</button>'
+                    + '<button type="button" class="btn-orange delete" data-icon="remove">#del#</button>'
+        ,
+        gridDialogEditBtns: '<ul>'
+                          + '    <li class="pull-left"><button type="button" class="btn btn-orange prev" data-icon="arrow-up">#prev#</button></li>'
+                          + '    <li class="pull-left"><button type="button" class="btn btn-orange next" data-icon="arrow-down">#next#</button></li>'
+                          + '    <li><button type="button" class="btn btn-red cancel" data-icon="remove">#cancel#</button></li>'
+                          + '    <li><button type="button" class="btn btn-default save" data-icon="save">#save#</button></li>'
+                          + '</ul>'
         ,
         alertBoxFrag: '<div id="bjui-alertMsgBox" class="bjui-alert"><div class="alertContent"><div class="#type#"><div class="alertInner"><h1><i class="fa #fa#"></i>#title#</h1><div class="msg">#message#</div></div><div class="toolBar"><ul>#btnFragment#</ul></div></div></div></div>',
         alertBtnFrag: '<li><button class="btn btn-#class#" rel="#callback#" type="button">#btnMsg#</button></li>',

@@ -1,13 +1,3 @@
-<script type="text/javascript">
-function pic_form_upload_success(data) {
-    var json = jQuery.parseJSON(data);
-    DWZ.ajaxDone(json);
-    if (json.statusCode == DWZ.statusCode.ok) {
-        $('#j_form_pic').val(json.navTabId);
-        $('#j_form_span_pic').html('<img src="'+ json.navTabId +'" width="100" />');
-    }
-}
-</script>
 <div class="bjui-pageContent">
     <div style="margin:15px auto 0; width:800px;">
         <fieldset>
@@ -30,7 +20,7 @@ function pic_form_upload_success(data) {
                         <td>
                             <a href="javascript:;" class="btn btn-default" data-toggle="alertmsg" data-type="correct" data-msg="我是正确的提示信息！">正确提示</a>
                         </td>
-                        <td>$(selector).alertmsg('correct', '正确的提示内容！')</td>
+                        <td>$(selector).alertmsg('ok', '正确的提示内容！') || $(selector).alertmsg('correct', '正确的提示内容！')</td>
                     </tr>
                     <tr>
                         <td>
@@ -52,6 +42,8 @@ function pic_form_upload_success(data) {
                     </tr>
                 </tbody>
             </table>
+            <hr>
+            <p><a href="doc/alertmsg/alertmsg.html" data-toggle="navtab" data-id="doc-alertmsg" data-title="提示框 alertmsg">点我查看更多参数设置</a></p>
         </fieldset>
     </div>
 </div>

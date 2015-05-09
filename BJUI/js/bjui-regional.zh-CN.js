@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI v1.1 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-regional.zh-CN.js v1.0
+ * B-JUI: bjui-regional.zh-CN.js v1.1
  * @author K'naan (xknaan@163.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-regional.zh-CN.js
  * ========================================================================
@@ -42,14 +42,47 @@
         
         /* 分页 */
         BJUI.setRegional('pagination', {
-            first  : '首页',
-            last   : '末页',
-            prev   : '上一页',
-            next   : '下一页',
-            jumpto : '跳转页号',
-            jump   : '跳转'
+            total   : '总记录数/总页数',
+            first   : '首页',
+            last    : '末页',
+            prev    : '上一页',
+            next    : '下一页',
+            jumpto  : '输入跳转页码，回车确认',
+            jump    : '跳转',
+            page    : '页',
+            refresh : '刷新'
         })
         
+        BJUI.setRegional('datagrid', {
+            asc       : '升序',
+            desc      : '降序',
+            showhide  : '显示/隐藏 列',
+            filter    : '过滤',
+            clear     : '清除',
+            lock      : '锁定列',
+            unlock    : '解除锁定',
+            add       : '添加',
+            edit      : '编辑',
+            save      : '保存',
+            update    : '更新',
+            cancel    : '取消',
+            del       : '删除',
+            prev      : '上一条',
+            next      : '下一条',
+            refresh   : '刷新',
+            query     : '查询',
+            import    : '导入',
+            'export'  : '导出',
+            all       : '全部',
+            'true'    : '是',
+            'false'   : '否',
+            selectMsg : '未选中任何行！',
+            editMsg   : '请先保存编辑行！',
+            saveMsg   : '没有需要保存的行！',
+            delMsg    : '确定要删除该行吗？',
+            delMsgM   : '确定要删除选中行？'
+        })
+    
         /* ajax加载提示 */
         BJUI.setRegional('progressmsg', '正在努力加载数据，请稍等...')
         
@@ -147,7 +180,14 @@
                 ,chinese: [/^[\u0391-\uFFE5]+$/, '请输入中文']
                 ,username: [/^\w{3,12}$/, '请输入3-12位数字、字母、下划线']
                 ,password: [/^[0-9a-zA-Z]{6,16}$/, '密码由6-16位数字、字母组成']
-                ,accept: function (element, params){
+                ,pattern:function(element, params) {
+                    if (!params) return true
+                    
+                    var date = element.value.parseDate(params)
+                    
+                    return (!date ? this.renderMsg('错误的日期时间格式！', params) : true)
+                }
+                ,accept: function(element, params) {
                     if (!params) return true
                     
                     var ext = params[0]

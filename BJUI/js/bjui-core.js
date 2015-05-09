@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI v1.1 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-core.js v1.0
+ * B-JUI: bjui-core.js v1.1
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.core.js (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-core.js
@@ -22,10 +22,14 @@
         JSPATH     : 'BJUI/',
         PLUGINPATH : 'BJUI/plugins/',
         IS_DEBUG   : false,
+        KeyPressed : { //key press state
+            ctrl  : false,
+            shift : false
+        },
         keyCode: {
-            ENTER : 13, ESC  : 27, END: 35, HOME: 36,
-            SHIFT : 16, TAB  : 9,
-            LEFT  : 37, RIGHT: 39, UP : 38, DOWN: 40,
+            ENTER : 13, ESC  : 27, END : 35, HOME : 36,
+            SHIFT : 16, CTRL : 17, TAB : 9,
+            LEFT  : 37, RIGHT: 39, UP  : 38, DOWN : 40,
             DELETE: 46, BACKSPACE: 8
         },
         eventType: {
@@ -46,8 +50,8 @@
             afterCloseDialog  : 'bjui.afterCloseDialog'
         },
         pageInfo: {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'},
+        alertMsg: {displayPosition:'topcenter', alertTimeout: 6000}, //alertmsg display position && close timeout
         ajaxTimeout: 30000,
-        alertTimeout: 6000, //alertmsg close timeout
         statusCode: {ok:200, error:300, timeout:301},
         keys: {statusCode:'statusCode', message:'message'},
         ui: {
@@ -78,13 +82,13 @@
             
             $.extend(BJUI.statusCode, op.statusCode)
             $.extend(BJUI.pageInfo, op.pageInfo)
+            $.extend(BJUI.alertMsg, op.alertMsg)
             $.extend(BJUI.loginInfo, op.loginInfo)
             $.extend(BJUI.ui, op.ui)
             
             if (op.JSPATH) this.JSPATH = op.JSPATH
             if (op.PLUGINPATH) this.PLUGINPATH = op.PLUGINPATH
             if (op.ajaxTimeout) this.ajaxTimeout = op.ajaxTimeout
-            if (op.alertTimeout) this.alertTimeout = op.alertTimeout
             
             this.IS_DEBUG = op.debug || false
             this.initEnv()
@@ -168,6 +172,27 @@
         regional: {},
         setRegional: function(key, value) {
             BJUI.regional[key] = value
+        },
+        getRegional : function(key) {
+            if (String(key).indexOf('.') >= 0) {
+                var msg, arr = String(key).split('.')
+                
+                for (var i = 0; i < arr.length; i++) {
+                    if (!msg) msg = BJUI.regional[arr[i]]
+                    else msg = msg[arr[i]]
+                }
+                
+                return msg
+            } else {
+                return BJUI.regional[key]
+            }
+        },
+        doRegional: function(frag, regional) {
+            $.each(regional, function(k, v) {
+                frag = frag.replaceAll('#'+ k +'#', v)
+            })
+            
+            return frag
         }
     }
     

@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI v1.1 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-plugins.js v1.0
+ * B-JUI: bjui-plugins.js v1.1
  * @author K'naan (xknaan@163.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-plugins.js
  * ========================================================================
@@ -19,7 +19,7 @@
     
     $(document).on(BJUI.eventType.initUI, function(e) {
         var $box    = $(e.target)
-
+        
         // UI init begin...
         
         /* i-check */
@@ -30,7 +30,7 @@
                 id       = $element.attr('id'),
                 name     = $element.attr('name'),
                 label    = $element.data('label')
-                
+            
             if (label) $element.after('<label for="'+ id +'" class="ilabel">'+ label +'</label>')
             
             $element
@@ -225,6 +225,7 @@
             if (!options.style) $element.data('style', 'btn-default')
             if (!options.width) $element.data('width', 'auto')
             if (!options.container) $element.data('container', 'body')
+            else if (options.container == true) $element.attr('data-container', 'false').data('container', false)
             
             $element.selectpicker()
             
@@ -247,8 +248,12 @@
         
         /* zTree - plugin */
         $box.find('[data-toggle="ztree"]').each(function() {
-            var $this = $(this)
-            var op    = $this.data()
+            var $this = $(this), op = $this.data(), options = op.options, _setting
+            
+            if (options && typeof options == 'string') options = options.toObj()
+            if (options) $.extend(op, typeof options == 'object' && options)
+            
+            _setting = op.setting
             
             if (!op.nodes) {
                 op.nodes = []
@@ -261,13 +266,26 @@
                     op.nodes.push(node)
                 })
                 $this.empty()
+            } else {
+                if (typeof op.nodes == 'string') {
+                    if (op.nodes.indexOf('[') >= 0 || op.nodes.indexOf('{') >= 0) {
+                        op.nodes = op.nodes.toObj()
+                    } else {
+                        op.nodes = op.nodes.toFunc()
+                    }
+                }
+                if (typeof op.nodes == 'function') {
+                    op.nodes = op.nodes.call(this)
+                }
+                
+                $this.removeAttr('data-nodes')
             }
             
             if (!op.showRemoveBtn) op.showRemoveBtn = false
             if (!op.showRenameBtn) op.showRenameBtn = false
             if (op.addHoverDom && typeof op.addHoverDom != 'function')       op.addHoverDom    = (op.addHoverDom == 'edit')    ? _addHoverDom    : op.addHoverDom.toFunc()
             if (op.removeHoverDom && typeof op.removeHoverDom != 'function') op.removeHoverDom = (op.removeHoverDom == 'edit') ? _removeHoverDom : op.removeHoverDom.toFunc()
-            if (!op.maxAddLevel)   op.maxAddLevel    = 2
+            if (!op.maxAddLevel)   op.maxAddLevel   = 2
             
             var setting = {
                 view: {
@@ -306,6 +324,9 @@
                     }
                 }
             }
+            
+            if (_setting && typeof _setting == 'string') _setting = _setting.toObj()
+            if (_setting) $.extend(true, setting, typeof _setting == 'object' && _setting)
             
             $.fn.zTree.init($this, setting, op.nodes)
             

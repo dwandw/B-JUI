@@ -29,6 +29,10 @@ function doc_navtab_onClose() {
                 <pre class="brush: html">
                     <button type="button" class="btn-green" data-toggle="navtab" data-id="mynavtab" data-reload-warn="已打开业务页面，确认将重新载入?" data-url="mytab.html?d=2" data-title="我的业务页面">打开navtab</button>
                 </pre>
+                <span class="label label-default">DOM示例3(参数集合)：</span>　<button type="button" class="btn-green" data-toggle="navtab" data-options="{id:'mynavtab', reloadWarn:'已打开业务页面，确认将重新载入?', url:'doc/navtab/mytab.html?d=5', title:'我的业务页面(参数集合写法)'}">打开navtab(参数集合)</button>
+                <pre class="brush: html">
+                    <button type="button" class="btn-green" data-toggle="navtab" data-options="{id:'mynavtab', reloadWarn:'已打开业务页面，确认将重新载入?', url:'doc/navtab/mytab.html?d=5', title:'我的业务页面(参数集合写法)'}">打开navtab(参数集合)</button>
+                </pre>
                 <span class="label label-default">其他示例[回调函数]：</span>　<button type="button" class="btn-green" data-toggle="navtab" data-id="mynavtab" data-reload-warn="已打开业务页面，确认将重新载入?" data-url="doc/navtab/mytab.html?d=3" data-title="navtab回调函数示例" data-on-load="doc_navtab_onLoad" data-before-close="doc_navtab_beforeClose" data-on-close="doc_navtab_onClose">打开navtab</button>
                 <pre class="brush: js; html-script: true">
                     &lt;script type="text/javascript">

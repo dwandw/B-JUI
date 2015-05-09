@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI v1.1 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-contextmenu.js v1.0
+ * B-JUI: bjui-contextmenu.js v1.1
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.contextmenu.js (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-contextmenu.js
@@ -93,7 +93,7 @@
         
         if ($(window).width() < posX + $menu.width())   posX -= $menu.width()
         if ($(window).height() < posY + $menu.height()) posY -= $menu.height()
-
+        
         $menu.css({'left':posX, 'top':posY}).show()
         if (cur.shadow)
             $shadow.css({width:$menu.width(), height:$menu.height(), left:posX + 3, top:posY + 3}).show()
@@ -153,6 +153,7 @@
                 $li = $('<li class="diver"></li>')
             } else {
                 $li = $('<li><span class="icon">'+ icon +'</span><span class="title">'+ n.title +'</span></li>')
+                if (n.func && typeof n.func == 'string') n.func = n.func.toFunc()
                 if (n.func) {
                     $li.on('click', function(evt) {
                         that.hide()
@@ -168,7 +169,7 @@
         
         if ($(window).width() < posX + $menu.width())   posX -= $menu.width()
         if ($(window).height() < posY + $menu.height()) posY -= $menu.height()
-
+        
         $menu.css({'left':posX, 'top':posY}).show()
         
         if (options.shadow)
