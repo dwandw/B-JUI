@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.1 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-datagrid.js v1.1 - beta
+ * B-JUI: bjui-datagrid.js  v1.2 - beta
  * @author K'naan (xknaan@163.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-datagrid.js
  * ========================================================================
@@ -103,6 +103,7 @@
         delPK           : null,     // Ajax delete request to send only the primary key
         delConfirm      : true,     // Delete confirmation message, Optional 'true' | 'false' | 'message', (Optional 'true, false' is a boolean)
         delCallback     : null,     // Callback for delete
+        jsonPrefix      : '',       // JSON object key prefix, for post data
         contextMenuH    : true,     // Right-click on the thead, display the context menu
         contextMenuB    : false,    // Right-click on the tbody tr, display the context menu
         hScrollbar      : false,    // Allowed horizontal scroll bar
@@ -169,15 +170,13 @@
                 
                 return width
             },
-            beforeEdit: function() {
+            beforeEdit: function($trs, datas) {
                 var beforeEdit = options.beforeEdit
                 
                 if (beforeEdit) {
                     if (typeof beforeEdit == 'string') beforeEdit = beforeEdit.toFunc()
                     if (typeof beforeEdit == 'function') {
-                        if (!beforeEdit.call(that)) {
-                            return false
-                        }
+                        return beforeEdit.call(that, $trs, datas)
                     }
                 }
                 
@@ -240,6 +239,7 @@
                         n.lock      = (typeof n.lock == 'undefined')      ? true  : n.lock
                         n.hide      = (typeof n.hide == 'undefined')      ? false : n.hide
                         n.edit      = (typeof n.edit == 'undefined')      ? true  : n.edit
+                        n.add       = (typeof n.add       == 'undefined') ? true  : n.add
                         n.quicksort = (typeof n.quicksort == 'undefined') ? true  : n.quicksort
                         
                         rowArr[index][len++] = n
@@ -251,14 +251,30 @@
             },
             // create trs by data source
             createTrsByData: function(data, refreshFlag) {
-                if (!data.length)  return
+                var list
+                
                 if (!that.$tbody)  that.$tbody  = $('<tbody></tbody>')
-                
-                that.paging.total     = data.length
-                that.paging.pageCount = tools.getPageCount(that.paging.pageSize, that.paging.total)
-                if (that.paging.pageCurrent > that.paging.pageCount) that.paging.pageCurrent = that.paging.pageCount
-                
-                this.initTbody(data, refreshFlag)
+                if (data) {
+                    if (data.list) list = data.list
+                    else list = data
+                    
+                    that.paging.total = list.length
+                    
+                    if (typeof data == 'object') {
+                        if (data[BJUI.pageInfo.total]) that.paging.total = parseInt(data[BJUI.pageInfo.total])
+                        if (data[BJUI.pageInfo.pageSize]) {
+                            if (refreshFlag && that.paging.pageSize != data[BJUI.pageInfo.pageSize]) {
+                                that.$selectpage.trigger('bjui.datagrid.paging.pageSize', data[BJUI.pageInfo.pageSize])
+                            }
+                            that.paging.pageSize = parseInt(data[BJUI.pageInfo.pageSize])
+                        }
+                    }
+                    
+                    that.paging.pageCount = tools.getPageCount(that.paging.pageSize, that.paging.total)
+                    if (that.paging.pageCurrent > that.paging.pageCount) that.paging.pageCurrent = that.paging.pageCount
+                    
+                    this.initTbody(list, refreshFlag)
+                }
                 
                 if (!that.init_tbody) that.$tbody.appendTo(that.$element)
                 if (!that.init_thead) that.initThead()
@@ -383,18 +399,24 @@
                         }
                         
                         /* append */
-                        $td = $('<td'+ align + cls +'>'+ label +'</td>')
+                        $td = $('<td'+ align + cls +'><div>'+ label +'</div></td>')
                         $td.data('val', label).appendTo($tr)
                         if (n.gridNumber)   $td.addClass(that.classnames.td_linenumber)
                         if (n.gridCheckbox) $td.addClass(that.classnames.td_checkbox)
                         if (refreshFlag && n.hidden) $td.css('display', 'none')
                         
                         /* render */
-                        if (n.render && typeof n.render == 'string') n.render = n.render.toFunc()
+                        if (n.items && !n.render) n.render = $.datagrid.renderItem
+                        if (n.render && typeof n.render == 'string')  n.render = n.render.toFunc()
                         if (n.render && typeof n.render == 'function') {
                             var render_label = '', render_items = false
                             
                             if (n.items) {
+                                if (typeof n.items == 'string') {
+                                    if (n.render.trim().startsWith('[')) n.render = n.render.toObj()
+                                    else n.render = n.render.toFunc()
+                                }
+                                
                                 if (!n.renderTds) n.renderTds = []
                                 
                                 var delayRender = function($td, label) {
@@ -561,7 +583,7 @@
                 
                 if (data) {
                     if (typeof data == 'string') {
-                        if (data.indexOf('[') >= 0 || data.indexOf('{') >= 0) {
+                        if (data.trim().startsWith('[') || data.trim().startsWith('{')) {
                             data = data.toObj()
                         } else {
                             data = data.toFunc()
@@ -576,9 +598,10 @@
                 }
             },
             // setBoxb - height
-            setBoxbH: function() {
-                var boxH = options.height, topM = 0, h
+            setBoxbH: function(height) {
+                var boxH = height || options.height, topM = 0, h
                 
+                if (boxH < 100) return
                 if (isNaN(boxH)) boxH = that.$grid.height()
                 if (that.$boxT) {
                     h     = that.$boxT.outerHeight()
@@ -598,12 +621,14 @@
                 topM += that.$tableH.outerHeight()
                 boxH -= that.$boxH.outerHeight()
                 
+                if (boxH < 0) boxH = 0
+                
                 that.$boxB.height(boxH)
                 that.$boxM.height(boxH).css({top:topM})
             },
             // fixed h
-            fixedH: function() {
-                this.setBoxbH()
+            fixedH: function(height) {
+                this.setBoxbH(height)
             },
             // column menu - toggle show submenu
             showSubMenu: function($li, $menu, $submenu) {
@@ -611,6 +636,8 @@
                 var hidesubmenu = function($li, $menu, $submenu) {
                     left       = $menu.offset().left - that.$grid.offset().left - 1
                     animate_op = {left:'50%'}
+                    
+                    $li.removeClass('active')
                     
                     if ($menu.hasClass('position-right') || (boxWidth - left < width + submenu_width)) {
                         $submenu.css({left:'auto', right:'100%'})
@@ -620,7 +647,6 @@
                     }
                     animate_op.opacity = 0.2
                     
-                    $li.removeClass('active')
                     $submenu.stop().animate(animate_op, 'fast', function() {
                         $(this).hide()
                     })
@@ -659,7 +685,7 @@
                 
                 $li.on('bjui.datagrid.th.submenu.hide', function(e, menu, submenu) {
                     hidesubmenu($(this), menu, submenu)
-                }) 
+                })
             },
             // column menu - lock/unlock
             locking: function($th) {
@@ -739,7 +765,7 @@
             },
             // column - display/hide
             showhide: function(model, showFlag) {
-                var index = model.index, $th = model.th, $trs = that.$tbody.find('> tr'), display = showFlag ? '' : 'none', width = 0, tableW = that.$tableH.width()
+                var index = model.index, $th = model.th, $trs = that.$tbody.find('> tr'), display = showFlag ? '' : 'none'
                 var setColspan = function(column) {
                     var _colspan = column.colspan
                     
@@ -760,9 +786,6 @@
                 
                 model.hidden = !showFlag
                 
-                if (!showFlag) width -= model.width
-                else width += model.width
-                
                 $th.css('display', display)
                 $trs.find('> td:eq('+ index +')').css('display', display)
                 that.$colgroupH.find('> col').eq(index).css('display', display)
@@ -773,12 +796,6 @@
                     that.$colgroupF.find('> col').eq(index).css('display', display)
                 }
                 
-                if (width) {
-                    tableW = tableW + width
-                    that.$tableH.width(tableW)
-                    that.$tableB.width(tableW)
-                    that.$tableF && that.$tableF.width(tableW)
-                }
                 if (model.calc) {
                     that.$tfoot && that.$tfoot.trigger('bjui.datagrid.tfoot.resizeH')
                 }
@@ -787,22 +804,20 @@
             },
             // jump to page
             jumpPage: function(pageCurrent, pageSize) {
-                var data = that.data, allData = that.allData, postData = {}
+                var allData = that.allData, filterDatas
                 
-                if (!pageCurrent) pageCurrent = that.paging.pageCurrent
-                postData.pageCurrent = pageCurrent
-                
-                if (pageSize)    {
-                    postData.pageSize  = pageSize
-                    postData.pageCount = this.getPageCount(pageSize, that.paging.total)
-                    if (pageCurrent > postData.pageCount)
-                        postData.pageCurrent = postData.pageCount
+                if (pageCurrent) that.paging.pageCurrent = pageCurrent
+                if (pageSize) {
+                    that.paging.pageSize  = pageSize
+                    that.paging.pageCount = this.getPageCount(pageSize, that.paging.total)
+                    
+                    if (that.paging.pageCurrent > that.paging.pageCount)
+                        that.paging.pageCurrent = that.paging.pageCount
                 }
                 
-                $.extend(that.paging, postData)
-                
                 if (options.local == 'remote') {
-                    this.loadData(postData, true)
+                    filterDatas = this.getRemoteFilterData(true)
+                    this.loadData(filterDatas, true)
                 } else {
                     this.initTbody(allData, true)
                 }
@@ -844,6 +859,7 @@
                     model.sortAsc = true
                 }
                 $th.find('> div > .datagrid-label').prepend('<i class="fa fa-long-arrow-'+ (model.sortAsc ? 'up' : 'down') +'"></i>')
+                //that.$menu && that.$menu.trigger('bjui.datagrid.th.sort', [model.sortAsc])
                 
                 if (options.sortAll) {
                     if (options.local == 'remote') {
@@ -879,22 +895,12 @@
                 var switchOperator = function(operator, val1, val2) {
                     var compare = false
                     
-                    if (model.render && typeof model.render == 'function') {
-                        if (model.items) {
-                            val2 = model.render.call(that, val2, model.items)
-                        } else {
-                            val2 = model.render.call(that, val2)
-                        }
-                    } else if (model.items) {
-                        val2 = Datagrid.renderItem.call(that, val2, model.items)
-                    }
-                    
                     switch (operator) {
                     case '=':
-                        compare = val1 == val2
+                        compare = String(val1) == String(val2)
                         break
                     case '!=':
-                        compare = val1 != val2
+                        compare = String(val1) != String(val2)
                         break
                     case '>':
                         compare = parseFloat(val2) > parseFloat(val1)
@@ -903,7 +909,11 @@
                         compare = parseFloat(val2) < parseFloat(val1)
                         break
                     case 'like':
-                        compare = (String(val2).indexOf(String(val1)) >= 0)
+                        if (model.type == 'select') {
+                            compare = String(val1) == String(val2)
+                        } else {
+                            compare = (String(val2).indexOf(String(val1)) >= 0)
+                        }
                         break
                     default:
                         break
@@ -974,38 +984,9 @@
                     else allData = that.oldAllData.concat()
                 }
                 
-                var sortRemote = function(filterDatas) {
-                    if (!postData) postData = []
-                    
-                    $.each(filterDatas, function(name, v) {
-                        if (!v.datas) {
-                            v.model.isFiltered = false
-                            v.model.th.trigger('bjui.datagrid.th.filter', [false])
-                            if (v.model.quickfilter) v.model.quickfilter.trigger('bjui.datagrid.thead.clearfilter')
-                            return true
-                        }
-                        
-                        v.model.isFiltered = true
-                        v.model.th.trigger('bjui.datagrid.th.filter', [true])
-                        
-                        if (v.datas.andor)
-                            postData.push({name:'andor', value:v.datas.andor})
-                        if (v.datas.operatorA) {
-                            postData.push({name:name, value:v.datas.valA})
-                            postData.push({name:name +'.operator', value:v.datas.operatorA})
-                        }
-                        if (v.datas.operatorB) {
-                            postData.push({name:name, value:v.datas.valB})
-                            postData.push({name:name +'.operator', value:v.datas.operatorB})
-                        }
-                    })
-                    
-                    tools.loadData(postData, true)
-                }
-                
                 if (options.filterAll) {
                     if (options.local == 'remote') {
-                        sortRemote(that.filterDatas)
+                        tools.loadData(tools.getRemoteFilterData(), true)
                     } else {
                         fDatas = filterData(allData, that.filterDatas)
                         
@@ -1016,12 +997,51 @@
                     }
                 } else {
                     if (that.isDom) {
-                        sortRemote(that.filterDatas)
+                        tools.loadData(tools.getRemoteFilterData(), true)
                     } else {
                         fDatas = filterData(data, that.filterDatas)
                         this.createTrs(fDatas, true)
                     }
                 }
+            },
+            getRemoteFilterData: function(isPaging) {
+                var filterDatas = []
+                
+                if (that.filterDatas && !$.isEmptyObject(that.filterDatas)) {
+                    $.each(that.filterDatas, function(name, v) {
+                        if (!v.datas) {
+                            v.model.isFiltered = false
+                            v.model.th.trigger('bjui.datagrid.th.filter', [false])
+                            if (v.model.quickfilter) v.model.quickfilter.trigger('bjui.datagrid.thead.clearfilter')
+                            return true
+                        }
+                        
+                        v.model.isFiltered = true
+                        v.model.th.trigger('bjui.datagrid.th.filter', [true])
+                        
+                        if (options.jsonPrefix)
+                            name = options.jsonPrefix +'.'+ name
+                        
+                        if (v.datas.andor)
+                            filterDatas.push({name:'andor', value:v.datas.andor})
+                        if (v.datas.operatorA) {
+                            filterDatas.push({name:name, value:v.datas.valA})
+                            filterDatas.push({name:name +'.operator', value:v.datas.operatorA})
+                        }
+                        if (v.datas.operatorB) {
+                            filterDatas.push({name:name, value:v.datas.valB})
+                            filterDatas.push({name:name +'.operator', value:v.datas.operatorB})
+                        }
+                    })
+                    
+                    if (!isPaging) that.paging.pageCurrent = 1
+                }
+                
+                // paging
+                filterDatas.push({name:BJUI.pageInfo.pageSize, value:that.paging.pageSize})
+                filterDatas.push({name:BJUI.pageInfo.pageCurrent, value:that.paging.pageCurrent})
+                
+                return filterDatas
             },
             // set data for Dom
             setDomData: function(tr) {
@@ -1051,7 +1071,7 @@
                     var name = op.name, rule = '', pattern = '', selectoptions = [], attrs = ''
                     
                     if (!op) return
-                    if (op.attrs) {
+                    if (op.attrs && typeof op.attrs == 'object') {
                         $.each(op.attrs, function(i, n) {
                             attrs += ' '+ i +'='+ n
                         })
@@ -1059,7 +1079,7 @@
                     
                     if (op == that.linenumberColumn || op == that.checkboxColumn || op == that.editBtnsColumn) {
                         that.inputs.push('')
-                    } else if (op.edit && name) {
+                    } else if (name) {
                         if (op.rule) rule = ' data-rule="'+ op.label +'：'+ op.rule +'"'
                         else if (op.type == 'date') rule = ' data-rule="pattern('+ (op.pattern || 'yyyy-MM-dd') +')"';
                         if (op.type) {
@@ -1067,7 +1087,7 @@
                             case 'date':
                                 if (!op.pattern) op.pattern = 'yyyy-MM-dd'
                                 pattern = ' data-pattern="'+ op.pattern +'"'
-                                that.inputs.push('<input type="text" name="'+ name +'" data-toggle="datepicker"'+ pattern + rule +'>')
+                                that.inputs.push('<input type="text" name="'+ name +'" data-toggle="datepicker"'+ pattern + rule + attrs +'>')
                                 
                                 break
                             case 'select':
@@ -1079,11 +1099,11 @@
                                     })
                                 })
                                 
-                                that.inputs.push('<select name="'+ name +'" data-toggle="selectpicker"'+ rule +' data-width="100%">'+ selectoptions.join('') +'</select>')
+                                that.inputs.push('<select name="'+ name +'" data-toggle="selectpicker"'+ rule + attrs +' data-width="100%">'+ selectoptions.join('') +'</select>')
                                 
                                 break
                             case 'boolean':
-                                that.inputs.push('<input type="checkbox" name="'+ name +'" data-toggle="icheck"'+ rule +' value="true">')
+                                that.inputs.push('<input type="checkbox" name="'+ name +'" data-toggle="icheck"'+ rule + attrs +' value="true">')
                                 
                                 break
                             case 'lookup':
@@ -1099,14 +1119,12 @@
                                 
                                 break
                             default:
-                                that.inputs.push('<input type="text" name="'+ name +'"'+ rule +'>')
+                                that.inputs.push('<input type="text" name="'+ name +'"'+ rule + attrs +'>')
                                 break
                             }
                         } else {
-                            that.inputs.push('<input type="text" name="'+ name +'"'+ rule +'>')
+                            that.inputs.push('<input type="text" name="'+ name +'"'+ rule + attrs +'>')
                         }
-                    } else if (op.hidden) {
-                        that.inputs.push('<input type="hidden" name="'+ name +'">')
                     } else {
                         that.inputs.push('')
                     }
@@ -1135,7 +1153,10 @@
                         .css({left:posX, top:posY, opacity:1, 'z-index':9999}).show()
                     
                     $(document).on('click', function(e) {
-                        that.$showhide.css({left:'50%', top:0, opacity:0.2, 'z-index':''}).hide().appendTo(that.$grid)
+                        var $showhide = $(e.target).closest('.'+ that.classnames.s_showhide)
+                        
+                        if (!$showhide.length)
+                            that.$showhide.css({left:'50%', top:0, opacity:0.2, 'z-index':''}).hide().appendTo(that.$grid)
                     })
                     
                     e.preventDefault()
@@ -1267,6 +1288,7 @@
                     op.lock      = (typeof op.lock      == 'undefined') ? true  : op.lock
                     op.hide      = (typeof op.hide      == 'undefined') ? false : op.hide
                     op.edit      = (typeof op.edit      == 'undefined') ? true  : op.edit
+                    op.add       = (typeof op.add       == 'undefined') ? true  : op.add
                     op.quicksort = (typeof op.quicksort == 'undefined') ? true  : op.quicksort
                     
                     that.columnModel[i] = op
@@ -1296,6 +1318,7 @@
                     
                     if (op && typeof op == 'string') op = op.toObj()
                     if (typeof op != 'object') op = {}
+                    if ( !-[1,] && colspan == 1) colspan = 0 
                     
                     op.label = label
                     op.th    = $th
@@ -1316,7 +1339,6 @@
                             op.parent = next_ths[index]
                         }
                     }
-                    
                     if (!rowspan || rowspan == 1) $th.addClass('single-row')
                     if (!colspan) {
                         op.width     = (typeof op.width     == 'undefined') ? oW    : op.width
@@ -1324,6 +1346,7 @@
                         op.lock      = (typeof op.lock      == 'undefined') ? true  : op.lock
                         op.hide      = (typeof op.hide      == 'undefined') ? false : op.hide
                         op.edit      = (typeof op.edit      == 'undefined') ? true  : op.edit
+                        op.add       = (typeof op.add       == 'undefined') ? true  : op.add
                         op.quicksort = (typeof op.quicksort == 'undefined') ? true  : op.quicksort
                         
                         $th.html('<div style="height:'+ (rowspan ? rowspan * 24 : 24) +'px;"><div class="datagrid-space"></div><div class="datagrid-label">'+ label +'</div><div class="'+ that.classnames.th_cell +'"><div class="'+ that.classnames.th_resizemark +'"></div></div></div>')
@@ -1338,7 +1361,6 @@
                             op.parent = next_ths[index]
                             that.columnModel[next_rows[index]] = op
                         }
-                        
                         $th.data('index', op.index)
                     } else {
                         $th.html('<div style="height:'+ (rowspan ? rowspan * 24 : 24) +'px;"><div class="datagrid-space"></div><div class="datagrid-label">'+ label +'</div><div class="'+ that.classnames.th_cell +'"><div class="'+ that.classnames.th_resizemark +'"></div></div></div>')
@@ -1359,6 +1381,8 @@
             $.extend(that.options, typeof that.options.options == 'object' && that.options.options)
         }
         
+        that.parentH = $parent.height()
+        
         options = that.options
         that.$element.data('bjui.datagrid.init', true)
         if (!options.width) boxWidth = $parent.width()
@@ -1366,7 +1390,6 @@
         
         options.height    = options.height || 300
         that.isDom        = false
-        that.table_width  = 0
         that.columnModel  = []
         that.inputs       = []
         that.$grid        = $('<div class="bjui-datagrid"></div>').width(options.width).height(options.height)
@@ -1389,7 +1412,7 @@
         
         if (options.columns) {
             if (typeof options.columns == 'string') {
-                if (options.columns.indexOf('[') >= 0) {
+                if (options.columns.trim().startsWith('[')) {
                     options.columns = options.columns.toObj()
                 } else {
                     options.columns = options.columns.toFunc()
@@ -1401,7 +1424,7 @@
             
             that.$thead = null
             tools.createThead()
-        } if (!options.columns) {
+        } else {
             if (that.$thead && that.$thead.length && that.$thead.find('> tr').length) {
                 that.setColumnModel()
             }
@@ -1413,6 +1436,12 @@
         
         if (that.isDom) {
             tools.appendColumns()
+            
+            that.$tbody.find('> tr > td').each(function() {
+                var $td = $(this), html = $td.html()
+                
+                $td.html('<div>'+ html +'</div>')
+            })
             
             if (!that.paging.total) {
                 that.paging.total = that.$tbody.find('> tr').length
@@ -1545,7 +1574,10 @@
                                 .appendTo($group)
                                 .on('click', function(e) {
                                     if (options.importOption) {
-                                        var opts = options.importOption.toObj()
+                                        var opts = options.importOption
+                                        
+                                        if (typeof opts == 'string')
+                                            opts = opts.toObj()
                                         
                                         if (opts.options && opts.options.url) {
                                             if (opts.type == 'dialog') {
@@ -1563,13 +1595,18 @@
                                 .appendTo($group)
                                 .on('click', function(e) {
                                     if (options.exportOption) {
-                                        var opts = options.exportOption.toObj()
+                                        var opts = options.exportOption
+                                        
+                                        if (typeof opts == 'string')
+                                            opts = opts.toObj()
                                         
                                         if (opts.options && opts.options.url) {
                                             if (opts.type == 'dialog') {
                                                 that.$grid.dialog(opts.options)
                                             } else if (opts.type == 'navtab') {
                                                 that.$grid.navtab(opts.options)
+                                            } else if (opts.type == 'file') {
+                                                window.location.href = opts.options.url
                                             } else {
                                                 that.$grid.bjuiajax('doAjax', opts.options)
                                             }
@@ -1629,7 +1666,7 @@
             width = n.width ? n.width : ($firstTds.eq(i).outerWidth() || 50)
             cols.push('<col style="width:'+ width +'px;">')
             n.width = width
-            that.table_width += parseInt(width)
+            that.table_width += width
         })
         
         that.$thead.before(that.$colgroupH.append(cols.join('')))
@@ -1645,6 +1682,7 @@
                 if (!$target.closest('.'+ that.classnames.th_cell).length && !that.isResize)
                     tools.quickSort(columnModel[$(this).data('index')])
             })
+        
         // events - filter
         $ths.filter('.datagrid-column-menu')
             .on('bjui.datagrid.th.filter', function(e, flag) {
@@ -1677,7 +1715,9 @@
             that.initLock()
             that.$grid.initui()
             if (options.height) tools.fixedH()
-            that.fixedWidth()
+            setTimeout(function() {
+                that.fixedWidth('init')
+            }, 500)
             that.initEvents()
         }
         
@@ -1699,82 +1739,94 @@
         }
     }
     
-    Datagrid.prototype.fixedWidth = function() {
-        var that = this, options = that.options, gridWidth = that.$grid.width(), tableW = that.$tableH.outerWidth(), columnModel = that.columnModel, length = columnModel.length, bW = that.$boxB.find('> div').width() - 1, fixedW, excludeW = 0, width
+    Datagrid.prototype.fixedWidth = function(isInit) {
+        var that = this, options = that.options, bW, excludeW = 0, fixedW, width, columnModel = that.columnModel, length = columnModel.length
         
-        if (options.hScrollbar) {
-            that.$boxH.find('> div').width(bW)
-            that.$boxF && that.$boxF.find('> div').width(bW)
+        if (isInit && that.initFixedW) return
+        that.initFixedW = true
+        
+        var setNewWidth = function() {
+            that.$boxH.find('> div').css('width', '')
+            that.$boxB.find('> div').css('width', '')
+            that.$boxF && that.$boxF.find('> div').css('width', '')
+            that.$pagingCon && that.$pagingCon.css('width', '')
             
-            return
-        } else if (options.fullGrid && tableW == bW) {
-            return
-        } else if (!options.fullGrid && tableW <= bW) {
-            return
-        }
-        
-        if (bW < 0) return
-        
-        that.$tableH.width(bW)
-        that.$tableB.width(bW)
-        that.$tableF && that.$tableF.width(bW)
-        that.$boxH.find('> div').width(bW)
-        that.$boxF && that.$boxF.find('> div').width(bW)
-        that.$pagingCon && that.$pagingCon.width(bW)
-        
-        if (columnModel[length - 1] == that.editBtnsColumn) {
-            excludeW += that.editBtnsColumn.width
-            length --
-        }
-        if (columnModel[0] == that.linenumberColumn) {
-            excludeW += that.linenumberColumn.width
-            length --
-        }
-        if (columnModel[0] == that.checkboxColumn || columnModel[1] == that.checkboxColumn) {
-            excludeW += that.checkboxColumn.width
-            length --
-        }
-
-        fixedW = parseInt((bW - that.table_width - excludeW) / length)
-        
-        if (!fixedW) fixedW = -1
-        else fixedW --
-        
-        $.each(that.columnModel, function(i, n) {
-            if (n == that.linenumberColumn || n == that.checkboxColumn || n == that.editBtnsColumn) return true
+            bW = that.$boxB.find('> div').width()
             
-            width = n.width + fixedW
-            if (width <= 0) width = 1
-            that.$colgroupH.find('> col:eq('+ n.index +')').width(width)
-            that.$colgroupB.find('> col:eq('+ n.index +')').width(width)
-            that.$colgroupF && that.$colgroupF.find('> col:eq('+ n.index +')').width(width)
-            n.width = width
-        })
+            if (bW) {
+                that.$boxB.find('> div').width(bW)
+                that.$boxH.find('> div').width(bW)
+                that.$boxF && that.$boxF.find('> div').width(bW)
+                
+                if (that.table_width > bW)
+                    that.$pagingCon && that.$pagingCon.width(bW)
+                else
+                    that.$pagingCon && that.$pagingCon.width(that.table_width)
+            }
+        }
         
-        that.table_width = bW
+        var doFixedW = function() {
+            if (bW && bW < that.table_width) {
+                if (columnModel[length - 1] == that.editBtnsColumn) {
+                    excludeW += that.editBtnsColumn.width
+                    length --
+                }
+                if (columnModel[0] == that.linenumberColumn) {
+                    excludeW += that.linenumberColumn.width
+                    length --
+                }
+                if (columnModel[0] == that.checkboxColumn || columnModel[1] == that.checkboxColumn) {
+                    excludeW += that.checkboxColumn.width
+                    length --
+                }
+                
+                fixedW = parseInt((bW - that.table_width - excludeW) / length)
+                
+                if (!fixedW) fixedW = -1
+                else fixedW --
+                
+                $.each(columnModel, function(i, n) {
+                    if (n == that.linenumberColumn || n == that.checkboxColumn || n == that.editBtnsColumn) return true
+                    
+                    width = n.width + fixedW
+                    if (width <= 0) width = 1
+                    that.$colgroupH.find('> col:eq('+ n.index +')').width(width)
+                    that.$colgroupB.find('> col:eq('+ n.index +')').width(width)
+                    that.$colgroupF && that.$colgroupF.find('> col:eq('+ n.index +')').width(width)
+                    n.new_width = width
+                })
+            }
+        }
+        
+        if (options.fullGrid) {
+            setNewWidth()
+            doFixedW()
+        } else {
+            setNewWidth()
+        }
     }
     
     Datagrid.prototype.initTbody = function() {
-        var that = this, options = that.options, tools = that.tools, $trs = that.$tbody.find('> tr'), $tds = $trs.find('> td')
+        var that = this, options = that.options, tools = that.tools, $trs = that.$tbody.find('> tr'), $tds = $trs.find('> td'), width = '0'
         
         that.init_tbody = true
         that.$colgroupB = that.$colgroupH.clone()
         that.$tableB    = that.$element
-        that.$tableB.removeAttr('data-toggle width').empty().append(that.$tbody.before(that.$colgroupB))
+        that.$tableB.removeAttr('data-toggle width').empty().append(that.$tbody)
+        that.$tbody.before(that.$colgroupB)
         that.$grid.append(that.$boxB.append($('<div class="datagrid-wrap-b"></div>').append(that.$tableB)))
         
-        that.$tableH.width(that.table_width)
-        that.$tableB.width(that.table_width)
+        if ( !-[1,] ) width = 'auto' //for ie8
+        if (options.fullGrid) width = '100%'
+        
+        that.$tableH.width(width)
+        that.$tableB.width(width)
         
         // add class
         that.$tableB.addClass('table table-bordered').removeClass('table-hover')
         
         that.$boxB
             .scroll(function() {
-                var hW = that.$boxH.find('> div').width(), bW = that.$boxB.find('> div').width() - 1
-                
-                if (hW != bW) that.$boxH.find('> div').width(bW)
-                
                 that.$boxH.find('> div').prop('scrollLeft', this.scrollLeft)
                 that.$boxF && that.$boxF.find('> div').prop('scrollLeft', this.scrollLeft)
                 that.$lockB && that.$lockB.prop('scrollTop', this.scrollTop)
@@ -1805,23 +1857,12 @@
             .on('click.bjui.datagrid.tr', function(e, checkbox) {
                 var $tr = $(this), index = $tr.index(), $selectedTrs = that.$tbody.find('> tr.'+ that.classnames.tr_selected), $last = that.$lastSelect, checked, $lockTrs = that.$lockTbody && that.$lockTbody.find('> tr')
                 
-                if ($tr.hasClass(that.classnames.tr_edit)) return
-                
                 if (checkbox) {
                     checked = checkbox.is(':checked')
-                    /*if (checkbox.is(':checked')) {
-                        checked = true
-                        $tr.removeClass(that.classnames.tr_selected)
-                        $lockTrs && $lockTrs.eq(index).removeClass(that.classnames.tr_selected)
-                    } else {
-                        checked = false
-                        $tr.addClass(that.classnames.tr_selected)
-                        $lockTrs && $lockTrs.eq(index).addClass(that.classnames.tr_selected)
-                        that.$lastSelect = $tr
-                    }*/
                     if (!checked) that.$lastSelect = $tr
                     that.selectedRows($tr, !checked)
                 } else {
+                    if ($tr.hasClass(that.classnames.tr_edit)) return
                     if (!BJUI.KeyPressed.ctrl && !BJUI.KeyPressed.shift) {
                         if ($selectedTrs.length > 1 && $tr.hasClass(that.classnames.tr_selected)) {
                             that.selectedRows($selectedTrs.not($tr))
@@ -1923,14 +1964,15 @@
         that.$colgroupF = that.$colgroupH.clone()
         that.$tableF    = that.$tableH.clone().empty()
         that.$tableF.append(that.$colgroupF)
-        that.$boxB.after(that.$boxF.append($('<div class="datagrid-wrap-h"></div>').append(that.$tableF)))
+        that.$boxF.append($('<div class="datagrid-wrap-h"></div>').append(that.$tableF))
+        that.$boxF.insertAfter(that.$boxB)
         
         that.$tfoot = $('<thead></thead>')
         $.each(columnModel, function(i, n) {
-            var $th = $('<th>&nbsp;</th>')
+            var $th = $('<th><div></div></th>')
             
             if (n.calc) {
-                var calc_html = '<div class="datagrid-calcbox">#tit#</div>#number#'
+                var calc_html = '<div><div class="datagrid-calcbox">#tit#</div>#number#</div>'
                 
                 if (n.calc == 'avg')
                     $th.html(calc_html.replace('#tit#', (n.calcTit || 'AVG')).replace('#number#', (n.calc_sum / n.calc_count).toFixed(n.calcDecimal || 2)))
@@ -2038,7 +2080,6 @@
             columnModel = that.columnModel[index]
         }
         
-        //if (columnModel.hidden) return // can't lock hidden column
         if (columnModel == that.editBtnsColumn) return // edit btn column
         else if (columnModel.index == that.columnModel.length - 1) return // last column
         if (typeof columnModel.locked == 'undefined') columnModel.locked = false
@@ -2192,10 +2233,17 @@
             if (n.lockHide) tools.showhide(n, false)
         })
         
-        that.$tableH.width(tableW - width)
-        that.$tableB.width(tableW - width)
+        that.$boxH.find('> div').css('width', '')
+        that.$boxB.find('> div').css('width', '')
+        that.$boxF && that.$boxF.find('> div').css('width', '')
         
-        if (hasFoot) that.$tableF.width(tableW - width)
+        setTimeout(function() {
+            var bw = that.$boxB.find('> div').width()
+            
+            that.$boxB.find('> div').width(bw)
+            that.$boxH.find('> div').width(bw)
+            that.$boxF && that.$boxF.find('> div').width(bw)
+        }, 50)
         
         if (that.col_lock_count == 0) that.$lockBox.hide()
         else that.$lockBox.show()
@@ -2620,10 +2668,6 @@
                                     that.$colgroupF && that.$colgroupF.find('> col:eq('+ index +')').width(newWidth)
                                 }
                             } else {
-                                that.$tableH.width(tableW)
-                                that.$tableB.width(tableW)
-                                that.$tableF && that.$tableF.width(tableW)
-                                
                                 setTimeout(function() {
                                     that.$colgroupH.find('> col:eq('+ index +')').width(newWidth)
                                     that.$colgroupB.find('> col:eq('+ index +')').width(newWidth)
@@ -2739,6 +2783,25 @@
                     fixedLeft($btn)
                     that.colFilter($th, true)
                     tools.locking($th)
+                    
+                    // quick sort
+                    var $asc  = $menu.find('> ul > li.'+ that.classnames.li_asc),
+                        $desc = $asc.next()
+                    
+                    $asc.click(function() {
+                        model.sortAsc = false
+                        tools.quickSort(model)
+                    })
+                    
+                    $desc.click(function() {
+                        model.sortAsc = true
+                        tools.quickSort(model)
+                    })
+                    
+                    $menu.on('bjui.datagrid.th.sort', function(e, asc) {
+                        $asc.toggleClass('sort-active', asc)
+                        $desc.toggleClass('sort-active', !asc)
+                    })
                 })
             }
         })
@@ -2795,26 +2858,41 @@
     Datagrid.prototype.colFilter = function($th, filterFlag) {
         var that = this, options = that.options, tools = that.tools, regional = that.regional, $filter = $th.data('bjui.datagrid.filter'), $menu = that.$menu, $filterli = $menu.find('> ul > li.'+ that.classnames.li_filter)
         
+        if (!that.inputs || !that.inputs.length) tools.initEditInputs()
         if (filterFlag) {
+            $filterli.find('.'+ that.classnames.s_filter).addClass('hide')
+            
             if (!$filter || !$filter.length) {
                 $filter = $(BJUI.doRegional(FRAG.gridFilter.replaceAll('#label#', $th.text()), regional)).hide().appendTo(that.$grid)
                 
-                var n = that.columnModel[$th.data('index')], type = (n.type || 'string').toLowerCase(), operator = n.operator || [],
+                var index = $th.data('index'), model = that.columnModel[index], type = model.type || 'string', operator = model.operator || [],
                     $filterA = $filter.find('span.filter-a'),
                     $filterB = $filter.find('span.filter-b'),
                     $select  = $('<select data-toggle="selectpicker" data-container="true"></select>'),
-                    $input   = $('<input type="text" size="10">')
+                    $input   = $(that.inputs[index])//$('<input type="text" size="10">')
+                
+                $input.removeAttr('data-rule').attr('size', 10).addClass('filter-input')
                 
                 if (type == 'string') {
                     if (!operator.length) operator = ['=', '!=', 'like']
-                    $input = $('<input type="text" size="10">')
-                } else if (type == 'number' || type == 'int' || type == 'date') {
+                } else if (type == 'number' || type == 'int' || type == 'spinner') {
+                    if (type == 'spinner') $input.removeAttr('data-toggle')
                     if (!operator.length) operator = ['=', '!=', '>', '<', '>=', '<=']
-                    $input = $('<input type="text" size="10">')
-                } else {
+                } else if (type == 'date') {
                     if (!operator.length) operator = ['=', '!=']
-                    $input = $('<input type="text" size="10">')
+                } else if (type == 'boolean') {
+                    if (!operator.length) operator = ['=', '!=']
+                    $input = $(BJUI.doRegional('<select name="'+ model.name +'" data-toggle="selectpicker"><option value="">#all#</option><option value="true">#true#</option><option value="false">#false#</option></select>', regional))
+                } else if (type == 'select') {
+                    if (!operator.length) operator = ['=', '!=']
+                    $input.attr('data-width', '80')
+                    if ($input.find('> option:first-child').val()) {
+                        $input = $('<select name="'+ model.name +'" data-toggle="selectpicker" data-width="80"></select>')
+                            .append(BJUI.doRegional('<option value="">#all#</option>', regional))
+                            .append($input.html())
+                    }
                 }
+                
                 for (var i = 0; i < operator.length; i++) {
                     $select.append('<option value="'+ (operator[i]) +'">'+ (operator[i]) +'</option>')
                 }
@@ -2823,58 +2901,67 @@
                 $filterB.append($select.clone()).append($input.clone())
                 
                 $th.data('bjui.datagrid.filter', $filter)
+                
+                $filter.appendTo($filterli)
+                $filter.data('width', $filter.outerWidth()).hide().initui()
+                
+                // lookup - events
+                $filter.on('customEvent.bjui.lookup', '[data-toggle="lookupbtn"]', function(e, args) {
+                    for (var key in args) {
+                        if (model.name == key) {
+                            $input.val(args[key])
+                        }
+                    }
+                })
+                
+                /* events */
+                var $ok      = $filter.find('button.ok'),
+                    $clear   = $filter.find('button.clear'),
+                    $inputs  = $filter.find('.filter-input'),
+                    $valA    = $inputs.first(),
+                    $valB    = $inputs.last(),
+                    $selects = $filter.find('select'),
+                    $selA    = $selects.first(),
+                    $selB    = $selects.last(),
+                    $andOr   = $selects.eq(1)
+                    
+                $ok.click(function() {
+                    var operatorA = $selA.val(), valA = $valA.val().trim(), operatorB = $selB.val(), valB = $valB.val().trim(), andor = $andOr.val()
+                    var filterDatas = {}
+                    
+                    if (valA.length) {
+                        $.extend(filterDatas, {operatorA:operatorA, valA:valA})
+                    }
+                    if (valB.length) {
+                        if (valA.length) $.extend(filterDatas, {andor:andor})
+                        $.extend(filterDatas, {operatorB:operatorB, valB:valB})
+                    }
+                    if (!$.isEmptyObject(filterDatas)) {
+                        tools.quickFilter(that.columnModel[$th.data('index')], filterDatas)
+                        that.$grid.trigger('click')
+                        $filterli.trigger('bjui.datagrid.th.submenu.hide', [$menu, $filter])
+                    }
+                })
+                
+                $clear.click(function() {
+                    var model = that.columnModel[$th.data('index')]
+                    
+                    $selects.find('> option:first').prop('selected', true)
+                    $selects.selectpicker('refresh')
+                    $inputs.val('')
+                    if (model.isFiltered) {
+                        tools.quickFilter(model, null)
+                        that.$grid.trigger('click')
+                        $filterli.trigger('bjui.datagrid.th.submenu.hide', [$menu, $filter])
+                    }
+                })
             }
             
-            $filterli.find('> .'+ that.classnames.s_filter).remove()
+            tools.showSubMenu($filterli, $menu, $filter.removeClass('hide'))
             
-            $filter.find('.bootstrap-select').remove()
-            $filter.find('button > i').remove()
-            
-            $filter.appendTo($filterli)
-            $filter.data('width', $filter.outerWidth()).hide().initui()
-            
-            tools.showSubMenu($filterli, $menu, $filter)
-            
-            /* events */
-            var $ok      = $filter.find('button.ok'),
-                $clear   = $filter.find('button.clear'),
-                $inputs  = $filter.find(':text'),
-                $valA    = $inputs.first(),
-                $valB    = $inputs.last(),
-                $selects = $filter.find('select'),
-                $selA    = $selects.first(),
-                $selB    = $selects.last(),
-                $andOr   = $selects.eq(1)
-                
-            $ok.click(function() {
-                var operatorA = $selA.val(), valA = $valA.val().trim(), operatorB = $selB.val(), valB = $valB.val().trim(), andor = $andOr.val()
-                var filterDatas = {}
-                
-                if (valA.length) {
-                    $.extend(filterDatas, {operatorA:operatorA, valA:valA})
-                }
-                if (valB.length) {
-                    if (valA.length) $.extend(filterDatas, {andor:andor})
-                    $.extend(filterDatas, {operatorB:operatorB, valB:valB})
-                }
-                if (!$.isEmptyObject(filterDatas)) {
-                    tools.quickFilter(that.columnModel[$th.data('index')], filterDatas)
-                    that.$grid.trigger('click')
+            $menu.find('> ul > li:not(".'+ that.classnames.li_filter +'")').on('mouseover', function() {
+                if ($filterli.hasClass('active'))
                     $filterli.trigger('bjui.datagrid.th.submenu.hide', [$menu, $filter])
-                }
-            })
-            
-            $clear.click(function() {
-                var model = that.columnModel[$th.data('index')]
-                
-                $selects.find('> option:first').prop('selected', true)
-                $selects.selectpicker('refresh')
-                $inputs.val('')
-                if (model.isFiltered) {
-                    tools.quickFilter(model, null)
-                    that.$grid.trigger('click')
-                    $filterli.trigger('bjui.datagrid.th.submenu.hide', [$menu, $filter])
-                }
             })
         } else {
             $filterli.hide()
@@ -2887,20 +2974,15 @@
         
         if (paging.total == 0) return
         interval    = tools.getPageInterval(pageCount, paging.pageCurrent, paging.showPagenum)
-        selectPages = paging.selectPageSize.split(',')
-        selectPages.push(String(paging.pageSize))
-        $.unique(selectPages).sort(function(a, b) { return a - b })
-        
-        that.paging.pageCount = pageCount
         
         for (var i = interval.start; i < interval.end; i++) {
             pageNums.push(FRAG.gridPageNum.replace('#num#', i).replace('#active#', (paging.pageCurrent == i ? ' active' : '')))
         }
         
-        btnpaging = BJUI.doRegional(btnpaging.replaceAll('#pageCurrent#', paging.pageCurrent).replaceAll('#count#', paging.total +'/'+ pageCount), pr)
+        btnpaging = BJUI.doRegional(btnpaging.replaceAll('#pageCurrent#', paging.pageCurrent).replaceAll('#count#', paging.total +'/'+ parseInt(pageCount || 0)), pr)
         
         that.$box_paging = $('<div class="datagrid-paging-box"></div>')
-        that.$pagingCon  = $('<div class="paging-content"></div>').width(that.$tableH.width())
+        that.$pagingCon  = $('<div class="paging-content"></div>').width(that.$boxB.width())
         that.$refreshBtn = $('<button class="btn-default btn-refresh" title="'+ pr.refresh +'" data-icon="refresh"></button>')
         that.$paging     = $('<div class="datagrid-paging"></div>')
         that.$btnpaging  = $(btnpaging)
@@ -2917,19 +2999,7 @@
         that.$btnpaging.appendTo(that.$paging)
         that.$pagenum.insertAfter(that.$btnpaging.find('> li.page-prev'))
         
-        $.each(selectPages, function(i, n) {
-            var $option = $('<option value="'+ n +'">'+ n +'/'+ pr.page +'</option>')
-            
-            if (n == paging.pageSize) $option.prop('selected', true)
-            
-            that.$selectpage.append($option)
-        })
-        
         that.$box_paging.initui()
-        
-        /*if (options.pagingAlign != 'center') {
-            that.$box_paging.css('text-align', options.pagingAlign)
-        }*/
         
         //events
         var $jumpto = that.$btnpaging.find('> li.page-jumpto'),
@@ -2962,12 +3032,31 @@
             enablePrev()
             disableNext()
         }
+        var setPageSize = function(pageSize) {
+            that.$selectpage.empty()
+            
+            if (!pageSize) pageSize = that.paging.pageSize
+            
+            selectPages = paging.selectPageSize.split(',')
+            selectPages.push(String(pageSize))
+            $.unique(selectPages).sort(function(a, b) { return a - b })
+            $.each(selectPages, function(i, n) {
+                var $option = $('<option value="'+ n +'">'+ n +'/'+ pr.page +'</option>')
+                
+                if (n == paging.pageSize) $option.prop('selected', true)
+                
+                that.$selectpage.append($option)
+            })
+            
+            that.$selectpage.selectpicker('refresh')
+        }
         
         if (paging.pageCurrent == 1) pageFirst()
         if (paging.pageCurrent == paging.pageCount) {
             pageLast()
             if (paging.pageCurrent == 1) disablePrev()
         }
+        setPageSize()
         
         that.$paging.on('click', '.page-num', function(e) {
             var $num = $(this)
@@ -3000,6 +3089,10 @@
             
             $jumpto.find('input').val(pageCurrent)
             that.$btnpaging.find('> li.page-total > span').html(that.paging.total +'/'+ that.paging.pageCount)
+        })
+        
+        that.$selectpage.on('bjui.datagrid.paging.pageSize', function(e, pageSize) {
+            setPageSize(pageSize)
         })
         
         $jumpto.find('input').on('keyup', function(e) {
@@ -3064,12 +3157,13 @@
     
     // api - add
     Datagrid.prototype.add = function(addLocation) {
+        if (!this.tools.beforeEdit()) return
+        
         if (!this.options.editUrl) {
             BJUI.debug('Datagrid Plugin: Edit url is not set!')
             return
         }
         
-        if (!this.tools.beforeEdit()) return
         if (!this.options.editMode) return
         if (!this.options.inlineEditMult) {
             this.doCancelEditRow(this.$tbody.find('> tr.'+ this.classnames.tr_edit))
@@ -3139,7 +3233,7 @@
             if (trs.lockTr) trs.lockTr.insertAfter(that.$lockTbody.find('> tr:eq('+ that.$lastSelect.index() +')'))
         }
         
-        var addData = $.extend({}, that.emptyData)
+        var addData = $.extend({}, that.emptyData, {addFlag:true})
         
         if (!that.data) that.data = []
         if (!that.allData) that.allData = []
@@ -3162,7 +3256,11 @@
         })
         
         trs.tr.initui()
-        that.initEvents(trs.tr)
+        
+        setTimeout(function() {
+            that.initEvents(trs.tr)
+        }, 20)
+        
         if (trs.lockTr) that.initLockEvents(trs.lockTr)
         that.edit(trs.tr)
         
@@ -3186,11 +3284,17 @@
         $editTd.each(function() {
             var $td = $(this), $btns = $td.find('button'), $edit = $btns.first(), $update = $edit.next(), $save = $update.next(), $cancel = $save.next(), $delete = $cancel.next()
             
-            $edit.on('click', function(e) {
-                if (!tools.beforeEdit()) {
+            $edit.on('click', function(e, data) {
+                var $btn = $(this), $tr = $btn.closest('tr'), isAdd = $td.data('isAdd')
+                
+                if (!data) {
+                    if (that.isDom) data = $tr.data('initData') || tools.setDomData($tr)
+                    else data = that.data[$tr.index()]
+                }
+                
+                if (!tools.beforeEdit($tr, data)) {
                     return false
                 }
-                var $btn = $(this), $tr = $btn.closest('tr'), isAdd = $td.data('isAdd')
                 
                 if (type != 'dialog') {
                     that.inlineEdit($tr, isAdd)
@@ -3258,34 +3362,65 @@
     }
     
     // Api - inline edit tr
-    Datagrid.prototype.doEditRow = function(row, type, isAdd) {
-        var that = this, $tr, $editBtn
+    Datagrid.prototype.doEditRow = function(rows, type, isAdd) {
+        var that = this, $trs, $editBtn, datas = []
+        
+        type = type || that.options.editMode
+        
+        if (typeof rows == 'object') {
+            $trs = rows
+        } else if (isNaN(rows)) {
+            var $myTrs = that.$tbody.find('> tr'), $editTrs, rows = rows.split(',')
+            
+            rows = rows.unique()
+            rows.sort(function(a, b) {return a.trim() - b.trim()})
+            
+            $.each(rows, function(i, n) {
+                var tr = $myTrs.eq(parseInt(n.trim()))
+                
+                if (tr && tr.length) {
+                    if (!$editTrs) $editTrs = tr
+                    else $editTrs = $editTrs.add(tr)
+                }
+            })
+            
+            $trs = $editTrs
+        } else if (!isNaN(rows)) {
+            $trs = that.$tbody.find('> tr').eq(rows)
+        }
+        
+        if (!$trs.length) return
+        
+        $trs.each(function() {
+            var $tr = $(this), tr_index = $tr.index(), data
+            
+            if (that.isDom) data = $tr.data('initData') || tools.setDomData($tr)
+            else data = that.data[tr_index]
+            
+            datas.push(data)
+        })
+        
+        if (!that.tools.beforeEdit($trs, datas)) {
+            return
+        }
         
         if (!that.options.editUrl) {
             BJUI.debug('Datagrid Plugin: Edit url is not set!')
             return
         }
         
-        if (!that.tools.beforeEdit()) {
-            return
-        }
-        
-        type = type || that.options.editMode
-        
-        if ($.type(row) == 'number') {
-            $tr = this.$tbody.find('> tr').eq(row)
-        } else {
-            $tr = row
-        }
-        
-        $editBtn = $tr.find('> td.'+ that.classnames.s_edit +' > button.edit')
-        
-        if (type != 'dialog') {
-            if ($editBtn.length) $editBtn.trigger('click')
-            else this.inlineEdit($tr, isAdd)
-        } else {
-            this.dialogEdit($tr, isAdd)
-        }
+        $trs.each(function(i) {
+            var $tr = $(this)
+            
+            $editBtn = $tr.find('> td.'+ that.classnames.s_edit +' > button.edit')
+            
+            if (type != 'dialog') {
+                if ($editBtn.length) $editBtn.trigger('click', [datas[i]])
+                else that.inlineEdit($tr, isAdd, datas[i])
+            } else {
+                that.dialogEdit($tr, isAdd, datas[i])
+            }
+        })
     }
     
     // Api - cancel edit
@@ -3384,6 +3519,13 @@
         }
         
         var doDel = function() {
+            var $addTrs = $trs.filter('.'+ that.classnames.tr_add)
+            
+            if ($addTrs.length) {
+                $addTrs.remove()
+                if ($addTrs.length == $trs.length) return
+            }
+            
             // remote delete
             if (options.delUrl) {
                 var postData = [], callback = options.delCallback
@@ -3397,9 +3539,17 @@
                     if (options.delPK) {
                         postData.push(data[options.delPK])
                     } else {
-                        delData = $.extend({}, data)
-                        delete delData.gridCheckbox
-                        delete delData.gridEdit
+                        if (options.jsonPrefix) {
+                            delData = {}
+                            $.each(data, function(name, value) {
+                                if (name == 'gridCheckbox' || name == 'gridEdit') return true
+                                delData[options.jsonPrefix +'.'+ name] = value
+                            })
+                        } else {
+                            delData = $.extend({}, data)
+                            delete delData.gridCheckbox
+                            delete delData.gridEdit
+                        }
                         
                         postData.push(delData)
                     }
@@ -3437,15 +3587,17 @@
     }
     
     // inline edit
-    Datagrid.prototype.inlineEdit = function($tr, isAdd) {
-        if (!this.tools.beforeEdit()) {
+    Datagrid.prototype.inlineEdit = function($tr, isAdd, data) {
+        if (!this.tools.beforeEdit($tr, data)) {
             return false
         }
         
-        var that = this, options = that.options, tools = that.tools, columnModel = that.columnModel, $tds = $tr.find('> td'), tds_length = $tds.length, tr_index = $tr.index(), data
+        var that = this, options = that.options, tools = that.tools, columnModel = that.columnModel, $tds = $tr.find('> td'), tds_length = $tds.length, tr_index = $tr.index()
         
-        if (that.isDom) data = tools.setDomData($tr)
-        else data = that.data[tr_index]
+        if (!data) {
+            if (that.isDom) data = $tr.data('initData') || tools.setDomData($tr)
+            else data = that.data[tr_index]
+        }
         
         if ($tr.hasClass(that.classnames.tr_edit)) return false
         if (!that.inputs || !that.inputs.length) tools.initEditInputs()
@@ -3460,7 +3612,7 @@
         that.$lastEditTr = $tr
         
         $tds.each(function(i) {
-            var $td = $(this), op = columnModel[i], val = data[op.name], html = $td.html(), input = that.inputs[i], $input
+            var $td = $(this), op = columnModel[i], val = op && op.name && data[op.name], html = $td.html(), input = that.inputs[i], $input
             var onChange = function($el, $td, val) {
                 var changeData = $tr.data(that.datanames.changeData)
                 
@@ -3545,11 +3697,34 @@
             
             $td.data(that.datanames.td_html, html)
             
+            if (isAdd) {
+                if (!op.add) input = ''
+            } else {
+                if (!op.edit) input = ''
+            }
+            
             if (input) {
                 $input = $(input)
                 
                 if (op.type == 'boolean') $input.prop('checked', val)
-                else $input.val(val)
+                else {
+                    if (!val || val == 'null') val = ''
+                    $input.val(String(val))
+                }
+                
+                if (isAdd) {
+                    if (op.addAttrs && typeof op.addAttrs == 'object') {
+                        $.each(op.addAttrs, function(i, n) {
+                            $input.attr(i, n)
+                        })
+                    }
+                } else {
+                    if (op.editAttrs && typeof op.editAttrs == 'object') {
+                        $.each(op.editAttrs, function(i, n) {
+                            $input.attr(i, n)
+                        })
+                    }
+                }
                 
                 $td
                     .empty()
@@ -3595,12 +3770,19 @@
                     changeData = $tr.data(that.datanames.changeData)
                     $.extend(data, changeData)
                     // Specification post data
-                    tempData = $.extend({}, data)
-                    delete tempData.gridCheckbox
-                    delete tempData.gridEdit
+                    if (options.jsonPrefix) {
+                        tempData = {}
+                        $.each(data, function(name, value) {
+                            if (name == 'gridCheckbox' || name == 'gridEdit') return true
+                            tempData[options.jsonPrefix +'.'+ name] = value
+                        })
+                    } else {
+                        tempData = $.extend({}, data)
+                        delete tempData.gridCheckbox
+                        delete tempData.gridEdit
+                    }
                     
                     len --
-                    
                     postData.push(tempData)
                 } else {
                     postData = []
@@ -3624,11 +3806,13 @@
                         returnData = json
                     } else if ($.type(json) == 'object') {
                         if (json[BJUI.keys.statusCode]) {
-                            complete = true
-                            if (json[BJUI.keys.statusCode] != BJUI.statusCode.ok) {
+                            if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
+                                complete = true
+                            } else {
                                 that.$grid.bjuiajax('ajaxDone', json)
                             }
                         } else {
+                            complete = true
                             returnData.push(json)
                         }
                     }
@@ -3666,9 +3850,17 @@
                     changeData = $tr.data(that.datanames.changeData)
                     $.extend(data, changeData)
                     // Specification post data
-                    tempData = $.extend({}, data)
-                    delete tempData.gridCheckbox
-                    delete tempData.gridEdit
+                    if (options.jsonPrefix) {
+                        tempData = {}
+                        $.each(data, function(name, value) {
+                            if (name == 'gridCheckbox' || name == 'gridEdit') return true
+                            tempData[options.jsonPrefix +'.'+ name] = value
+                        })
+                    } else {
+                        tempData = $.extend({}, data)
+                        delete tempData.gridCheckbox
+                        delete tempData.gridEdit
+                    }
                     // Callback
                     if (callback) {
                         callback = callback.toFunc()
@@ -3681,11 +3873,13 @@
                                 returnData = json[0]
                             } else if ($.type(json) == 'object') {
                                 if (json[BJUI.keys.statusCode]) {
-                                    complete = true
-                                    if (json[BJUI.keys.statusCode] != BJUI.statusCode.ok) {
+                                    if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
+                                        complete = true
+                                    } else {
                                         that.$grid.bjuiajax('ajaxDone', json)
                                     }
                                 } else {
+                                    complete = true
                                     returnData = json
                                 }
                             }
@@ -3808,15 +4002,17 @@
     }
     
     // inline edit
-    Datagrid.prototype.dialogEdit = function($tr, isAdd) {
-        if (!this.tools.beforeEdit()) {
+    Datagrid.prototype.dialogEdit = function($tr, isAdd, data) {
+        if (!this.tools.beforeEdit($tr, data)) {
             return false
         }
         
-        var that = this, options = that.options, tools = that.tools, columnModel = that.columnModel, tr_index = $tr.index(), data, $dialog, $form, html = '', title
+        var that = this, options = that.options, tools = that.tools, columnModel = that.columnModel, tr_index = $tr.index(), $dialog, $form, html = '', title
         
-        if (that.isDom) data = tools.setDomData($tr)
-        else data = that.data[tr_index]
+        if (!data) {
+            if (that.isDom) data = $tr.data('initData') || tools.setDomData($tr)
+            else data = that.data[tr_index]
+        }
         
         if (!that.inputs || !that.inputs.length) tools.initEditInputs()
         
@@ -3919,6 +4115,8 @@
                     
                     if (n.type == 'boolean') {
                         $input.attr('checked', data[n.name])
+                    } else if (n.type == 'textarea') {
+                        $input.html(data[n.name])
                     } else {
                         $input.attr('value', data[n.name])
                     }
@@ -3995,9 +4193,17 @@
                         changeData = $tr.data(that.datanames.changeData)
                         $.extend(data, changeData)
                         
-                        postData = $.extend({}, data)
-                        delete postData.gridCheckbox
-                        delete postData.gridEdit
+                        if (options.jsonPrefix) {
+                            postData = {}
+                            $.each(data, function(name, value) {
+                                if (name == 'gridCheckbox' || name == 'gridEdit') return true
+                                postData[options.jsonPrefix +'.'+ name] = value
+                            })
+                        } else {
+                            postData = $.extend({}, data)
+                            delete postData.gridCheckbox
+                            delete postData.gridEdit
+                        }
                         
                         // Callback
                         if (callback) {
@@ -4011,11 +4217,13 @@
                                     returnData = json[0]
                                 } else if ($.type(json) == 'object') {
                                     if (json[BJUI.keys.statusCode]) {
-                                        complete = true
-                                        if (json[BJUI.keys.statusCode] != BJUI.statusCode.ok) {
+                                        if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
+                                            complete = true
+                                        } else {
                                             that.$grid.bjuiajax('ajaxDone', json)
                                         }
                                     } else {
+                                        complete = true
                                         returnData = json
                                     }
                                 }
@@ -4122,16 +4330,47 @@
     
     /* resize */
     Datagrid.prototype.resizeGrid = function() {
-        var that = this
+        var that = this, $target = that.$grid.getPageTarget(), parentW, parentH
         var _resizeGrid = function() {
-            var hW = that.$boxH.find('> div').width(), bW = that.$boxB.find('> div').width() - 1
             
-            if (hW != bW) that.$boxH.find('> div').width(bW)
+            if (that.initFixedW && String(that.options.width).endsWith('%')) {
+                parentW = that.$grid.parent().width()
+                
+                if ($target.is(':hidden') && $target.hasClass('navtabPage')) {
+                    that.$grid.data('need.fixedW', true)
+                } else {
+                    that.fixedWidth()
+                }
+            }
             
-            if (!that.resizeFlag) that.fixedWidth()
+            if (String(that.options.height).endsWith('%')) {
+                parentH = that.$grid.parent().height()
+                
+                if ($target.is(':hidden') && $target.hasClass('navtabPage')) {
+                    if ($target.hasClass('navtabPage')) {
+                        that.$grid.data('need.fixedH', true)
+                    }
+                } else if (parentH) {
+                    if (parentH != that.parentH)
+                        that.tools.fixedH(parentH)
+                }
+            }
         }
         
-        $(window).off(BJUI.eventType.resizeGrid).on(BJUI.eventType.resizeGrid, _resizeGrid)
+        $target.on('bjui.navtab.switch', $.proxy(function() {
+            if (that.$grid.data('need.fixedH')) {
+                parentH = that.$grid.parent().height()
+                if (parentH)
+                    that.tools.fixedH(parentH)
+                that.$grid.removeData('need.fixedH')
+            }
+            if (that.$grid.data('need.fixedW')) {
+                that.fixedWidth()
+                that.$grid.removeData('need.fixedW')
+            }
+        }, that))
+        
+        $(window).on(BJUI.eventType.resizeGrid, $.proxy(_resizeGrid, that))
     }
     
     

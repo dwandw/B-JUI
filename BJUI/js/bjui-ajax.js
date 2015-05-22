@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.1 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-ajax.js v1.1
+ * B-JUI: bjui-ajax.js  v1.2
  * @author K'naan (xknaan@163.com) 
  * -- Modified from dwz.ajax.js (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-ajax.js
@@ -47,7 +47,11 @@
                 var form     = $parent.isTag('form') ? $parent[0] : $parent.find('#pagerForm:first')[0]
                 var pageInfo = $.extend({}, BJUI.pageInfo)
                 
-                if ($parent.data('bjui.clientPaging')) args = $parent.data('bjui.clientPaging')
+                if ($parent.data('bjui.clientPaging')) {
+                    args = $.extend({}, $parent.data('bjui.clientPaging'), args)
+                    $parent.data('bjui.clientPaging', args)
+                }
+                
                 if (form) {
                     for (var key in pageInfo) {
                         var val = ''
@@ -110,7 +114,8 @@
         if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {
             if (json[BJUI.keys.message]) $element.alertmsg('error', json[BJUI.keys.message])
         } else if (json[BJUI.keys.statusCode] == BJUI.statusCode.timeout) {
-            $element.alertmsg('error', json[BJUI.keys.message] || FRAG.sessionTimout, {okCall:BJUI.loadLogin})
+            $element.alertmsg('info', json[BJUI.keys.message] || FRAG.sessionTimout)
+            BJUI.loadLogin()
         } else {
             if (json[BJUI.keys.message]) $element.alertmsg('correct', json[BJUI.keys.message])
         }
@@ -192,6 +197,13 @@
             setTimeout(function() { that.$element.dialog('refresh', json.dialogid) }, 100)
         if (json.divid)
             setTimeout(function() { that.$element.bjuiajax('refreshDiv', json.divid) }, 100)
+        if (json.datagrid) {
+            setTimeout(function() {
+                $.each(json.datagrid.join(','), function(i, n) {
+                    $('#'+ n.trim()).datagrid('refresh')
+                })
+            }, 100)
+        }
         if (json.closeCurrent && !json.forward)
             that.$element.navtab('closeCurrentTab')
         else if (that.options.reload)

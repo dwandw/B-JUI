@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.1 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-navtab.js v1.1
+ * B-JUI: bjui-navtab.js  v1.2
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.navTab.js (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-navtab.js
@@ -63,8 +63,11 @@
                     $main.removeAttr('data-url').navtab('reload', options)
                 })
             }
-            $main.navtab('switchTab', 'main')
-                
+            
+            setTimeout(function() {
+                $main.navtab('switchTab', 'main')
+            }, 50)
+            
             $mainLi
                 .click(function() {
                     if ($(this).hasClass('active')) $moreBox.hide()
@@ -192,16 +195,16 @@
                 $tabs.animate({ left: iLeft }, 200, function() { that.tools.ctrlScrollBtn() })
             },
             scrollCurrent: function() { // auto scroll current tab
-                var iW = this.tabsW(this.getTabs())
+                var iW = this.tabsW(this.getTabs()), scrollW = this.getScrollBarW()
                 
-                if (iW <= this.getScrollBarW())
+                if (iW <= scrollW)
                     this.scrollTab(0)
-                else if (this.getLeft() < this.getScrollBarW() - iW)
-                    this.scrollTab(this.getScrollBarW()-iW)
+                else if (this.getLeft() < scrollW - iW)
+                    this.scrollTab(scrollW-iW)
                 else if (currentIndex < this.visibleStart())
                     this.scrollTab(-this.getTabsW(0, currentIndex))
                 else if (currentIndex >= this.visibleEnd())
-                    this.scrollTab(this.getScrollBarW() - this.getTabs().eq(currentIndex).outerWidth(true) - this.getTabsW(0, currentIndex))
+                    this.scrollTab(scrollW - this.getTabs().eq(currentIndex).outerWidth(true) - this.getTabsW(0, currentIndex))
             },
             ctrlScrollBtn: function() {
                 var iW = this.tabsW(this.getTabs())
@@ -221,7 +224,7 @@
                 }
             },
             switchTab: function(iTabIndex) {
-                var $tab = this.getTabs().removeClass('active').eq(iTabIndex).addClass('active'), $panels = this.getPanels(), $panel = $panels.eq(iTabIndex)
+                var $tab = this.getTabs().removeClass('active').eq(iTabIndex).addClass('active'), $panels = this.getPanels(), $panel = $panels.eq(iTabIndex), onSwitch = that.options.onSwitch ? that.options.onSwitch.toFunc() : null
                 
                 if ($tab.data('reloadFlag')) {
                     $panels.hide()
@@ -245,6 +248,11 @@
                 this.scrollCurrent()
                 $currentTab     = $tab
                 $.CurrentNavtab = $currentPanel = $panel
+                
+                if (onSwitch) onSwitch.apply(that)
+                
+                //events
+                $panel.trigger('bjui.navtab.switch')
             },
             closeTab: function(index, openTabid) {
                 var $tab        = this.getTabs().eq(index)
@@ -368,9 +376,6 @@
     // if found tabid replace tab, else create a new tab.
     Navtab.prototype.openTab = function() {
         var that = this, $element = this.$element, options = this.options, tools = this.tools
-        
-        if (options.options && typeof options.options == 'string') options.options = options.options.toObj()
-        $.extend(that.options, typeof options.options == 'object' && options.options)
         
         if (!options.url && options.href) options.url = options.href
         if (!options.url) {
@@ -601,24 +606,24 @@
         
         return this.each(function () {
             var $this   = $(this)
-            var options = $.extend({}, Navtab.DEFAULTS, $this.data(), typeof option == 'object' && option)
+            var options = $.extend({}, Navtab.DEFAULTS, typeof option == 'object' && option)
             var data    = $this.data('bjui.navtab')
             
-            if (options.url && !options.url.isFinishedTm()) options.fresh = true
-            if (!data || options.fresh) $this.data('bjui.navtab', (data = new Navtab(this, options)))
+            if (!data) $this.data('bjui.navtab', (data = new Navtab(this, options)))
             
             if (typeof property == 'string' && $.isFunction(data[property])) {
                 [].shift.apply(args)
                 if (!args) data[property]()
                 else data[property].apply(data, args)
             } else {
+                data = new Navtab(this, options)
                 data.openTab()
             }
         })
     }
-
+    
     var old = $.fn.navtab
-
+    
     $.fn.navtab             = Plugin
     $.fn.navtab.Constructor = Navtab
     
@@ -632,14 +637,20 @@
     
     // NAVTAB DATA-API
     // ==============
-
+    
     $(document).on('click.bjui.navtab.data-api', '[data-toggle="navtab"]', function(e) {
-        var $this   = $(this), href = $this.attr('href'), options = $this.data()
+        var $this   = $(this), href = $this.attr('href'), data = $this.data(), options = data.options
         
-        if (!options.title) options.title = $this.text()
-        if (href) options.href = href
+        if (options) {
+            if (typeof options == 'string') options = options.toObj()
+            if (typeof options == 'object')
+                $.extend(data, options)
+        }
         
-        Plugin.call($this, options)
+        if (!data.title) data.title = $this.text()
+        if (href && !data.url) data.url = href
+        
+        Plugin.call($this, data)
         
         e.preventDefault()
     })

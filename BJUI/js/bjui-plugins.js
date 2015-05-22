@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.1 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-plugins.js v1.1
+ * B-JUI: bjui-plugins.js  v1.2
  * @author K'naan (xknaan@163.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-plugins.js
  * ========================================================================
@@ -268,7 +268,7 @@
                 $this.empty()
             } else {
                 if (typeof op.nodes == 'string') {
-                    if (op.nodes.indexOf('[') >= 0 || op.nodes.indexOf('{') >= 0) {
+                    if (op.nodes.trim().startsWith('[') || op.nodes.trim().startsWith('{')) {
                         op.nodes = op.nodes.toObj()
                     } else {
                         op.nodes = op.nodes.toFunc()
@@ -355,6 +355,7 @@
                 if (treeNode.faiconClose) {
                     $('#'+ treeNode.tId +'_ico').find('> i').attr('class', 'fa fa-'+ treeNode.faiconClose)
                 }
+                console.log('11')
                 if (op.onCollapse) {
                     op.onCollapse.toFunc().call(this, event, treeId, treeNode)
                 }
@@ -406,7 +407,7 @@
                                     }
                                 })
                             }
-                        
+                            
                             if (op.beforeRemove) {
                                 var fn = op.beforeRemove.toFunc()
                                 
@@ -533,37 +534,34 @@
         
         /* accordion */
         $box.find('[data-toggle="accordion"]').each(function() {
-            var $this = $(this)
+            var $this = $(this), hBox = $this.data('heightbox'), height = $this.data('height')
             var initAccordion = function(hBox, height) {
-                var offsety   = $this.data('offsety') || 0
-                var height    = height || ($(hBox).outerHeight() - (offsety * 1))
-                var $pheader  = $this.find('.panel-heading')
-                var h1        = $pheader.outerHeight()
+                var offsety   = $this.data('offsety') || 0,
+                    height    = height || ($(hBox).outerHeight() - (offsety * 1)),
+                    $pheader  = $this.find('.panel-heading'),
+                    h1        = $pheader.outerHeight()
                 
-                h1 = h1 * $pheader.length + (parseInt($pheader.last().parent().css('marginTop')) * ($pheader.length - 1))
+                h1 = (h1 + 1) * $pheader.length
                 $this.css('height', height)
-                height = height - h1 - (2 * $pheader.length)
+                height = height - h1
                 $this.find('.panel-collapse').find('.panel-body').css('height', height)
             }
-            var hBox   = $this.data('heightbox')
-            var height = $this.data('height')
             
-            if (hBox || height) {
-                initAccordion(hBox, height)
-                $(window).resize(function() {
+            if ($this.find('> .panel').length) {
+                if (hBox || height) {
                     initAccordion(hBox, height)
-                })
-            }
-            
-            $this.on('shown.bs.collapse', function() {
-                $(this).find('[data-toggle=collapse]').each(function() {
-                    var $collapse = $(this), faicon = $collapse.data('faicon'), faiconClose = $collapse.data('faiconClose'),
-                        icon = faicon ? faicon : 'caret-square-o-down', iconClose = faiconClose ? faiconClose : (faicon ? faicon : 'caret-square-o-right')
+                    $(window).resize(function() {
+                        initAccordion(hBox, height)
+                    })
                     
-                    $collapse.find('i').attr('class', 'fa fa-'+ icon)
-                    $collapse.removeClass('active').not('.collapsed').addClass('active').find('i').attr('class', 'fa fa-'+ iconClose)
-                })
-            })
+                    $this.on('hidden.bs.collapse', function (e) {
+                        var $last = $(this).find('> .panel:last'), $a = $last.find('> .panel-heading > h4 > a')
+                        
+                        if ($a.hasClass('collapsed'))
+                            $last.css('border-bottom', '1px #ddd solid')
+                    })
+                }
+            }
         })
         
         /* Kindeditor */

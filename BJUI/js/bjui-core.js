@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.1 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-core.js v1.1
+ * B-JUI: bjui-core.js  v1.2
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.core.js (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-core.js
@@ -55,6 +55,7 @@
         statusCode: {ok:200, error:300, timeout:301},
         keys: {statusCode:'statusCode', message:'message'},
         ui: {
+            windowWidth      : 0,
             showSlidebar     : true,      // After the B-JUI initialization, display slidebar
             clientPaging     : true,      // Response paging and sorting information on the client
             overwriteHomeTab : false      // When open an undefined id of navtab, whether overwrite the home navtab
@@ -97,21 +98,36 @@
         },
         initEnv: function() {
             $(window).resize(function() {
-                BJUI.initLayout()
+                var ww = $(this).width()
+                
+                if (BJUI.ui.windowWidth) {
+                    if (BJUI.ui.windowWidth > 600 && BJUI.ui.windowWidth < ww)
+                        ww = BJUI.ui.windowWidth
+                }
+                
+                BJUI.initLayout(ww)
                 setTimeout(function() {$(this).trigger(BJUI.eventType.resizeGrid)}, 30)
             })
-
+            
             setTimeout(function() {
-                BJUI.initLayout()
+                var ww = $(window).width()
+                
+                if (BJUI.ui.windowWidth) {
+                    if (BJUI.ui.windowWidth > 600 && BJUI.ui.windowWidth < ww)
+                        ww = BJUI.ui.windowWidth
+                }
+                
+                BJUI.initLayout(ww)
                 $(document).initui()
             }, 10)
         },
-        initLayout: function() {
-            var iContentW = $(window).width() - (BJUI.ui.showSlidebar ? $('#bjui-sidebar').width() + 10 : 8) - 0
-            var iContentH = $(window).height() - $('#bjui-header').height() - $('#bjui-hnav').outerHeight() - $('#bjui-footer').outerHeight()
-            var navtabH   = $('#bjui-navtab').find('.tabsPageHeader').height()
-            var topH      = $('#bjui-hnav').height() + $('#bjui-header').outerHeight() + 5
-            var collH     = $('#bjui-hnav').find('.navbar-collapse').height()
+        initLayout: function(ww) {
+            var iContentW = ww - (BJUI.ui.showSlidebar ? $('#bjui-sidebar').width() + 6 : 6),
+                iContentH = $(window).height() - $('#bjui-header').height() - $('#bjui-footer').outerHeight(), 
+                navtabH   = $('#bjui-navtab').find('.tabsPageHeader').height()
+            
+            if (BJUI.ui.windowWidth) $('#bjui-window').width(ww)
+            BJUI.windowWidth = ww
             
             $('#bjui-container').height(iContentH)
             $('#bjui-navtab').width(iContentW)
@@ -133,7 +149,7 @@
                 $('body').data('bjui.navbar.width', navbarWidth)
             }
             if (navbarWidth) {
-                if ($(window).width() - navbarWidth.logoW < navbarWidth.navW) {
+                if (ww - navbarWidth.logoW < navbarWidth.navW) {
                     $toggle.show()
                     $navbar.addClass('collapse menu')
                 } else {
@@ -142,32 +158,27 @@
                 }
             }
             /* horizontal navbar */
-            var hnavWidth = $('body').data('bjui.hnav.width'), hnavCWidth = $('body').data('bjui.hnav.cwidth'),
-                $hnav = $('#bjui-hnav'), $htoggle = $hnav.find('.bjui-hnav-toggle'), $hnavbar = $('#bjui-hnav-navbar'), $form = $hnav.find('.hnav-form')
+            var $hnavbox  = $('#bjui-hnav-navbar-box'),
+                $hnavbar  = $hnavbox.find('> #bjui-hnav-navbar'),
+                $hmoreL   = $hnavbox.prev(),
+                $hmoreR   = $hnavbox.next(),
+                hboxWidth = $hnavbox.width(),
+                liW       = 0
             
-            if (!hnavWidth) {
-                hnavWidth = {barW:$hnavbar.outerWidth(), formW:$form.outerWidth()}
-                $('body').data('bjui.hnav.width', hnavWidth)
-            }
-            if (hnavWidth) {
-                if ((!hnavCWidth ? hnavWidth.barW : hnavCWidth) + hnavWidth.formW > $(window).width()) {
-                    if (!hnavCWidth) {
-                        $hnavbar.addClass('condensed')
-                        $('body').data('bjui.hnav.cwidth', $hnavbar.outerWidth())
-                    }
-                    $htoggle.show()
-                    $hnavbar.addClass('collapse menu')
-                    $form.hide()
+            $hnavbar.find('> li').each(function(i) {
+                var $li = $(this)
+                
+                liW += $li.outerWidth()
+                
+                if (liW > hboxWidth) {
+                    $hmoreR.show()
+                    $hnavbox.data('hnav.move', true).data('hnav.liw', liW)
                 } else {
-                    if (hnavCWidth && (hnavWidth.barW + hnavWidth.formW < $(window).width())) {
-                        $hnavbar.removeClass('condensed')
-                        $('body').removeData('bjui.hnav.cwidth')
-                    }
-                    $hnavbar.removeClass('collapse menu in')
-                    $form.show()
-                    $htoggle.hide()
+                    $hmoreL.hide()
+                    $hmoreR.hide()
+                    $hnavbox.removeData('hnav.move')
                 }
-            }
+            })
         },
         regional: {},
         setRegional: function(key, value) {

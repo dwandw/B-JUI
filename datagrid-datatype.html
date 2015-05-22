@@ -31,7 +31,7 @@ $('#test-datagrid-json').datagrid({
                 name: 'sex',
                 label: '性别',
                 type: 'select',
-                items: [{'true':'男'}, {'false':'女'}],
+                items: [{'':''}, {'true':'男'}, {'false':'女'}],
                 align: 'center',
                 width: 40,
                 render: $.datagrid.renderItem
@@ -121,6 +121,7 @@ $('#test-datagrid-json').datagrid({
     editMode: 'inline',
     fullGrid: true,
     showLinenumber: false
+    //showCheckboxcol: true
 })
 
 $('#test-datagrid-array').datagrid({
@@ -357,24 +358,14 @@ $('#test-datagrid-xml').datagrid({
 })
 </script>
 <div class="bjui-pageContent">
-    <button onclick="delRowsTest()">测试 删除</button>
-    <div style="margin:15px; height:100%;">
-        <fieldset>
-            <legend>Json 数据类型</legend>
-            <table id="test-datagrid-json" data-width="100%" class="table table-bordered">
-            </table>
-        </fieldset>
-        <fieldset>
-            <legend>Array 数据类型</legend>
-            <table id="test-datagrid-array" data-width="100%" class="table table-bordered">
-            </table>
-        </fieldset>
-        <fieldset>
-            <legend>Xml 数据类型</legend>
-            <table id="test-datagrid-xml" data-width="100%" class="table table-bordered">
-            </table>
-        </fieldset>
-        
-        
+    <div style="padding:15px; height:100%; width:100%;">
+        <table id="test-datagrid-json" data-width="100%" class="table table-bordered">
+        </table>
+        <br>
+        <table id="test-datagrid-array" data-width="100%" data-height="280" class="table table-bordered">
+        </table>
+        <br>
+        <table id="test-datagrid-xml" data-width="100%" class="table table-bordered">
+        </table>
     </div>
 </div>

@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.1 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-tablefixed.js v1.1
+ * B-JUI: bjui-tablefixed.js  v1.2
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.stable.js (author:ZhangHuihua@msn.com, Roger Wu)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-tablefixed.js
@@ -144,10 +144,10 @@
         
         this.$container = this.$element.parent().addClass('bjui-resizeGrid')
         this.$fixed     = undefined
-        var width       = this.$container.innerWidth()
+        var width       = this.$container.width()
         var height      = this.options.height
         
-        if (this.$container.hasClass('tab-pane')) width = this.$container.parent().innerWidth() - 20
+        if (this.$container.hasClass('tab-pane')) width = this.$container.parent().width() - 20
         if (typeof this.options.width == 'string' && this.options.width.indexOf('%')) {
             this.options.newWidth = width * (this.options.width.replace('%', '') / 100)
         } else {
@@ -406,7 +406,7 @@
         var _resizeGrid = function() {
             $('div.bjui-resizeGrid').each(function() {
                 var $this  = $(this), $navtab = $this.closest('.navtabPage'),
-                    width  = $this.innerWidth(),
+                    width  = $this.width(),
                     height = $this.height(),
                     $fixed = $this.find('.bjui-tablefixed'),
                     fixedH = $fixed.find('.fixedtableThead').height(),

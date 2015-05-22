@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.1 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-alertmsg.js v1.1
+ * B-JUI: bjui-alertmsg.js  v1.2
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.alertMsg.js (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-alertmsg.js
@@ -216,13 +216,6 @@
             open: function(type, msg, buttons) {
                 var tools = this, btnsHtml = '', $newbox, $btns, alertTimeout = BJUI.alertMsg.alertTimeout
                 
-                if (options.options) {
-                    if (typeof options.options == 'string') options.options = options.options.toObj()
-                    $.extend(true, that.options, typeof options.options == 'object' && options.options)
-                    
-                    if (type != options.type && options.types[options.type]) type = options.type
-                    if (options.msg) msg = options.msg
-                }
                 if (buttons) {
                     for (var i = 0; i < buttons.length; i++) {
                         var sRel = buttons[i].call ? 'callback' : ''
@@ -350,9 +343,8 @@
         return this.each(function () {
             var $this   = $(this)
             var options = $.extend({}, Alertmsg.DEFAULTS, $this.data(), typeof option == 'object' && option)
-            var data    = $this.data('bjui.alertmsg')
+            var data    = new Alertmsg(this, options)
             
-            if (!data) $this.data('bjui.alertmsg', (data = new Alertmsg(this, options)))
             if (typeof property == 'string' && $.isFunction(data[property])) {
                 [].shift.apply(args)
                 if (!args) data[property]()
@@ -380,15 +372,19 @@
     // ==============
     
     $(document).on('click.bjui.alertmsg.data-api', '[data-toggle="alertmsg"]', function(e) {
-        var $this = $(this), data = $this.data(), options = data.options, type = data.type, msg = data.msg
+        var $this = $(this), data = $this.data(), options = data.options, type, msg
         
         if (options) {
-            options = options.toObj()
-            if (!type) type = options.type
+            if (typeof options == 'string') options = options.toObj()
+            if (typeof options == 'object') {
+                $.extend(data, options)
+            }
         }
         
+        type = data.type
         if (!type) return false
-        Plugin.call($this, type, msg, data)
+        
+        Plugin.call($this, type, data.msg || type, data)
         
         e.preventDefault()
     })

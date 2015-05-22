@@ -28,7 +28,7 @@
                     <td>columns</td>
                     <td>array</td>
                     <td>null</td>
-                    <td>[可选] 表头模型，适用动态生成表头，如果未设置本参数，将自动转化静态表头为模型。</td>
+                    <td>[可选] 表头模型，适用动态生成表头，如果未设置本参数，将自动转化静态表头为模型。<a href="doc/datagrid/datagrid-columns.html" data-toggle="navtab" data-options="{id:'doc-datagrid-columns', title:'columns参数'}">点此查看columns对象的详细参数</a></td>
                 </tr>
                 <tr>
                     <td>data</td>
@@ -40,7 +40,10 @@
                     <td>dataUrl</td>
                     <td>string</td>
                     <td>null</td>
-                    <td>[可选] Ajax请求数据的URL。</td>
+                    <td>[可选] Ajax请求数据的URL。返回数据模板:
+                    <br><b>JSON:</b><code>{total:50, pageCurrent:1, list:[{name:'孙悟空',sex:true}, {name:'美国队长', true}]}</code>
+                    <br><b>Array:</b><code>{total:50, pageCurrent:1, list:[['孙悟空',true], ['美国队长', true]]}</code>    
+                    </td>
                 </tr>
                 <tr>
                     <td>loadType</td>
@@ -178,7 +181,10 @@
                     <td>paging</td>
                     <td>boolean/object</td>
                     <td>true</td>
-                    <td>[可选] 是否显示分页组件，可设置分页参数。分页参数模板：<code>{pageSize:30, selectPageSize:'30,60,90', pageCurrent:1, showPagenum:5}</code></td>
+                    <td>[可选] 是否显示分页组件，可设置分页参数。分页参数模板：
+                        <code>{pageSize:30, selectPageSize:'30,60,90', pageCurrent:1, showPagenum:5, total:0}</code><br>
+                        <code>如果local='remote'，并通过dataUrl参数请求json数据时，返回的数据要提供total、pageCurrent参数，可提供pageSize参数</code>
+                    </td>
                 </tr>
                 <tr>
                     <td>pagingAlign</td>
@@ -257,6 +263,12 @@
                     <td>function(json)</td>
                     <td>null</td>
                     <td>[可选] 删除成功后的回调函数，返回的json内容为B-JUI默认的回调json。</td>
+                </tr>
+                <tr>
+                    <td>jsonPrefix</td>
+                    <td>string</td>
+                    <td>null</td>
+                    <td>[可选] 发送到服务器端的json数据(name)加前缀，包括(保存、删除、筛选)操作。</td>
                 </tr>
                 <tr>
                     <td>contextMenuH</td>

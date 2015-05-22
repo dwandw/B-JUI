@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.1 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-frag.js v1.1
+ * B-JUI: bjui-frag.js  v1.2
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.frag.xml (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-frag.js
@@ -63,7 +63,7 @@
         next      : 'Next',
         refresh   : 'Refresh',
         query     : 'Query',
-        import    : 'Import',
+        'import'  : 'Import',
         'export'  : 'Export',
         all       : 'All',
         'true'    : 'True',
@@ -165,6 +165,16 @@
         orderby: '<a href="javascript:;" class="order asc" data-order-direction="asc" title="#asc#"><i class="fa fa-angle-up"></i></a>' +
                  '<a href="javascript:;" class="order desc" data-order-direction="desc" title="#desc#"><i class="fa fa-angle-down"></i></a>'
         ,
+        slidePanel: '<div class="panel panel-default">' +
+                    '    <div class="panel-heading">' +
+                    '        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#bjui-accordionmenu" href="##id#" class="#class#">#icon#&nbsp;#title#<b>#righticon#</b></a></h4>' +
+                    '    </div>' +
+                    '    <div id="#id#" class="panel-collapse collapse#bodyclass#">' +
+                    '        <div class="panel-body">' +
+                    '        </div>' +
+                    '    </div>' +
+                    '</div>'
+        ,                    
         pagination: '<ul class="pagination">' +
                     '    <li class="j-first">' +
                     '        <a class="first" href="javascript:;"><i class="fa fa-step-backward"></i> #first#</a>' +

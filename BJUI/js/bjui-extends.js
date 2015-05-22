@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.1 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-extends.js v1.1
+ * B-JUI: bjui-extends.js  v1.2
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.core.js (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-extends.js
@@ -52,13 +52,11 @@
                                 else $this.dialog('closeCurrent')
                             }
                         } else if (json[BJUI.keys.statusCode] == BJUI.statusCode.timeout) {
-                            if (!$ajaxMask.length) {
-                                if ($this.closest('.bjui-dialog').length) $this.dialog('closeCurrent')
-                                if ($this.closest('.navtab-panel').length) $this.navtab('closeCurrent')
-                            }
-                            $('body').alertmsg('error', (json[BJUI.keys.message] || BJUI.regional.sessiontimeout),
-                                { okCall:function() { BJUI.loadLogin() } }
-                            )
+                            if ($this.closest('.bjui-dialog').length) $this.dialog('closeCurrent')
+                            if ($this.closest('.navtab-panel').length) $this.navtab('closeCurrentTab')
+                            
+                            $('body').alertmsg('info', (json[BJUI.keys.message] || BJUI.regional.sessiontimeout))
+                            BJUI.loadLogin()
                         }
                         $ajaxMask.fadeOut('normal', function() {
                             $(this).remove()
