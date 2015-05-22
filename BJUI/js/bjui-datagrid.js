@@ -2878,11 +2878,12 @@
                     $filterA = $filter.find('span.filter-a'),
                     $filterB = $filter.find('span.filter-b'),
                     $select  = $('<select data-toggle="selectpicker" data-container="true"></select>'),
-                    $input   = $(that.inputs[index])//$('<input type="text" size="10">')
+                    $input   = $(that.inputs[index]),
+                    $valA, $valB
                 
                 $input.removeAttr('data-rule').attr('size', 10).addClass('filter-input')
                 
-                if (type == 'string') {
+                if (type == 'string' || type == 'lookup') {
                     if (!operator.length) operator = ['=', '!=', 'like']
                 } else if (type == 'number' || type == 'int' || type == 'spinner') {
                     if (type == 'spinner') $input.removeAttr('data-toggle')
@@ -2906,8 +2907,11 @@
                     $select.append('<option value="'+ (operator[i]) +'">'+ (operator[i]) +'</option>')
                 }
                 
+                $valA = $input
+                $valB = $valA.clone()
+                
                 $filterA.append($select).append($input)
-                $filterB.append($select.clone()).append($input.clone())
+                $filterB.append($select.clone()).append($valB)
                 
                 $th.data('bjui.datagrid.filter', $filter)
                 
@@ -2926,9 +2930,6 @@
                 /* events */
                 var $ok      = $filter.find('button.ok'),
                     $clear   = $filter.find('button.clear'),
-                    $inputs  = $filter.find('.filter-input'),
-                    $valA    = $inputs.first(),
-                    $valB    = $inputs.last(),
                     $selects = $filter.find('select'),
                     $selA    = $selects.first(),
                     $selB    = $selects.last(),
@@ -2957,7 +2958,8 @@
                     
                     $selects.find('> option:first').prop('selected', true)
                     $selects.selectpicker('refresh')
-                    $inputs.val('')
+                    $valA.val('')
+                    $valB.val('')
                     if (model.isFiltered) {
                         tools.quickFilter(model, null)
                         that.$grid.trigger('click')
