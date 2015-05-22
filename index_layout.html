@@ -49,6 +49,11 @@
                     <div class="panel-heading"><h3 class="panel-title">当前版本：<code>V1.2</code>　最近更新日志(2015-05-22)：</h3></div>
                     <div class="panel-body bjui-doc" style="padding:0;">
                         <ul>
+                            <li>[修复]datagrid在local模式下提供空数据时显示不正常的bug</li>
+                            <li>[新增]ajax下载插件及文档，可以返回规范JSON或正确的文件下载地址</li>
+                            <li>[优化]当ajax回调在遇到其他http状态码(401,403,404...)时，如果返回框架规范JSON，则显示返回的信息提示</li>
+                            <li>[优化]当调整浏览器大小后，遇到当前navtab有固定表头表格会导致其他navtab的datagrid调整大小失败的问题</li>
+                            <li>-----</li>
                             <li>[界面] 五套皮肤重新配色</li>
                             <li>[界面] 重新设计横向菜单，当超出显示宽度时可左右移动，新增列表方式的导航栏</li>
                             <li>[init - 初始化参数] 新增pageInfo对象参数total，用于datagrid返回记录总数</li>

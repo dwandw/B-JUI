@@ -122,10 +122,16 @@
     }
     
     Bjuiajax.prototype.ajaxError = function(xhr, ajaxOptions, thrownError) {
-        this.$element.alertmsg('error', '<div>Http status: ' + xhr.status + ' ' + xhr.statusText + '</div>' 
-            + '<div>ajaxOptions: '+ ajaxOptions +' </div>'
-            + '<div>thrownError: '+ thrownError +' </div>'
-            + '<div>'+ xhr.responseText +'</div>')
+        var msg = xhr.responseText.trim()
+        
+        if (msg.startsWith('{')) {
+            this.ajaxDone(msg.toObj())
+        } else {
+            this.$element.alertmsg('error', '<div>Http status: ' + xhr.status + ' ' + xhr.statusText + '</div>' 
+                + '<div>ajaxOptions: '+ ajaxOptions +' </div>'
+                + '<div>thrownError: '+ thrownError +' </div>'
+                + '<div>'+ msg +'</div>')
+        }
     }
     
     Bjuiajax.prototype.ajaxCallback = function(json) {
@@ -453,7 +459,7 @@
     
     Bjuiajax.prototype.doExport = function(options) {
         var that = this, $element = that.$element, $target = options.target ? $(options.target) : null, form
-
+        
         if (!options.url) {
             BJUI.debug('Error trying to open a ajax link: url is undefined!')
             return
@@ -478,7 +484,12 @@
             form = that.tools.getPagerForm($target)
             if (form) options.url = encodeURI(options.url + (options.url.indexOf('?') == -1 ? '?' : '&') + $(form).serialize())
             
-            window.location = options.url
+            $.fileDownload(options.url, {
+                failCallback: function(responseHtml, url) {
+                    if (responseHtml.trim().startsWith('{')) responseHtml = responseHtml.toObj()
+                    that.ajaxDone(responseHtml)
+                }
+            })
         }
         
         if (options.confirmMsg) {
@@ -494,7 +505,7 @@
     
     Bjuiajax.prototype.doExportChecked = function(options) {
         var that = this, $element = that.$element, $target = options.target ? $(options.target) : null
-
+        
         if (!options.url) {
             BJUI.debug('Error trying to open a export link: url is undefined!')
             return
@@ -534,7 +545,12 @@
             
             options.url = options.url.setUrlParam((options.idname ? options.idname : 'ids'), ids.join(','))
             
-            window.location = options.url
+            $.fileDownload(options.url, {
+                failCallback: function(responseHtml, url) {
+                    if (responseHtml.trim().startsWith('{')) responseHtml = responseHtml.toObj()
+                    that.ajaxDone(responseHtml)
+                }
+            })
         }
         
         if (options.confirmMsg) {
@@ -550,7 +566,7 @@
     
     Bjuiajax.prototype.doAjaxChecked = function(options) {
         var that = this, $element = that.$element, $target = options.target ? $(options.target) : null
-
+        
         options = $.extend({}, Bjuiajax.DEFAULTS, typeof options == 'object' && options)
         if (!options.url) {
             BJUI.debug('Error trying to open a del link: url is undefined!')

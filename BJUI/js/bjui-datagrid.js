@@ -253,7 +253,7 @@
             createTrsByData: function(data, refreshFlag) {
                 var list
                 
-                if (!that.$tbody)  that.$tbody  = $('<tbody></tbody>')
+                if (!that.$tbody) that.$tbody = $('<tbody></tbody>')
                 if (data) {
                     if (data.list) list = data.list
                     else list = data
@@ -286,13 +286,17 @@
                 var doInit  = function() {
                     type = type.toLowerCase()
                     if (data) allData = that.allData = data
-                    if (options.local == 'local') {
-                        start = (paging.pageSize * (paging.pageCurrent - 1))
-                        end   = start + paging.pageSize
-                        if (paging.total != allData.length) paging.total = allData.length
-                        if (start > allData.length) start = paging.pageSize * (paging.pageCount - 1)
+                    if (!allData.length) {
+                        end = 0
                     } else {
-                        if (allData.length > paging.pageSize) end = paging.pageSize
+                        if (options.local == 'local') {
+                            start = (paging.pageSize * (paging.pageCurrent - 1))
+                            end   = start + paging.pageSize
+                            if (paging.total != allData.length) paging.total = allData.length
+                            if (start > allData.length) start = paging.pageSize * (paging.pageCount - 1)
+                        } else {
+                            if (allData.length > paging.pageSize) end = paging.pageSize
+                        }
                     }
                     if (end > allData.length) end = allData.length
                     
@@ -1606,7 +1610,12 @@
                                             } else if (opts.type == 'navtab') {
                                                 that.$grid.navtab(opts.options)
                                             } else if (opts.type == 'file') {
-                                                window.location.href = opts.options.url
+                                                $.fileDownload(opts.options.url, {
+                                                    failCallback: function(responseHtml, url) {
+                                                        if (responseHtml.trim().startsWith('{')) responseHtml = responseHtml.toObj()
+                                                        that.$grid.bjuiajax('ajaxDone', responseHtml)
+                                                    }
+                                                })
                                             } else {
                                                 that.$grid.bjuiajax('doAjax', opts.options)
                                             }

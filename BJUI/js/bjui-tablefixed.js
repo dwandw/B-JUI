@@ -452,7 +452,7 @@
             }
         }
         
-        $(window).off(BJUI.eventType.resizeGrid).on(BJUI.eventType.resizeGrid, _resizeGrid)
+        $(window).on(BJUI.eventType.resizeGrid, _resizeGrid)
     }
     
     
