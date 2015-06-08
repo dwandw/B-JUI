@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-extends.js v1.0
+ * B-JUI: bjui-extends.js  v1.2
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.core.js (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-extends.js
@@ -52,13 +52,11 @@
                                 else $this.dialog('closeCurrent')
                             }
                         } else if (json[BJUI.keys.statusCode] == BJUI.statusCode.timeout) {
-                            if (!$ajaxMask.length) {
-                                if ($this.closest('.bjui-dialog').length) $this.dialog('closeCurrent')
-                                if ($this.closest('.navtab-panel').length) $this.navtab('closeCurrent')
-                            }
-                            $('body').alertmsg('error', (json[BJUI.keys.message] || BJUI.regional.sessiontimeout),
-                                { okCall:function() { BJUI.loadLogin() } }
-                            )
+                            if ($this.closest('.bjui-dialog').length) $this.dialog('closeCurrent')
+                            if ($this.closest('.navtab-panel').length) $this.navtab('closeCurrentTab')
+                            
+                            $('body').alertmsg('info', (json[BJUI.keys.message] || BJUI.regional.sessiontimeout))
+                            BJUI.loadLogin()
                         }
                         $ajaxMask.fadeOut('normal', function() {
                             $(this).remove()
@@ -71,6 +69,7 @@
                         if ($this.closest('.navtab-panel').length) $this.navtab('closeCurrentTab')
                         else $this.dialog('closeCurrent')
                     }
+                    $this.trigger('bjui.ajaxError')
                 },
                 statusCode : {
                     503: function(xhr, ajaxOptions, thrownError) {
@@ -119,6 +118,9 @@
             }
             op.error = op.error || function(xhr, ajaxOptions, thrownError) {
                 $this.bjuiajax('ajaxError', xhr, ajaxOptions, thrownError)
+                if ($ajaxMask) {
+                    $target.trigger('bjui.ajaxError')
+                }
             }
             
             $.ajax(op)
@@ -189,7 +191,8 @@
             return o
         },
         isTag: function(tn) {
-            if(!tn) return false
+            if (!tn) return false
+            if (!$(this).prop('tagName')) return false
             return $(this)[0].tagName.toLowerCase() == tn ? true : false
         },
         /**
@@ -221,8 +224,11 @@
         isInteger: function() {
             return (new RegExp(/^\d+$/).test(this))
         },
-        isNumber: function(value, element) {
-            return (new RegExp(/^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/).test(this))
+        isNumber: function() {
+            return (new RegExp(/^([-]{0,1}(\d+)[\.]+(\d+))|([-]{0,1}(\d+))$/).test(this))
+        },
+        includeChinese: function() {
+        	return (new RegExp(/[\u4E00-\u9FA5]/).test(this))
         },
         trim: function() {
             return this.replace(/(^\s*)|(\s*$)|\r|\n/g, '')
@@ -321,6 +327,17 @@
                 return this
             }
         },
+        toObj: function() {
+            var obj = null
+            
+            try {
+                obj = (new Function('return '+ this))()
+            } catch (e) {
+                obj = this
+                BJUI.debug('String toObj锛歅arse "String" to "Object" error! Your str is: '+ this)
+            }
+            return obj
+        },
         /**
          * String to Function
          * 参数(方法字符串或方法名)： 'function(){...}' 或 'getName' 或 'USER.getName' 均可
@@ -397,10 +414,70 @@
         }
     })
     
+    /* Function */
     $.extend(Function.prototype, {
         //to fixed String.prototype -> toFunc
         toFunc: function() {
             return this
         }
     })
+    
+    /* Array */
+    $.extend(Array.prototype, {
+        remove: function(index) {
+            if (index < 0) return this
+            else return this.slice(0, index).concat(this.slice(index + 1, this.length))
+        },
+        unique: function() {
+            var temp = new Array()
+            
+            this.sort()
+            for (var i = 0; i < this.length; i++) {
+                if (this[i] == this[i + 1]) continue
+                temp[temp.length] = this[i]
+            }
+            
+            return temp
+        },
+        myIndexOf: function(e) {
+            if (!this || !this.length) return -1
+            
+            for (var i = 0, j; j = this[i]; i++) {
+                if (j == e) return i
+            }
+            
+            return -1
+        },
+        /* serializeArray to json */
+        toJson: function() {
+            var o = {}
+            var a = this
+            
+            $.each(a, function () {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]]
+                    }
+                    o[this.name].push(this.value || '')
+                } else {
+                   o[this.name] = this.value || ''
+                }
+            })
+            
+            return o
+        }
+    })
+    
+    /* Global */
+    $.isJson = function(obj) {
+        var flag = true
+        
+        try {
+            flag = $.parseJSON(obj)
+        } catch (e) {
+            return false
+        }
+        return flag ? true : false
+    }
+    
 }(jQuery);

@@ -202,8 +202,68 @@
                     $msgbox.hide()
                 })
             }
+        },
+        'red_bottom_effect_grid': {
+            formClass: 'n-red',
+            msgClass: 'n-right',
+            msgArrow: TPL_ARROW,
+            msgShow: function($msgbox, type) {
+                var $el   = $msgbox.children()
+                /*
+                var $form   = $msgbox.closest('form'),
+                    fW      = $form.width(),
+                    fL      = $form.offset().left,
+                    eL      = $msgbox.offset().left,
+                    mw      = $el.outerWidth()
+                  */  
+                var offLeft = fixedLeft($msgbox)
+                var $wrap   = $msgbox.find('> .msg-wrap')
+                var $icon   = $msgbox.find('.n-icon')
+                
+                /*if ((fW - (eL - fL)) < (mw + offLeft + 8)) {
+                    $wrap.addClass('wrap').width(fW - (eL - fL) - offLeft - 8)
+                        .find('> .n-msg').width(fW - (eL - fL) - offLeft - 8 - 30)
+                }*/
+                
+                if ($wrap.hasClass('n-error'))
+                    $icon.removeClass('n-icon').addClass('glyphicon glyphicon-remove-circle').css({top:-1, 'font-size':'14px', 'vertical-align':'middle'})
+                else if ($wrap.hasClass('n-tip'))
+                    $icon.removeClass('n-icon').addClass('glyphicon glyphicon-info-sign').css({top:-1, 'font-size':'14px', 'vertical-align':'middle'})
+                else if ($wrap.hasClass('n-ok'))
+                    $icon.removeClass('n-icon').addClass('glyphicon glyphicon-ok-circle').css({top:-1, 'font-size':'14px', 'vertical-align':'middle'})
+                if ($el.is(':animated')) return
+                if (type === 'error') {
+                    $el.css({
+                        left: offLeft + 20,
+                        opacity: 0
+                    }).delay(100).show().stop().animate({
+                        left: offLeft - 4,
+                        opacity: 1
+                    }, 150).animate({
+                        left: offLeft + 3
+                    }, 80).animate({
+                        left: offLeft
+                    }, 80)
+                } else {
+                    $el.css({
+                        left: offLeft,
+                        opacity: 1
+                    }).fadeIn(200)
+                }
+            },
+            msgHide: function($msgbox, type) {
+                var $el = $msgbox.children()
+                
+                $el.stop().delay(100).show().animate({
+                    left: '20px',
+                    opacity: 0
+                }, 300, function(){
+                    $msgbox.hide()
+                })
+            }
         }
     })
+    
     
     $.validator.config({
         theme     : 'red_right_effect',

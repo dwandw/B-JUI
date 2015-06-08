@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-dialog.js v1.0
+ * B-JUI: bjui-dialog.js  v1.2
  * @author K'naan (xknaan@163.com)
  * -- Modified from dwz.dialog.js, dwz.dialogDrag.js, dwz.resize.js (author:Roger Wu)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-dialog.js
@@ -141,7 +141,8 @@
         var $dialog = $body.data(options.id)
         
         if (!options.target || !$(options.target).length) {
-            if (!(options.url)) {
+            if (!options.url && options.href) options.url = options.href
+            if (!options.url) {
                 BJUI.debug('Dialog Plugin: Error trying to open a dialog, url is undefined!')
                 return
             } else {
@@ -290,7 +291,7 @@
         var that    = this
         var options = $.extend({}, typeof option == 'object' && option)
         var $dialog = (options.id && $('body').data(options.id)) || that.getCurrent()
-
+        
         if ($dialog && $dialog.length) {
             var initOptions = $dialog.data('initOptions'), op = $.extend({}, initOptions, options)
             var _reload = function() {
@@ -634,17 +635,17 @@
         
         return this.each(function () {
             var $this   = $(this)
-            var options = $.extend({}, Dialog.DEFAULTS, $this.data(), typeof option == 'object' && option)
+            var options = $.extend({}, Dialog.DEFAULTS, typeof option == 'object' && option)
             var data    = $this.data('bjui.dialog')
             
-            if (options.url && !options.url.isFinishedTm()) options.fresh = true
-            if (!data || options.fresh) $this.data('bjui.dialog', (data = new Dialog(this, options)))
+            if (!data) $this.data('bjui.dialog', (data = new Dialog(this, options)))
             
             if (typeof property == 'string' && $.isFunction(data[property])) {
                 [].shift.apply(args)
                 if (!args) data[property]()
                 else data[property].apply(data, args)
             } else {
+                data = new Dialog(this, options)
                 data.open()
             }
         })
@@ -667,18 +668,18 @@
     // ==============
 
     $(document).on('click.bjui.dialog.data-api', '[data-toggle="dialog"]', function(e) {
-        var $this   = $(this)
-        var href    = $this.attr('href')
-        var options = $this.data()
+        var $this   = $(this), href = $this.attr('href'), data = $this.data(), options = data.options
         
-        if (!options.title) options.title = $this.text()
-        if (href) {
-            if (!options.url) options.url = href
-            if (options.url && options.url != href)
-                options.url = href
+        if (options) {
+            if (typeof options == 'string') options = options.toObj()
+            if (typeof options == 'object')
+                $.extend(data, options)
         }
         
-        Plugin.call($this, options)
+        if (!data.title) data.title = $this.text()
+        if (href && !data.url) data.url = href
+        
+        Plugin.call($this, data)
         
         e.preventDefault()
     })

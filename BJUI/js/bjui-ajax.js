@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-ajax.js v1.0
+ * B-JUI: bjui-ajax.js  v1.2
  * @author K'naan (xknaan@163.com) 
  * -- Modified from dwz.ajax.js (author:ZhangHuihua@msn.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-ajax.js
@@ -47,7 +47,11 @@
                 var form     = $parent.isTag('form') ? $parent[0] : $parent.find('#pagerForm:first')[0]
                 var pageInfo = $.extend({}, BJUI.pageInfo)
                 
-                if ($parent.data('bjui.clientPaging')) args = $parent.data('bjui.clientPaging')
+                if ($parent.data('bjui.clientPaging')) {
+                    args = $.extend({}, $parent.data('bjui.clientPaging'), args)
+                    $parent.data('bjui.clientPaging', args)
+                }
+                
                 if (form) {
                     for (var key in pageInfo) {
                         var val = ''
@@ -110,17 +114,24 @@
         if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {
             if (json[BJUI.keys.message]) $element.alertmsg('error', json[BJUI.keys.message])
         } else if (json[BJUI.keys.statusCode] == BJUI.statusCode.timeout) {
-            $element.alertmsg('error', json[BJUI.keys.message] || FRAG.sessionTimout, {okCall:BJUI.loadLogin})
+            $element.alertmsg('info', json[BJUI.keys.message] || FRAG.sessionTimout)
+            BJUI.loadLogin()
         } else {
             if (json[BJUI.keys.message]) $element.alertmsg('correct', json[BJUI.keys.message])
         }
     }
     
     Bjuiajax.prototype.ajaxError = function(xhr, ajaxOptions, thrownError) {
-        this.$element.alertmsg('error', '<div>Http status: ' + xhr.status + ' ' + xhr.statusText + '</div>' 
-            + '<div>ajaxOptions: '+ ajaxOptions +' </div>'
-            + '<div>thrownError: '+ thrownError +' </div>'
-            + '<div>'+ xhr.responseText +'</div>')
+        var msg = xhr.responseText.trim()
+        
+        if (msg.startsWith('{')) {
+            this.ajaxDone(msg.toObj())
+        } else {
+            this.$element.alertmsg('error', '<div>Http status: ' + xhr.status + ' ' + xhr.statusText + '</div>' 
+                + '<div>ajaxOptions: '+ ajaxOptions +' </div>'
+                + '<div>thrownError: '+ thrownError +' </div>'
+                + '<div>'+ msg +'</div>')
+        }
     }
     
     Bjuiajax.prototype.ajaxCallback = function(json) {
@@ -192,6 +203,13 @@
             setTimeout(function() { that.$element.dialog('refresh', json.dialogid) }, 100)
         if (json.divid)
             setTimeout(function() { that.$element.bjuiajax('refreshDiv', json.divid) }, 100)
+        if (json.datagrid) {
+            setTimeout(function() {
+                $.each(json.datagrid.join(','), function(i, n) {
+                    $('#'+ n.trim()).datagrid('refresh')
+                })
+            }, 100)
+        }
         if (json.closeCurrent && !json.forward)
             that.$element.navtab('closeCurrentTab')
         else if (that.options.reload)
@@ -441,7 +459,7 @@
     
     Bjuiajax.prototype.doExport = function(options) {
         var that = this, $element = that.$element, $target = options.target ? $(options.target) : null, form
-
+        
         if (!options.url) {
             BJUI.debug('Error trying to open a ajax link: url is undefined!')
             return
@@ -466,7 +484,12 @@
             form = that.tools.getPagerForm($target)
             if (form) options.url = encodeURI(options.url + (options.url.indexOf('?') == -1 ? '?' : '&') + $(form).serialize())
             
-            window.location = options.url
+            $.fileDownload(options.url, {
+                failCallback: function(responseHtml, url) {
+                    if (responseHtml.trim().startsWith('{')) responseHtml = responseHtml.toObj()
+                    that.ajaxDone(responseHtml)
+                }
+            })
         }
         
         if (options.confirmMsg) {
@@ -482,7 +505,7 @@
     
     Bjuiajax.prototype.doExportChecked = function(options) {
         var that = this, $element = that.$element, $target = options.target ? $(options.target) : null
-
+        
         if (!options.url) {
             BJUI.debug('Error trying to open a export link: url is undefined!')
             return
@@ -522,7 +545,12 @@
             
             options.url = options.url.setUrlParam((options.idname ? options.idname : 'ids'), ids.join(','))
             
-            window.location = options.url
+            $.fileDownload(options.url, {
+                failCallback: function(responseHtml, url) {
+                    if (responseHtml.trim().startsWith('{')) responseHtml = responseHtml.toObj()
+                    that.ajaxDone(responseHtml)
+                }
+            })
         }
         
         if (options.confirmMsg) {
@@ -538,7 +566,7 @@
     
     Bjuiajax.prototype.doAjaxChecked = function(options) {
         var that = this, $element = that.$element, $target = options.target ? $(options.target) : null
-
+        
         options = $.extend({}, Bjuiajax.DEFAULTS, typeof options == 'object' && options)
         if (!options.url) {
             BJUI.debug('Error trying to open a del link: url is undefined!')
@@ -633,11 +661,8 @@
     // BJUIAJAX DATA-API
     // ==============
     
-    $(document).on('submit.bjui.bjuiajax.data-api', '[data-toggle="ajaxform"]', function(e) {
-        var $this   = $(this)
-        var options = $this.data()
-        
-        if (!$this.isTag('form')) return
+    $(document).on('submit.bjui.bjuiajax.data-api', 'form[data-toggle="ajaxform"]', function(e) {
+        var $this = $(this), options = $this.data()
         
         Plugin.call($this, 'ajaxForm', options)
         

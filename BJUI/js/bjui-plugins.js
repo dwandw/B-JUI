@@ -1,12 +1,12 @@
 /*!
- * B-JUI v1.0 (http://b-jui.com)
+ * B-JUI  v1.2 (http://b-jui.com)
  * Git@OSC (http://git.oschina.net/xknaan/B-JUI)
  * Copyright 2014 K'naan (xknaan@163.com).
  * Licensed under Apache (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
 /* ========================================================================
- * B-JUI: bjui-plugins.js v1.0
+ * B-JUI: bjui-plugins.js  v1.2
  * @author K'naan (xknaan@163.com)
  * http://git.oschina.net/xknaan/B-JUI/blob/master/BJUI/js/bjui-plugins.js
  * ========================================================================
@@ -19,7 +19,7 @@
     
     $(document).on(BJUI.eventType.initUI, function(e) {
         var $box    = $(e.target)
-
+        
         // UI init begin...
         
         /* i-check */
@@ -30,7 +30,7 @@
                 id       = $element.attr('id'),
                 name     = $element.attr('name'),
                 label    = $element.data('label')
-                
+            
             if (label) $element.after('<label for="'+ id +'" class="ilabel">'+ label +'</label>')
             
             $element
@@ -225,6 +225,7 @@
             if (!options.style) $element.data('style', 'btn-default')
             if (!options.width) $element.data('width', 'auto')
             if (!options.container) $element.data('container', 'body')
+            else if (options.container == true) $element.attr('data-container', 'false').data('container', false)
             
             $element.selectpicker()
             
@@ -247,8 +248,12 @@
         
         /* zTree - plugin */
         $box.find('[data-toggle="ztree"]').each(function() {
-            var $this = $(this)
-            var op    = $this.data()
+            var $this = $(this), op = $this.data(), options = op.options, _setting
+            
+            if (options && typeof options == 'string') options = options.toObj()
+            if (options) $.extend(op, typeof options == 'object' && options)
+            
+            _setting = op.setting
             
             if (!op.nodes) {
                 op.nodes = []
@@ -261,19 +266,32 @@
                     op.nodes.push(node)
                 })
                 $this.empty()
+            } else {
+                if (typeof op.nodes == 'string') {
+                    if (op.nodes.trim().startsWith('[') || op.nodes.trim().startsWith('{')) {
+                        op.nodes = op.nodes.toObj()
+                    } else {
+                        op.nodes = op.nodes.toFunc()
+                    }
+                }
+                if (typeof op.nodes == 'function') {
+                    op.nodes = op.nodes.call(this)
+                }
+                
+                $this.removeAttr('data-nodes')
             }
             
             if (!op.showRemoveBtn) op.showRemoveBtn = false
             if (!op.showRenameBtn) op.showRenameBtn = false
             if (op.addHoverDom && typeof op.addHoverDom != 'function')       op.addHoverDom    = (op.addHoverDom == 'edit')    ? _addHoverDom    : op.addHoverDom.toFunc()
             if (op.removeHoverDom && typeof op.removeHoverDom != 'function') op.removeHoverDom = (op.removeHoverDom == 'edit') ? _removeHoverDom : op.removeHoverDom.toFunc()
-            if (!op.maxAddLevel)   op.maxAddLevel    = 2
+            if (!op.maxAddLevel)   op.maxAddLevel   = 2
             
             var setting = {
                 view: {
                     addHoverDom    : op.addHoverDom || null,
                     removeHoverDom : op.removeHoverDom || null,
-                    addDiyDom      : (op.addDiyDom != null) ? op.addDiyDom.toFunc() : null
+                    addDiyDom      : op.addDiyDom ? op.addDiyDom.toFunc() : null
                 },
                 edit: {
                     enable        : op.editEnable,
@@ -286,13 +304,16 @@
                     radioType : op.radioType
                 },
                 callback: {
-                    onClick      : op.onClick      != null ? op.onClick.toFunc()      : null,
-                    beforeDrag   : op.beforeDrag   != null ? op.beforeDrag.toFunc()   : _beforeDrag,
-                    beforeDrop   : op.beforeDrop   != null ? op.beforeDrop.toFunc()   : _beforeDrop,
-                    onDrop       : op.onDrop       != null ? op.onDrop.toFunc()       : null,
-                    onCheck      : op.onCheck      != null ? op.onCheck.toFunc()      : null,
-                    beforeRemove : op.beforeRemove != null ? op.beforeRemove.toFunc() : null,
-                    onRemove     : op.onRemove     != null ? op.onRemove.toFunc()     : null
+                    onClick       : op.onClick      ? op.onClick.toFunc()      : null,
+                    beforeDrag    : op.beforeDrag   ? op.beforeDrag.toFunc()   : _beforeDrag,
+                    beforeDrop    : op.beforeDrop   ? op.beforeDrop.toFunc()   : _beforeDrop,
+                    onDrop        : op.onDrop       ? op.onDrop.toFunc()       : null,
+                    onCheck       : op.onCheck      ? op.onCheck.toFunc()      : null,
+                    beforeRemove  : op.beforeRemove ? op.beforeRemove.toFunc() : null,
+                    onRemove      : op.onRemove     ? op.onRemove.toFunc()     : null,
+                    onNodeCreated : _onNodeCreated,
+                    onCollapse    : _onCollapse,
+                    onExpand      : _onExpand
                 },
                 data: {
                     simpleData: {
@@ -304,6 +325,9 @@
                 }
             }
             
+            if (_setting && typeof _setting == 'string') _setting = _setting.toObj()
+            if (_setting) $.extend(true, setting, typeof _setting == 'object' && _setting)
+            
             $.fn.zTree.init($this, setting, op.nodes)
             
             var IDMark_A = '_a'
@@ -311,6 +335,40 @@
             
             if (op.expandAll) zTree.expandAll(true)
             
+            // onCreated
+            function _onNodeCreated(event, treeId, treeNode) {
+                if (treeNode.faicon) {
+                    var $a    = $('#'+ treeNode.tId +'_a')
+                    
+                    if (!$a.data('faicon')) {
+                        $a.data('faicon', true)
+                          .addClass('faicon')
+                          .find('> span.button').append('<i class="fa fa-'+ treeNode.faicon +'"></i>')
+                    }
+                }
+                if (op.onNodeCreated) {
+                    op.onNodeCreated.toFunc().call(this, event, treeId, treeNode)
+                }
+            }
+            // onCollapse
+            function _onCollapse(event, treeId, treeNode) {
+                if (treeNode.faiconClose) {
+                    $('#'+ treeNode.tId +'_ico').find('> i').attr('class', 'fa fa-'+ treeNode.faiconClose)
+                }
+                console.log('11')
+                if (op.onCollapse) {
+                    op.onCollapse.toFunc().call(this, event, treeId, treeNode)
+                }
+            }
+            // onExpand
+            function _onExpand(event, treeId, treeNode) {
+                if (treeNode.faicon && treeNode.faiconClose) {
+                    $('#'+ treeNode.tId +'_ico').find('> i').attr('class', 'fa fa-'+ treeNode.faicon)
+                }
+                if (op.onExpand) {
+                    op.onExpand.toFunc().call(this, event, treeId, treeNode)
+                }
+            }
             // add button, del button
             function _addHoverDom(treeId, treeNode) {
                 var level = treeNode.level
@@ -349,7 +407,7 @@
                                     }
                                 })
                             }
-                        
+                            
                             if (op.beforeRemove) {
                                 var fn = op.beforeRemove.toFunc()
                                 
@@ -476,41 +534,42 @@
         
         /* accordion */
         $box.find('[data-toggle="accordion"]').each(function() {
-            var $this = $(this)
+            var $this = $(this), hBox = $this.data('heightbox'), height = $this.data('height')
             var initAccordion = function(hBox, height) {
-                var offsety   = $this.data('offsety') || 0
-                var height    = height || ($(hBox).outerHeight() - (offsety * 1))
-                var $pheader  = $this.find('.panel-heading')
-                var h1        = $pheader.outerHeight()
+                var offsety   = $this.data('offsety') || 0,
+                    height    = height || ($(hBox).outerHeight() - (offsety * 1)),
+                    $pheader  = $this.find('.panel-heading'),
+                    h1        = $pheader.outerHeight()
                 
-                h1 = h1 * $pheader.length + (parseInt($pheader.last().parent().css('marginTop')) * ($pheader.length - 1))
+                h1 = (h1 + 1) * $pheader.length
                 $this.css('height', height)
-                height = height - h1 - (2 * $pheader.length)
+                height = height - h1
                 $this.find('.panel-collapse').find('.panel-body').css('height', height)
             }
-            var hBox   = $this.data('heightbox')
-            var height = $this.data('height')
             
-            if (hBox || height) {
-                initAccordion(hBox, height)
-                $(window).resize(function() {
+            if ($this.find('> .panel').length) {
+                if (hBox || height) {
                     initAccordion(hBox, height)
-                })
+                    $(window).resize(function() {
+                        initAccordion(hBox, height)
+                    })
+                    
+                    $this.on('hidden.bs.collapse', function (e) {
+                        var $last = $(this).find('> .panel:last'), $a = $last.find('> .panel-heading > h4 > a')
+                        
+                        if ($a.hasClass('collapsed'))
+                            $last.css('border-bottom', '1px #ddd solid')
+                    })
+                }
             }
-            
-            $this.on('shown.bs.collapse', function() {
-                var $collapse = $this.find('[data-toggle=collapse]')
-                
-                $collapse.find('i').removeClass('fa-caret-square-o-down').addClass('fa-caret-square-o-right')
-                $collapse.removeClass('active').not('.collapsed').addClass('active').find('i').removeClass('fa-caret-square-o-right').addClass('fa-caret-square-o-down')
-            })
         })
         
         /* Kindeditor */
         $box.find('[data-toggle="kindeditor"]').each(function() {
             var $editor = $(this), options = $editor.data()
             
-            if (options.items)                     options.items = options.items.replaceAll('\'', '').replaceAll(' ', '').split(',')
+            if (options.items && typeof options.items == 'string')
+                options.items = options.items.replaceAll('\'', '').replaceAll(' ', '').split(',')
             if (options.afterUpload)         options.afterUpload = options.afterUpload.toFunc()
             if (options.afterSelectFile) options.afterSelectFile = options.afterSelectFile.toFunc()
             if (options.confirmSelect)     options.confirmSelect = options.confirmSelect.toFunc()

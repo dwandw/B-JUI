@@ -19,23 +19,23 @@
             <p>主页面由上（页头）、中左（导航菜单）、中右（工作区）、下（页脚）四部分组成，其中左侧导航菜单可收缩。结构如下：</p>
         </blockquote>
         <pre class="brush: html">
-            <header id="bjui-header">
-                <!-- 页头 -->
-            </header>
-            <div id="bjui-hnav">
-                <!-- 横向菜单 -->
-            </div>
-            <div id="bjui-container" class="clearfix">
-                <div id="bjui-leftside">
+            &lt;header id="bjui-header"&gt;
+                <!-- logo --><!-- 快捷菜单(消息、用户信息、切换皮肤) -->
+                &lt;div id="bjui-hnav"&gt;
+                    <!-- 横向菜单 -->
+                &lt;/div&gt;
+            &lt;/header&gt;
+            &lt;div id="bjui-container" class="clearfix"&gt;
+                &lt;div id="bjui-leftside"&gt;
                     <!-- 导航栏 -->
-                </div>
-                <div id="bjui-navtab" class="tabsPage">
+                &lt;/div&gt;
+                &lt;div id="bjui-navtab" class="tabsPage"&gt;
                     <!-- 工作区(navtab) -->
-                </div>
-            </div>
-            <footer id="bjui-footer">
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;footer id="bjui-footer"&gt;
                 <!-- 页脚 -->
-            </footer>
+            &lt;/footer&gt;
         </pre>
         <h4>子页面（即页面片段[后面简称：页片]）标准结构</h4>
         <blockquote>
@@ -53,7 +53,8 @@
             </div>
         </pre>
         <blockquote class="point">
-            <strong>注意：</strong>在标准结构中，<code>bjui-pageHeader</code> 和 <code>bjui-pageFooter</code> 部分是固定在页片中的，<code>bjui-pageContent</code>部分的内容溢出会出现滚动条。
+            <p><strong>注意1：</strong>在标准结构中，<code>bjui-pageHeader</code> 和 <code>bjui-pageFooter</code> 部分是固定在页片中的，<code>bjui-pageContent</code>中的内容溢出会出现滚动条。</p>
+            <p><strong>注意2：</strong><code>bjui-pageContent</code>默认padding 10px，像表格之类的布局不需要padding的，需要再添加个Class: <code>tableContent</code>。</p>
         </blockquote>
     </div>
 </div>
