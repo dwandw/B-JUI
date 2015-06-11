@@ -20,7 +20,7 @@
     
     $.fn.extend({
         /**
-         * @param {Object} op: {type:GET/POST, url:ajaxÇëÇóµØÖ·, data:ajaxÇëÇó²ÎÊıÁĞ±í, callback:»Øµ÷º¯Êı }
+         * @param {Object} op: {type:GET/POST, url:ajaxè¯·æ±‚åœ°å€, data:ajaxè¯·æ±‚å‚æ•°åˆ—è¡¨, callback:å›è°ƒå‡½æ•° }
          */
         ajaxUrl: function(op) {
             var $this = $(this)
@@ -171,7 +171,7 @@
             return $elements.eq(index)
         },
         /**
-         * ½«±íµ¥Êı¾İ×ª³ÉJSON¶ÔÏó ÓÃ·¨£º$(form).serializeJson() Author: K'naan
+         * å°†è¡¨å•æ•°æ®è½¬æˆJSONå¯¹è±¡ ç”¨æ³•ï¼š$(form).serializeJson() Author: K'naan
          */
         serializeJson: function () {
             var o = {}
@@ -196,7 +196,7 @@
             return $(this)[0].tagName.toLowerCase() == tn ? true : false
         },
         /**
-         * ÅĞ¶Ïµ±Ç°ÔªËØÊÇ·ñÒÑ¾­°ó¶¨Ä³¸öÊÂ¼ş
+         * åˆ¤æ–­å½“å‰å…ƒç´ æ˜¯å¦å·²ç»ç»‘å®šæŸä¸ªäº‹ä»¶
          * @param {Object} type
          */
         isBind: function(type) {
@@ -204,7 +204,7 @@
             return _events && type && _events[type]
         },
         /**
-         * Êä³öfirebugÈÕÖ¾
+         * è¾“å‡ºfirebugæ—¥å¿—Ö¾
          * @param {Object} msg
          */
         log: function(msg) {
@@ -215,7 +215,7 @@
     })
     
     /**
-     * À©Õ¹String·½·¨
+     * æ‰©å±•Stringæ–¹æ³•
      */
     $.extend(String.prototype, {
         isPositiveInteger: function() {
@@ -255,7 +255,7 @@
         replaceAll: function(os, ns) {
             return this.replace(new RegExp(os,'gm'), ns)
         },
-        /*Ìæ»»Õ¼Î»·ûÎª¶ÔÓ¦Ñ¡ÔñÆ÷µÄÖµ*/ //{^(.|\#)[A-Za-z0-9_-\s]*}
+        /*æ›¿æ¢å ä½ç¬¦ä¸ºå¯¹åº”é€‰æ‹©å™¨çš„å€¼*/ //{^(.|\#)[A-Za-z0-9_-\s]*}
         replacePlh: function($box) {
             $box = $box || $(document)
             return this.replace(/{\/?[^}]*}/g, function($1) {
@@ -340,7 +340,7 @@
         },
         /**
          * String to Function
-         * ²ÎÊı(·½·¨×Ö·û´®»ò·½·¨Ãû)£º 'function(){...}' »ò 'getName' »ò 'USER.getName' ¾ù¿É
+         * å‚æ•°(æ–¹æ³•å­—ç¬¦ä¸²æˆ–æ–¹æ³•å)ï¼š 'function(){...}' æˆ– 'getName' æˆ– 'USER.getName' å‡å¯
          * Author: K'naan
          */
         toFunc: function() {
