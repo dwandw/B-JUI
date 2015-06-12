@@ -246,7 +246,7 @@
         $thead.find('> tr:gt(0) > th').each(function() {
             var $th = $(this)
             
-            $th.html('<div class="fixedtableCol">'+ $th.html() +'</div>')
+            $th.html('<div class="fixedtableCol" title="'+ $th.html() +'">'+ $th.html() +'</div>')
         })
         
         $thead.wrap('<div class="fixedtableHeader" style="width:'+ (this.options.newWidth - Tablefixed.SCROLLW) + 'px;overflow:hidden;"><div class="fixedtableThead"><table class="table table-bordered" style="width:'+ (this.options.newWidth - Tablefixed.SCROLLW) + 'px; max-width:'+ (this.options.newWidth - Tablefixed.SCROLLW) +'px;"></table></div></div>')
@@ -391,7 +391,7 @@
             $th.pagination('setClientOrder', {orderField:options.orderField, orderDirection:options.orderDirection})
         }
         if (!$orderBox.length) {
-            $orderBox = $('<div class="fixedtableCol">'+ $th.html() +'</div>')
+            $orderBox = $('<div class="fixedtableCol" title="'+ $th.html() +'">'+ $th.html() +'</div>')
                 .appendTo($th.empty())
         }
         
