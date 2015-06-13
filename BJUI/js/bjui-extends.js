@@ -204,7 +204,7 @@
             return _events && type && _events[type]
         },
         /**
-         * 输出firebug日志־
+         * 输出firebug日־
          * @param {Object} msg
          */
         log: function(msg) {
