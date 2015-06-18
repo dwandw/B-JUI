@@ -85,6 +85,7 @@
             $.extend(BJUI.pageInfo, op.pageInfo)
             $.extend(BJUI.alertMsg, op.alertMsg)
             $.extend(BJUI.loginInfo, op.loginInfo)
+            $.extend(BJUI.keys, op.keys)
             $.extend(BJUI.ui, op.ui)
             
             if (op.JSPATH) this.JSPATH = op.JSPATH
