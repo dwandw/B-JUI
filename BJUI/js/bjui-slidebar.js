@@ -248,8 +248,13 @@
                     options = options.toObj()
                     if (options && options.faicon) {
                         options.faicon = options.faicon.trim()
-                        if (options.faicon.startsWith('fa-')) options.faicon = options.faicon.substr(3)
-                        $a.prepend('<i class="fa fa-'+ options.faicon +'"></i>').data('icon.init', true).attr('title', $a.text())
+                        if (options.faicon.startsWith('icon-')) {
+                            options.faicon = options.faicon.substr(5)
+                            $a.prepend('<i class="icon iconfont icon-'+ options.faicon +'"></i>').data('icon.init', true).attr('title', $a.text())
+                        }else{
+                            if (options.faicon.startsWith('fa-')) options.faicon = options.faicon.substr(3)
+                            $a.prepend('<i class="fa fa-'+ options.faicon +'"></i>').data('icon.init', true).attr('title', $a.text())
+                        }
                     }
                 }
             })
@@ -270,7 +275,15 @@
                           .replaceAll('#class#', cls)
                           .replaceAll('#bodyclass#', bodycls)
             
-            if (icon) panel = panel.replaceAll('#icon#', '<i class="fa fa-'+ icon +'"></i>')
+            var iconStr
+            if (icon.startsWith('icon-')) {
+                icon = icon.substr(5)
+                iconStr = '<i class="icon iconfont icon-'+ icon +'"></i>'
+            }else{
+                if (icon.startsWith('fa-')) icon = icon.substr(3)
+                iconStr = '<i class="fa fa-'+ icon +'"></i>'
+            }
+            if (icon) panel = panel.replaceAll('#icon#', iconStr)
             else panel = panel.replaceAll('#icon#', '')
             
             $panel = $(panel)

@@ -341,9 +341,17 @@
                     var $a    = $('#'+ treeNode.tId +'_a')
                     
                     if (!$a.data('faicon')) {
+                        var iconStr;
+                        if (treeNode.faicon.startsWith('icon-')) {
+                            treeNode.faicon = treeNode.faicon.substr(5)
+                            iconStr = '<i class="icon iconfont icon-'+ treeNode.faicon +'"></i>'
+                        }else{
+                            if (treeNode.faicon.startsWith('fa-')) treeNode.faicon = treeNode.faicon.substr(3)
+                            iconStr = '<i class="fa fa-'+ treeNode.faicon +'"></i>'
+                        }
                         $a.data('faicon', true)
                           .addClass('faicon')
-                          .find('> span.button').append('<i class="fa fa-'+ treeNode.faicon +'"></i>')
+                          .find('> span.button').append(iconStr)
                     }
                 }
                 if (op.onNodeCreated) {
@@ -355,7 +363,6 @@
                 if (treeNode.faiconClose) {
                     $('#'+ treeNode.tId +'_ico').find('> i').attr('class', 'fa fa-'+ treeNode.faiconClose)
                 }
-                console.log('11')
                 if (op.onCollapse) {
                     op.onCollapse.toFunc().call(this, event, treeId, treeNode)
                 }

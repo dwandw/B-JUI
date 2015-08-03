@@ -122,15 +122,14 @@
     }
     
     Bjuiajax.prototype.ajaxError = function(xhr, ajaxOptions, thrownError) {
-        var msg = xhr.responseText.trim()
-        
-        if (msg.startsWith('{')) {
+        if(xhr.responseText && xhr.responseText.trim().startsWith('{')){
+            var msg = xhr.responseText.trim()
             this.ajaxDone(msg.toObj())
-        } else {
+        }else{
             this.$element.alertmsg('error', '<div>Http status: ' + xhr.status + ' ' + xhr.statusText + '</div>' 
-                + '<div>ajaxOptions: '+ ajaxOptions +' </div>'
-                + '<div>thrownError: '+ thrownError +' </div>'
-                + '<div>'+ msg +'</div>')
+                    + '<div>ajaxOptions: '+ ajaxOptions +' </div>'
+                    + '<div>thrownError: '+ thrownError +' </div>'
+                    + '<div>'+ msg +'</div>')
         }
     }
     

@@ -217,7 +217,7 @@
             },
             successQueueItem: function(file, xhr) {
                 tools.showProgress(file.id, file.size, file.size)
-                options.onUploadSuccess && options.onUploadSuccess.toFunc().call(that, file, xhr.responseText, that.$element)
+                options.onUploadSuccess && options.onUploadSuccess(file, xhr.responseText, that.$element)
                 //在指定的间隔时间后删掉进度条
                 setTimeout(function() {
                     that.$element.find('#'+ file.id).fadeOut('normal', function() {
@@ -297,16 +297,6 @@
         if (!(options.uploader)) {
             BJUI.debug('Upload Plugin: The options uploader is undefined!')
             return
-        } else {
-            options.uploader = decodeURI(options.uploader).replacePlh($element.closest('.unitBox'))
-            
-            if (!options.uploader.isFinishedTm()) {
-                $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
-                BJUI.debug('Upload Plugin: The options uploader is incorrect: '+ options.uploader)
-                return
-            }
-            
-            options.uploader = encodeURI(options.uploader)
         }
         
         if ($element.hasClass('bjui-upload')) return
@@ -332,6 +322,21 @@
             .on('click.bjui.upload', '.bjui-upload-select', function(e) {
                 that.$file.trigger('click')
             })
+        
+        if (options.onInit && typeof options.onInit == 'string')
+            options.onInit = options.onInit.toFunc()
+        if (options.onCancel && typeof options.onCancel == 'string')
+            options.onCancel = options.onCancel.toFunc()
+        if (options.onSelect && typeof options.onSelect == 'string')
+            options.onSelect = options.onSelect.toFunc()
+        if (options.onUploadStart && typeof options.onUploadStart == 'string')
+            options.onUploadStart = options.onUploadStart.toFunc()
+        if (options.onUploadSuccess && typeof options.onUploadSuccess == 'string')
+            options.onUploadSuccess = options.onUploadSuccess.toFunc()
+        if (options.onUploadComplete && typeof options.onUploadComplete == 'string')
+            options.onUploadComplete = options.onUploadComplete.toFunc()
+        if (options.onUploadError && typeof options.onUploadError == 'string')
+            options.onUploadError   = options.onUploadError.toFunc()
         
         options.onInit && options.onInit()
         
@@ -361,6 +366,16 @@
         var that = this, $element = that.$element, options = that.options, tools = that.tools
         var xhr  = false, originalFile = file
         
+        var _uploader = decodeURI(options.uploader).replacePlh($element.closest('.unitBox'))
+        
+        if (!_uploader.isFinishedTm()) {
+            $element.alertmsg('error', (options.warn || FRAG.alertPlhMsg.replace('#plhmsg#', BJUI.regional.plhmsg)))
+            BJUI.debug('Upload Plugin: The options uploader is incorrect: '+ _uploader)
+            return
+        }
+        
+        _uploader = encodeURI(_uploader)
+        
         //校正进度条和上传比例的误差
         xhr = new XMLHttpRequest()
         
@@ -383,7 +398,7 @@
                         if (uploadedSize < originalFile.size) {
                             file = originalFile.slice(uploadedSize, uploadedSize + options.fileSplitSize)
                             //上传文件
-                            tools.sendBlob(options.uploader, xhr, file, options.formData)
+                            tools.sendBlob(_uploader, xhr, file, options.formData)
                         } else {
                             upOver = true
                         }
@@ -411,7 +426,7 @@
             //开始上传
             options.formData.fileName = originalFile.name
             options.formData.lastModifiedDate = originalFile.lastModifiedDate.getTime()
-            tools.sendBlob(options.uploader, xhr, file, options.formData)
+            tools.sendBlob(_uploader, xhr, file, options.formData)
         }
         
         //暂停事件
@@ -531,6 +546,8 @@
                     options.onCancel = options.onCancel.toFunc()
                 if (options.onSelect && typeof options.onSelect == 'string')
                     options.onSelect = options.onSelect.toFunc()
+                if (options.onUploadStart && typeof options.onUploadStart == 'string')
+                    options.onUploadStart = options.onUploadStart.toFunc()
                 if (options.onUploadSuccess && typeof options.onUploadSuccess == 'string')
                     options.onUploadSuccess = options.onUploadSuccess.toFunc()
                 if (options.onUploadComplete && typeof options.onUploadComplete == 'string')
