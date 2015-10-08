@@ -284,6 +284,7 @@
         if (!this.$element.attr('class')) $tbody.parent().addClass('table table-striped table-bordered table-hover')
         else $tbody.parent().addClass(this.$element.attr('class'))
         if (typeof this.$element.attr('data-selected-multi') != 'undefined') $tbody.parent().attr('data-selected-multi', this.$element.attr('data-selected-multi'))
+        if (typeof this.$element.attr('data-on-click') != 'undefined') $tbody.parent().attr('data-on-click', this.$element.attr('data-on-click'))
         
         $tbody.before('<thead><tr class="resize-head">'+ this.$fixed.find('thead > tr').html() +'</tr></thead>')
         this.options.$tds = $tbody.prev().find('> tr:first-child > th')
@@ -537,6 +538,11 @@
         } else {
             $selected = $('<input type="hidden" id="bjui-selected" value="'+ id +'">')
             $selected.appendTo($table.closest('.unitBox'))
+        }
+        var onclick = $table.data("onClick");
+        if (onclick && typeof onclick == 'string'){
+            onclick = onclick.toFunc();
+            onclick(this);
         }
     })
     

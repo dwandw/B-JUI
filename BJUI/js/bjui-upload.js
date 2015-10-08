@@ -323,6 +323,8 @@
                 that.$file.trigger('click')
             })
         
+        if(options.formData && typeof options.formData == 'string')
+            options.formData = options.formData.toObj()
         if (options.onInit && typeof options.onInit == 'string')
             options.onInit = options.onInit.toFunc()
         if (options.onCancel && typeof options.onCancel == 'string')

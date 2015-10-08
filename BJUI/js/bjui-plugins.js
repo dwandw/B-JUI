@@ -733,6 +733,50 @@
             )
         })
         
+
+        /* lrz file */
+        $box.find('[data-toggle="lrz_file"]').each(function(){
+            var $element = $(this);
+            var options  = $element.data();
+            options.done = function(results){
+                console.log(results);
+            }
+
+            $element.change(function() {
+                lrz($element[0].files[0],options);
+            });
+        });
+
+        /* qrcode */
+        $box.find('[data-toggle="qrcode"]').each(function(){
+            var $element = $(this);
+            var options  = $element.data();
+
+            $element.qrcode(options);
+        });
+
+        /* holder */
+        $box.find('[data-toggle="holder"]').each(function(){
+            Holder.run({
+                images: this
+            });
+        });
+
+        /* cropper */
+        $box.find('[data-toggle="cropper"]').each(function(){
+            var $element = $(this);
+            var options  = $element.data();
+            options.crop = function(data){
+                $("#dataX").val(Math.round(data.x));
+                $("#dataY").val(Math.round(data.y));
+                $("#dataHeight").val(Math.round(data.height));
+                $("#dataWidth").val(Math.round(data.width));
+                $("#dataRotate").val(Math.round(data.rotate));
+            }
+
+            $element.find(".img-container > img").cropper(options);
+        });
+
     })
     
 }(jQuery);

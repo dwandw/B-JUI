@@ -53,9 +53,8 @@
                             }
                         } else if (json[BJUI.keys.statusCode] == BJUI.statusCode.timeout) {
                             if ($this.closest('.bjui-dialog').length) $this.dialog('closeCurrent')
-                            if ($this.closest('.navtab-panel').length) $this.navtab('closeCurrentTab')
+                            // if ($this.closest('.navtab-panel').length) $this.navtab('closeCurrentTab')
                             
-                            $('body').alertmsg('info', (json[BJUI.keys.message] || BJUI.regional.sessiontimeout))
                             BJUI.loadLogin()
                         }
                         $ajaxMask.fadeOut('normal', function() {
@@ -83,7 +82,7 @@
         },
         doAjax: function(op) {
             var $this = $(this), $target, $ajaxMask
-            
+
             if (!op.url) {
                 BJUI.debug('The ajax url is undefined!')
                 return
@@ -106,14 +105,14 @@
             op.success = function(response) {
                 if ($ajaxMask) {
                     if (op.callback) {
-                        $.when(op.callback(response)).done(function() {
+                        $.when(op.callback(response, op.element)).done(function() {
                             $target.trigger('bjui.ajaxStop')
                         })
                     } else {
                         $target.trigger('bjui.ajaxStop')
                     }
                 } else {
-                    op.callback(response)
+                    op.callback(response, op.element)
                 }
             }
             op.error = op.error || function(xhr, ajaxOptions, thrownError) {
@@ -411,6 +410,12 @@
                 }
             }
             return url.substr(0, url.indexOf('?')) + '?' + returnurl
+        },
+        format: function() {
+            var args = arguments;
+            return this.replace(/{(\d+)}/g, function(match, number) {
+                return typeof args[number] != 'undefined' ? args[number] : match;
+            });
         }
     })
     

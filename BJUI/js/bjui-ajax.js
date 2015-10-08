@@ -87,7 +87,7 @@
             callback ? callback.apply(that, [data, $form]) : $.proxy(that.ajaxCallback(data), that)
         }
         var _submitFn = function() {
-            var op = {loadingmask:options.loadingmask, type:$form.attr('method'), url:$form.attr('action'), callback:successFn, error:$.proxy(that.ajaxError, that)}
+            var op = {loadingmask:options.loadingmask, type:$form.attr('method'), url:$form.attr('action'), callback:successFn}
             
             if (enctype && enctype == 'multipart/form-data') {
                 if (window.FormData) {
@@ -114,22 +114,26 @@
         if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {
             if (json[BJUI.keys.message]) $element.alertmsg('error', json[BJUI.keys.message])
         } else if (json[BJUI.keys.statusCode] == BJUI.statusCode.timeout) {
-            $element.alertmsg('info', json[BJUI.keys.message] || FRAG.sessionTimout)
             BJUI.loadLogin()
         } else {
             if (json[BJUI.keys.message]) $element.alertmsg('correct', json[BJUI.keys.message])
+            //else $element.alertmsg('correct', "操作成功")
         }
     }
     
     Bjuiajax.prototype.ajaxError = function(xhr, ajaxOptions, thrownError) {
-        if(xhr.responseText && xhr.responseText.trim().startsWith('{')){
-            var msg = xhr.responseText.trim()
-            this.ajaxDone(msg.toObj())
+        if(xhr.status == 500 || xhr.status == 400){
+            this.$element.alertmsg('error', xhr.responseText);
         }else{
-            this.$element.alertmsg('error', '<div>Http status: ' + xhr.status + ' ' + xhr.statusText + '</div>' 
-                    + '<div>ajaxOptions: '+ ajaxOptions +' </div>'
-                    + '<div>thrownError: '+ thrownError +' </div>'
-                    + '<div>'+ msg +'</div>')
+            if(xhr.responseText && xhr.responseText.trim().startsWith('{')){
+                var msg = xhr.responseText.trim()
+                this.ajaxDone(msg.toObj())
+            }else{
+                this.$element.alertmsg('error', '<div>Http status: ' + xhr.status + ' ' + xhr.statusText + '</div>' 
+                        + '<div>ajaxOptions: '+ ajaxOptions +' </div>'
+                        + '<div>thrownError: '+ thrownError +' </div>'
+                        + '<div>'+ msg +'</div>')
+            }
         }
     }
     
@@ -167,8 +171,8 @@
             var url  = null, type = null
             
             if (form) {
-                url  = form.attr('action')
-                type = form.attr('method') || 'GET'
+                url  = $(form).attr('action')
+                type = $(form).attr('method') || 'GET'
             } else {
                 url  = $target.data('url')
                 type = $target.data('type') || 'GET'
@@ -442,7 +446,7 @@
         
         var callback = options.callback && options.callback.toFunc()
         var todo     = function() {
-            $element.doAjax({type:options.type, url:options.url, data:options.data, callback:callback ? callback : $.proxy(function(data) {that.ajaxCallback(data)}, that)})
+            $element.doAjax({type:options.type, url:options.url, data:options.data, element:options["bjui.bjuiajax"], callback:callback ? callback : $.proxy(function(data) {that.ajaxCallback(data)}, that)})
         }
         
         if (options.confirmMsg) {
