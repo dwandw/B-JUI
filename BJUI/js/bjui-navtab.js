@@ -317,7 +317,7 @@
                 $panel
                     .trigger(BJUI.eventType.beforeLoadNavtab)
                     .ajaxUrl({
-                        type:(options.type || 'GET'), url:options.url, data:options.data || {}, loadingmask:options.loadingmask, callback:function(response) {
+                        type:(options.type || 'GET'), url:options.url, data:options.data || {}, loadingmask:options.loadingmask, template:options.template, callback:function(response) {
                             that.tools.loadUrlCallback($panel)
                             if (onLoad) onLoad.apply(that, [$panel])
                             if (autorefreshTimer) clearInterval(autorefreshTimer)

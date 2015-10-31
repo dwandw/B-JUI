@@ -40,10 +40,13 @@
                 timeout  : BJUI.ajaxTimeout,
                 success  : function(response) {
                     var json = response.toJson(), $ajaxMask = $this.find('> .bjui-ajax-mask')
-                    
                     if (!json[BJUI.keys.statusCode]) {
-                        $this.empty().html(response).append($ajaxMask).initui()
-                        if ($.isFunction(op.callback)) op.callback(response)
+                        if(op.template){
+                            json.COMMON = COMMON;
+                            var html = template('solution/list', json);
+                            $this.empty().html(html).append($ajaxMask).initui()
+                            if ($.isFunction(op.callback)) op.callback(response)
+                        }
                     } else {
                         if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {
                             if (json[BJUI.keys.message]) $this.alertmsg('error', json[BJUI.keys.message])
