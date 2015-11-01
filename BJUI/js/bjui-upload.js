@@ -203,9 +203,6 @@
                 } else {
                     $temp.find('> .percent').remove()
                 }
-                options.onSelect && options.onSelect(files)
-                //判断是否是自动上传
-                if (options.auto) that.fileUpload(file, uploadedSize)
                 
                 $temp.on('click.bjui.upload.confirm', '.up_confirm', function(e) {
                     var $this = $(this), $queue = $this.closest('.item')
@@ -214,10 +211,13 @@
                     that.fileUpload($queue.data('upfile'), uploadedSize)
                 })
                 $temp.on('click.bjui.upload.cancel', '.up_cancel', this.removeQueueItem)
+                options.onSelect && options.onSelect($temp)
+                //判断是否是自动上传
+                if (options.auto) that.fileUpload(file, uploadedSize)
             },
             successQueueItem: function(file, xhr) {
                 tools.showProgress(file.id, file.size, file.size)
-                options.onUploadSuccess && options.onUploadSuccess(file, xhr.responseText, that.$element)
+                options.onUploadSuccess && options.onUploadSuccess(file, xhr.responseText, that)
                 //在指定的间隔时间后删掉进度条
                 setTimeout(function() {
                     that.$element.find('#'+ file.id).fadeOut('normal', function() {

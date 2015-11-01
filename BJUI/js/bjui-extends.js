@@ -30,7 +30,24 @@
             if (op.loadingmask) {
                 $this.trigger(BJUI.eventType.ajaxStatus)
             }
-            
+            requirejs.config({
+                baseUrl: '/assets/template',
+                urlArgs: "_=" +  (new Date()).getTime(),
+            });
+            if(op.url.endsWith("shtml")){
+                var json = {};
+                var $ajaxMask = $this.find('> .bjui-ajax-mask');
+                json.COMMON = COMMON;
+                json.data = {};
+                var template = op.url.replace(".shtml","").replaceAll("-","/");
+                // TODO 正式环境删除
+                requirejs.undef(template);
+                requirejs([template],function(render){
+                    var html = render(json);
+                    $this.empty().html(html).append($ajaxMask).initui()
+                });
+                return;
+            }
             $.ajax({
                 type     : op.type || 'GET',
                 url      : op.url,
@@ -39,13 +56,28 @@
                 dataType : 'html',
                 timeout  : BJUI.ajaxTimeout,
                 success  : function(response) {
-                    var json = response.toJson(), $ajaxMask = $this.find('> .bjui-ajax-mask')
+                    var json = response.toJson(), $ajaxMask = $this.find('> .bjui-ajax-mask');
+                    if(json.request){
+                        var a = ["tabid","dialogid","divid","closeCurrent","forward","forwardConfirm"];
+                        for(var i in json.request){
+                            if($.inArray(i, a)>-1){
+                                json[i]=json.request[i];
+                                if(i == "closeCurrent"){
+                                    json[i] = json[i].toBool();
+                                }
+                            }
+                        }
+                    }
                     if (!json[BJUI.keys.statusCode]) {
                         if(op.template){
                             json.COMMON = COMMON;
-                            var html = template('solution/list', json);
-                            $this.empty().html(html).append($ajaxMask).initui()
-                            if ($.isFunction(op.callback)) op.callback(response)
+                            // TODO 正式环境删除
+                            requirejs.undef(op.template);
+                            requirejs([op.template],function(render){
+                                var html = render(json);
+                                $this.empty().html(html).append($ajaxMask).initui()
+                                if ($.isFunction(op.callback)) op.callback(response)
+                            });
                         }
                     } else {
                         if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {
@@ -106,6 +138,17 @@
             if (!op.cache) op.cache = false
             op.timeout = BJUI.ajaxTimeout
             op.success = function(response) {
+                if(response.request){
+                    var a = ["tabid","dialogid","divid","closeCurrent","forward","forwardConfirm"];
+                    for(var i in response.request){
+                        if($.inArray(i, a)>-1){
+                            response[i]=response.request[i];
+                            if(i == "closeCurrent"){
+                                response[i] = response[i].toBool();
+                            }
+                        }
+                    }
+                }
                 if ($ajaxMask) {
                     if (op.callback) {
                         $.when(op.callback(response, op.element)).done(function() {

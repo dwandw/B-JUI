@@ -95,7 +95,7 @@
     Lookup.prototype.open = function($obj) {
         var that = this, options = this.options
         
-        $obj.dialog({id:options.id || 'lookup_dialog', url:options.url, title:options.title, width:options.width, height:options.height, mask:options.mask, maxable:options.maxable, resizable:options.resizable})
+        $obj.dialog({id:options.id || 'lookup_dialog', url:options.url, title:options.title, width:options.width, height:options.height, mask:options.mask, maxable:options.maxable, resizable:options.resizable, template:options.template})
     }
     
     Lookup.prototype.getField = function(key) {

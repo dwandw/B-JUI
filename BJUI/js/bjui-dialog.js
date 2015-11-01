@@ -106,7 +106,7 @@
                 
                 if (options.url) {
                     $dialogContent.ajaxUrl({
-                        type:options.type || 'GET', url:options.url, data:options.data || {}, loadingmask:options.loadingmask, callback:function(response) {
+                        type:options.type || 'GET', url:options.url, data:options.data || {}, loadingmask:options.loadingmask, template:options.template, callback:function(response) {
                             if (onLoad) onLoad.apply(that, [$dialog])
                             if (BJUI.ui.clientPaging && $dialog.data('bjui.clientPaging')) $dialog.pagination('setPagingAndOrderby', $dialog)
                         }

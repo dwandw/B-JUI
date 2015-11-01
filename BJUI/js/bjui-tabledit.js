@@ -180,25 +180,23 @@
                             }
                             
                             $tr.prev('input').remove()
-                            $tr
-                                //.parent()
-                                .unwrap()
-                                .isValid(function(v) {
-                                    if (v) {
-                                        if (callback) {
-                                            callback = callback.toFunc()
-                                        } else {
-                                            callback = function(json) {
-                                                if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
-                                                    _doRead($tr)
-                                                } else {
-                                                    $tr.bjuiajax('ajaxDone', json)
-                                                }
+                            $tr.parent().isValid(function(v) {
+                                if (v) {
+                                    $tr.unwrap()
+                                    if (callback) {
+                                        callback = callback.toFunc()
+                                    } else {
+                                        callback = function(json) {
+                                            if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
+                                                _doRead($tr)
+                                            } else {
+                                                $tr.bjuiajax('ajaxDone', json)
                                             }
                                         }
-                                        $tr.bjuiajax('doAjax', {url:that.options.action, data:data, type:that.options.type || 'POST', callback:callback})
                                     }
-                                })
+                                    $tr.bjuiajax('doAjax', {url:that.options.action, data:data, type:that.options.type || 'POST', callback:callback})
+                                }
+                            })
                         } else {
                             _doRead($tr)
                         }

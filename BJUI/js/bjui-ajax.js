@@ -402,7 +402,7 @@
         $target
             .addClass('bjui-layout')
             .data('options', options)
-            .ajaxUrl({ type:options.type, url:options.url, data:options.data, loadingmask:options.loadingmask, callback:function(html) {
+            .ajaxUrl({ type:options.type, url:options.url, data:options.data, loadingmask:options.loadingmask, template:options.template, callback:function(html) {
                     if (BJUI.ui.clientPaging && $target.data('bjui.clientPaging'))
                         $target.pagination('setPagingAndOrderby', $target)
                     if (options.callback)
