@@ -32,16 +32,21 @@
             }
             requirejs.config({
                 baseUrl: '/assets/template',
-                urlArgs: "_=" +  (new Date()).getTime(),
+                // urlArgs: "_=" +  (new Date()).getTime(),
             });
-            if(op.url.endsWith("shtml")){
+            if(op.url.indexOf("shtml") > -1){
                 var json = {};
                 var $ajaxMask = $this.find('> .bjui-ajax-mask');
                 json.COMMON = COMMON;
                 json.data = {};
-                var template = op.url.replace(".shtml","").replaceAll("-","/");
+                json.request = op.url.getUrlParamMap();
+                var template = op.url;
+                if(template.indexOf("?") > -1){
+                    template = template.substring(0, op.url.indexOf("?"));
+                }
+                template = template.replace(".shtml","").replaceAll("-","/");
                 // TODO 正式环境删除
-                requirejs.undef(template);
+                // requirejs.undef(template);
                 requirejs([template],function(render){
                     var html = render(json);
                     $this.empty().html(html).append($ajaxMask).initui()
@@ -72,12 +77,15 @@
                         if(op.template){
                             json.COMMON = COMMON;
                             // TODO 正式环境删除
-                            requirejs.undef(op.template);
+                            // requirejs.undef(op.template);
                             requirejs([op.template],function(render){
                                 var html = render(json);
                                 $this.empty().html(html).append($ajaxMask).initui()
                                 if ($.isFunction(op.callback)) op.callback(response)
                             });
+                        }else{
+                            $this.empty().html(response).append($ajaxMask).initui()
+                            if ($.isFunction(op.callback)) op.callback(response)
                         }
                     } else {
                         if (json[BJUI.keys.statusCode] == BJUI.statusCode.error) {
@@ -462,6 +470,13 @@
             return this.replace(/{(\d+)}/g, function(match, number) {
                 return typeof args[number] != 'undefined' ? args[number] : match;
             });
+        },
+        getUrlParamMap: function() {
+            var map = {};
+            var parts = this.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                map[key] = value;
+            });
+            return map;
         }
     })
     
