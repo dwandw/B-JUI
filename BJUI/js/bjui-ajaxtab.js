@@ -68,6 +68,7 @@
         
         $(options.target).ajaxUrl({
             url      : options.url,
+            template : options.template,
             data     : {},
             callback : function() {
                 $element.data('bjui.ajaxtab.reload', true).tab('show')
