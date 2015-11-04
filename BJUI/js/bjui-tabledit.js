@@ -182,19 +182,23 @@
                             $tr.prev('input').remove()
                             $tr.parent().isValid(function(v) {
                                 if (v) {
-                                    $tr.unwrap()
-                                    if (callback) {
-                                        callback = callback.toFunc()
-                                    } else {
-                                        callback = function(json) {
-                                            if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
-                                                _doRead($tr)
-                                            } else {
-                                                $tr.bjuiajax('ajaxDone', json)
+                                    $tr.unwrap();
+                                    var _callback = function(json) {
+                                        if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
+                                            _doRead($tr);
+                                            if(callback){
+                                                callback = callback.toFunc();
+                                                callback(json);
+                                            }
+                                        } else {
+                                            $tr.bjuiajax('ajaxDone', json)
+                                            if(callback){
+                                                callback = callback.toFunc();
+                                                callback(json);
                                             }
                                         }
-                                    }
-                                    $tr.bjuiajax('doAjax', {url:that.options.action, data:data, type:that.options.type || 'POST', callback:callback})
+                                    };
+                                    $tr.bjuiajax('doAjax', {url:that.options.action, data:data, type:that.options.type || 'POST', callback:_callback})
                                 }
                             })
                         } else {
@@ -259,7 +263,7 @@
                             $this.closest('.iradio_minimal-purple').find('ins').addClass('readonly')
                         }
                         if (toggle) {
-                            if (toggle == 'doedit' || toggle == 'dosave') return true
+                            if (toggle == 'doedit' || toggle == 'dosave' || toggle == 'dialog') return true
                             else $this.removeAttr('data-toggle').attr('data-toggle-old', toggle)
                             if (toggle == 'kindeditor') {
                                 KindEditor.remove($this)
