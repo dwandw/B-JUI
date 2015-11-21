@@ -78,10 +78,7 @@
                     position = options.displayPosition
                 }
                 
-                if (mode) {
-                    if (options.displayMode && options.displayMode != 'silde')
-                        mode = options.displayMode
-                } else {
+                if (!mode) {
                     mode = options.displayMode
                 }
                 
@@ -152,10 +149,7 @@
                     position = options.displayPosition
                 }
                 
-                if (mode) {
-                    if (options.displayMode && options.displayMode != 'silde')
-                        mode = options.displayMode
-                } else {
+                if (!mode) {
                     mode = options.displayMode
                 }
                 
