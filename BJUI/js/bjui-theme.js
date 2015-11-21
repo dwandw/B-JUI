@@ -26,12 +26,6 @@
         var INIT_THEME = function() {
             $themeLink = $('#bjui-link-theme')
             $themeLis  = $('#bjui-themes')
-            if ($.cookie) {
-                var themeName = $.cookie('bjui_theme') || 'blue'
-                var $li = $themeLis.find('a.theme_'+ themeName)
-                
-                $li.theme({})
-            }
         }
         
         INIT_THEME()

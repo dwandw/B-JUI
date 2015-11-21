@@ -95,6 +95,7 @@
             this.IS_DEBUG = op.debug || false
             this.initEnv()
             
+            if($.cookie && $.cookie('bjui_theme')) $(this).theme('setTheme', $.cookie('bjui_theme'))
             if ((!$.cookie || !$.cookie('bjui_theme')) && op.theme) $(this).theme('setTheme', op.theme)
         },
         initEnv: function() {

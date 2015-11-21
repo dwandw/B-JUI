@@ -45,115 +45,73 @@
     Tabledit.prototype.TOOLS = function() {
         var that = this
         var tools = {
-            initSuffix: function($tbody) {
-                var $trs = $tbody.find('> tr')
-                
-                $trs.each(function(i) {
-                    var $tr = $(this)
-                    
-                    $tr.find(':input, :file, a, label, div').each(function() {
-                        var $child = $(this),
-                            name   = $child.attr('name'), 
-                            val    = $child.val(),
-                            fors   = $child.attr('for'),
-                            id     = $child.attr('id'),
-                            href   = $child.attr('href'),
-                            group  = $child.attr('data-group'),
-                            suffix = $child.attr('data-suffix')
-                        
-                        if (name) $child.attr('name', name.replaceSuffix(i))
-                        if (fors) $child.attr('for', fors.replaceSuffix(i))
-                        if (id)   $child.attr('id', id.replaceSuffix(i).replaceSuffix2(i))
-                        if (href) $child.attr('href', href.replaceSuffix(i))
-                        if (group)   $child.attr('data-group', group.replaceSuffix(i))
-                        if (suffix)  $child.attr('data-suffix', suffix.replaceSuffix(i))
-                        if (val && val.indexOf('#index#') >= 0) $child.val(val.replace('#index#', i + 1))
-                        if ($child.hasClass('no')) {
-                            var prefix = $child.data('prefix') ? $child.data('prefix') : ''
-                            
-                            $child.val(prefix + (i + 1))
-                        }
-                    })
+            initSuffix: function($tr) {
+                var i = $tr.data("id");
+                $tr.find(':input, :file, a, label, div, select').each(function() {
+                    var $child = $(this),
+                        name   = $child.attr('name'), 
+                        val    = $child.val(),
+                        fors   = $child.attr('for'),
+                        id     = $child.attr('id'),
+                        href   = $child.attr('href'),
+                        group  = $child.attr('data-group'),
+                        suffix = $child.attr('data-suffix'),
+                        nextSelect = $child.attr('data-nextSelect')
+
+                    if (name) $child.attr('name', name.replaceSuffix(i))
+                    if (fors) $child.attr('for', fors.replaceSuffix(i))
+                    if (id)   $child.attr('id', id.replaceSuffix(i).replaceSuffix2(i))
+                    if (href) $child.attr('href', href.replaceSuffix(i))
+                    if (group)   $child.attr('data-group', group.replaceSuffix(i))
+                    if (suffix)  $child.attr('data-suffix', suffix.replaceSuffix(i))
+                    if (val && val.indexOf('#index#') >= 0) $child.val(val.replace('#index#', i + 1))
+                    if (nextSelect) $child.attr('data-nextSelect', nextSelect.replaceSuffix(i))
+                    if ($child.hasClass('no')) {
+                        var prefix = $child.data('prefix') ? $child.data('prefix') : ''
+
+                        $child.val(prefix + (i + 1))
+                    }
                 })
             },
-            // Enter for Tab
-            initEnter: function($tbody) {
-                var $texts = $tbody.find(':text')
+            // Tab
+            initTab: function($tr) {
+                var $texts = $tr.find(':text, button, textarea');
                 
                 $texts.each(function(i) {
                     $(this).bind('keydown', function (e) {
-                        if (e.which == BJUI.keyCode.ENTER) {
+                        if (e.which == BJUI.keyCode.TAB) {
                             var nexInd = i + 1
                             
-                            if ($texts.eq(nexInd)) {
-                                $texts.eq(nexInd).focus()
+                            if ($texts.eq(nexInd).length > 0) {
+                                $texts.eq(nexInd)[0].focus()
+                            }else{
+                                $texts.eq(0)[0].focus()
                             }
                             e.preventDefault()
                         }
                     })
                 })
-                this.initInput($tbody)
+                this.initInput($tr)
             },
-            initInput: function($tbody) {
-                $tbody.find('> tr > td').each(function() {
-                    var $span = $(this).find('.input-hold')
-                    
-                    if (!$span.length) {
-                        $span = $('<span class="input-hold" style="display:block; padding:0 4px; height:0px; font-size:12px; visibility:hidden;"></span>')
-                        $(this).append($span)
-                    }
-                    if (!$.support.leadingWhitespace) { // for ie8
-                        $(this).on('propertychange', ':text', function(e) {
-                            $span.text($(this).val())
-                        })
-                    } else {
-                        $(this).on('input', ':text', function(e) {
-                            $span.text($(this).val())
-                        })
-                    }
+            initInput: function($tr) {
+                $tr.find('> td').each(function() {
+                    var $this = $(this);
+                    $(this).on('change', ':input', function(e) {
+                        $this.data("val", $(this).val()).attr("data-val", $(this).val());
+                    });
                 })
             },
             initTbody: function() {
                 var $table  = that.$element,
                     $tbody  = that.$tbody
-                    
+
                 $tbody.find('> tr').each(function() {
-                    var $tr = $(this), $tds = $tr.find('> td'), $ths = $table.data('bjui.tabledit.tr').clone().find('> th')
-                    
+                    var $tr = $(this)
                     $tr.data('bjui.tabledit.oldTds', $tr.html())
-                    
-                    $ths.each(function(i) {
-                        var $td = $tds.eq(i), val = $td.data('val'),
-                            $th = $(this), $child = $th.children(), $pic = $th.find('.pic-box')
-                        
-                        if (typeof val == 'undefined') val = $td.html()
-                        if (!$td.data('noedit')) {
-                            if ($child.length) {
-                                if ($child.is('input:checkbox') || $child.is('input:radio')) {
-                                    $child.filter('[value="'+ val +'"]').attr('checked', 'checked')
-                                } else if ($child.isTag('select')) {
-                                    $child.find('option[value="'+ $td.data('val') +'"]').attr('selected', 'selected')
-                                } else if ($pic.length) {
-                                    if ($td.data('val')) $th.find('.pic-name').val($td.data('val'))
-                                    $pic.html($td.html())
-                                } else if ($child.hasClass('wrap_bjui_btn_box')) {
-                                    $child.find('input[data-toggle]').attr('value', val +'')
-                                } else if ($child.is('textarea')) {
-                                    $child.html(val)
-                                    if ($child.attr('data-toggle') == 'kindeditor') {
-                                        $child.attr('data-toggle-old', 'kindeditor').removeAttr('data-toggle')
-                                    }
-                                } else {
-                                    $child.attr('value', val +'')
-                                }
-                                $td.html($th.html())
-                            }
-                        }
-                    })
-                    
-                    $tr.on('dblclick', $.proxy(function(e) { _doEdit($tr) }, that)).initui()
-                    that.tools.initSuffix($tbody)
-                    _doRead($tr)
+                    if($tr.find('[data-toggle="doedit"]').length == 0)
+                        $tr.find('> td:last').prepend('<button type="button" class="btn-green" data-toggle="doedit" data-icon="pencil" title="编辑"></button>');
+                    _doRead($tr);
+                    $tr.on('dblclick', $.proxy(function(e) { _doEdit($tr) }, that))
                 })
                 
                 $tbody
@@ -184,18 +142,13 @@
                                 if (v) {
                                     $tr.unwrap();
                                     var _callback = function(json) {
+                                        $tr.bjuiajax('ajaxDone', json);
                                         if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
                                             _doRead($tr);
-                                            if(callback){
-                                                callback = callback.toFunc();
-                                                callback(json);
-                                            }
-                                        } else {
-                                            $tr.bjuiajax('ajaxDone', json)
-                                            if(callback){
-                                                callback = callback.toFunc();
-                                                callback(json);
-                                            }
+                                        }
+                                        if(callback){
+                                            callback = callback.toFunc();
+                                            callback(json, that.$element);
                                         }
                                     };
                                     $tr.bjuiajax('doAjax', {url:that.options.action, data:data, type:that.options.type || 'POST', callback:_callback})
@@ -206,78 +159,71 @@
                         }
                     })
                 
-                that.tools.initEnter($tbody)
-                
                 function _doEdit($tr) {
-                    $tr.removeClass('readonly').find('> td *').each(function() {
-                        var $this = $(this), $td = $this.closest('td'), val = $td.data('val'), toggle = $this.attr('data-toggle-old'), readonly = $td.data('readonly')
-                        
-                        if (typeof val == 'undefined') val = $td.html()
-                        if ($td.data('notread')) return true
-                        if ($this.isTag('select'))
-                            $this.val($td.attr('data-val')).selectpicker('refresh').nextAll('.bootstrap-select').removeClass('readonly').find('button').removeClass('disabled')
-                        if ($this.is(':checkbox')) {
-                            $this.closest('.icheckbox_minimal-purple').removeClass('disabled')
-                            $this.closest('.icheckbox_minimal-purple').find('ins').removeClass('readonly')
+                    var $tds = $tr.find('> td'), $ths = $table.data('bjui.tabledit.tr').clone().find('> th');
+                    $tr.removeClass('readonly');
+                    $ths.each(function(i) {
+                        var $td = $tds.eq(i), val = $td.data('val'), $th = $(this), $child = $th.children(), $pic = $th.find('.pic-box');
+                        if(!$child.length && $th.data("edit")){
+                            $th.html($th.data("edit"));
+                            $child = $th.children();
                         }
-                        if ($this.is(':radio')) {
-                            $this.closest('.iradio_minimal-purple').removeClass('disabled')
-                            $this.closest('.iradio_minimal-purple').find('ins').removeClass('readonly')
-                        }
-                        if (toggle) {
-                            if (toggle == 'dosave') return true
-                            else $this.removeAttr('data-toggle-old').attr('data-toggle', toggle)
-                            if (toggle == 'spinner') {
-                                $this.spinner('destroy').spinner()
+                        if (!$td.data('noedit')) {
+                            if ($child.length) {
+                                if ($child.is('input:checkbox') || $child.is('input:radio')) {
+                                    $child.filter('[value="'+ val +'"]').attr('checked', 'checked')
+                                } else if ($child.isTag('select')) {
+                                    if($child.data("toggle") == "address"){
+                                        $child.attr('data-val', $td.data('val'));
+                                    }else{
+                                        $child.find('option[value="'+ $td.data('val') +'"]').attr('selected', 'selected')
+                                    }
+                                } else if ($pic.length) {
+                                    if ($td.data('val')) $th.find('.pic-name').val($td.data('val'))
+                                    $pic.html($td.html())
+                                } else if ($child.hasClass('wrap_bjui_btn_box')) {
+                                    $child.find('input[data-toggle]').attr('value', val +'')
+                                } else if ($child.is('textarea')) {
+                                    $child.html(val)
+                                } else {
+                                    $child.attr('value', val +'')
+                                }
+                                $td.html($th.html())
                             }
-                            if (toggle == 'kindeditor') {
-                                //$this.attr('data-toggle', 'kindeditor')
-                                $td.initui()
-                            }
                         }
-                        if ($this.is(':text') || $this.is('textarea')) {
-                            $this.off('keydown.readonly')
-                            if (readonly) $this.prop('readonly', true)
-                        }
-                        
-                        $this.find('.bjui-lookup, .bjui-spinner, .bjui-upload').show()
-                    })
-                    
+                    });
+                    that.tools.initSuffix($tr);
+
+                    $tr.initui();
+                    that.tools.initTab($tr);
                     $tr.find('[data-toggle="doedit"]')
                         .attr('data-toggle', 'dosave')
-                        .text('完成')
+                        .attr('title', '保存')
+                        .empty()
+                        .data('bjui.icon',false)
+                        .data('icon','save')
+                        .parent()
+                        .initui()
                 }
                 function _doRead($tr) {
-                    $tr.addClass('readonly').find('> td *').each(function() {
-                        var $this = $(this), $td = $this.closest('td'), toggle = $this.attr('data-toggle')
-                        
-                        if ($td.data('notread')) return true
-                        if ($this.isTag('select'))
-                            $this.nextAll('.bootstrap-select').addClass('readonly').find('button').addClass('disabled')
-                        if ($this.is(':checkbox')) {
-                            $this.closest('.icheckbox_minimal-purple').addClass('disabled')
-                            $this.closest('.icheckbox_minimal-purple').find('ins').addClass('readonly')
-                        }
-                        if ($this.is(':radio')) {
-                            $this.closest('.iradio_minimal-purple').addClass('disabled')
-                            $this.closest('.iradio_minimal-purple').find('ins').addClass('readonly')
-                        }
-                        if (toggle) {
-                            if (toggle == 'doedit' || toggle == 'dosave' || toggle == 'dialog') return true
-                            else $this.removeAttr('data-toggle').attr('data-toggle-old', toggle)
-                            if (toggle == 'kindeditor') {
-                                KindEditor.remove($this)
-                            }
-                        }
-                        if ($this.is(':text') || $this.is('textarea'))
-                            $this.on('keydown.readonly', function(e) { e.preventDefault() })
-                        
-                        $this.find('.bjui-lookup, .bjui-spinner, .bjui-upload').hide()
-                    })
+                    var $tds = $tr.find('> td'), $ths = $table.data('bjui.tabledit.tr').clone().find('> th');
+                    $tr.addClass("readonly");
+                    $ths.each(function(i) {
+                        var $td = $tds.eq(i), val = $td.data('val'), $th = $(this);
+                        if($th.data("hidden")) return;
+                        $('select', $td).attr('disabled', 'disabled');
+                        if($('select', $td).length == 0 && val)
+                            $td.html(val);
+                    });
                     
                     $tr.find('[data-toggle="dosave"]')
                         .attr('data-toggle', 'doedit')
-                        .text('编辑')
+                        .attr('title', '编辑')
+                        .empty()
+                        .data('bjui.icon',false)
+                        .data('icon','pencil')
+                        .parent()
+                        .initui()
                 }
             },
             doAdd: function() {
@@ -354,7 +300,7 @@
         var that    = this
         var tools   = this.tools
         var $table  = this.$element.addClass('bjui-tabledit'), $tr = $table.find('> thead > tr:first'), $tbody = this.$tbody
-        var trHtml  = $table.find('> thead > tr:first').html()
+        var trHtml  = $tr.html()
         
         $tr.find('> th').each(function() {
             var $th   = $(this)
