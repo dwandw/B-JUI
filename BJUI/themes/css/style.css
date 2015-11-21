@@ -179,7 +179,10 @@ td[align=right] input{text-align:right;}
 #bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > .dropdown-menu > li > a.theme_purple{color:#7e00ff;}
 #bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > .dropdown-menu > li > a.theme_blue{color:blue;}
 #bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > .dropdown-menu > li > a.theme_red{color:#fc5555;}
-#bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > .dropdown-menu > li > a.theme_green{color:green;}
+#bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > .dropdown-menu > li > a.theme_green{color: #225a17;}
+#bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > .dropdown-menu > li > a.theme_bluetime{color: #3aadf2;}
+#bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > .dropdown-menu > li > a.theme_sleepless{color: #942b62;}
+#bjui-header > #bjui-navbar-collapse > .bjui-navbar-right > li > .dropdown-menu > li > a.theme_minimalist{color:#07739C;}
 #bjui-hnav{position:absolute; top:38px; width:100%; height:32px; overflow:visible;}
 #bjui-hnav > .bjui-hnav-more-left{position:absolute; left:0; top:0; z-index:1; display:none;}
 #bjui-hnav > .bjui-hnav-more-right{position:absolute; right:0; top:0; z-index:1; display:none;}
@@ -722,3 +725,21 @@ ul.ztree.zTreeDragUL{position:absolute; margin:0; padding:0; width:auto; height:
 .ztree .tree_del:hover{background-position:-265px -46px;}
 .ztree .diyBtn1{margin-left:2px;}
 .ztree_main *{font-size:14px;}
+
+/*扩展*/
+.permission-body{
+ height: 100%;
+}
+.permission-con{
+ height: 100%;
+ padding: 25px;
+}
+#ztree-detail{
+
+}
+.ztree-control-list{
+ height: 100%; overflow: auto
+}
+.ztree-control-panel{
+
+}
