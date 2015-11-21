@@ -262,7 +262,7 @@
         
         $box.empty()
         $array.each(function(i) {
-            var $t = $(this), panel, cls, bodycls, faicon = $t.data('faicon'), faiconClose = $t.data('faiconClose'), icon = faicon ? faicon : 'dot-circle-o'
+            var $t = $(this), panel, cls, bodycls, faicon = $t.data('faicon'), faiconClose = $t.data('faiconClose'), icon = faicon ? faicon : ''
             
             if ($t.data('tit')) title = $t.data('tit')
             

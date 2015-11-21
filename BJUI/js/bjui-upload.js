@@ -27,6 +27,7 @@
     }
     
     Upload.DEFAULTS = {
+        showQueue           : true,
         fileTypeExts        : '*.jpg;*.png',     //允许上传的文件类型，格式'*.jpg;*.doc'
         uploader            : '',     //文件提交的地址
         auto                : false,  //是否开启自动上传
@@ -211,7 +212,7 @@
                     that.fileUpload($queue.data('upfile'), uploadedSize)
                 })
                 $temp.on('click.bjui.upload.cancel', '.up_cancel', this.removeQueueItem)
-                options.onSelect && options.onSelect($temp)
+                options.onSelect && options.onSelect($temp, that)
                 //判断是否是自动上传
                 if (options.auto) that.fileUpload(file, uploadedSize)
             },
@@ -360,7 +361,9 @@
     }
     
     Upload.prototype.fileSelect = function(e) {
-        this.$uploadFileList.show()
+        if(this.options.showQueue){
+            this.$uploadFileList.show()
+        }
         this.tools.getFiles(e)
     }
     

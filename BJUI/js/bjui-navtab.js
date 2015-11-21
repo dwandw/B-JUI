@@ -515,8 +515,13 @@
         if ($tab && $tab.length) {
             $panel = this.tools.getPanel($tab.data('initOptions').id)
             $panel.removeData('bjui.clientPaging')
-            
-            this.reload($tab.data('initOptions'))
+            var $form = $("form[data-toggle=ajaxsearch]", $panel);
+            if($form && $form.length){
+                var options = $form.data();
+                $form.bjuiajax('doSearch', options);
+            }else{
+                this.reload($tab.data('initOptions'))
+            }
         }
     }
     

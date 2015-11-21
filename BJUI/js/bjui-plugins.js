@@ -21,6 +21,15 @@
         var $box    = $(e.target)
         
         // UI init begin...
+
+        /* permission check */
+
+        $box.find('[data-permission]').each(function() {
+            var $this = $(this);
+            if(permission_check && !permission_check($this.data("permission"))){
+                $this.remove();
+            }
+        });
         
         /* i-check */
         var $icheck = $box.find('[data-toggle="icheck"]')
@@ -149,6 +158,24 @@
                 
                 e.preventDefault()
             })
+
+            $element.hover(function(e) {
+                if (!$more.length) {
+                    BJUI.debug('Not created \'moresearch\' box[class="bjui-moreSearch"]!')
+                    return
+                }
+                $more.css('top', $parent.outerHeight() - 1)
+                $element.html('<i class="fa fa-angle-double-up"></i>')
+                if (name) $('body').data('moresearch.'+ name, true)
+                $more.fadeIn('slow', 'linear')
+                
+                e.preventDefault()
+            })
+
+
+            $more.mouseleave(function(){
+                $element.trigger('click');
+            });
             
             if (name && $('body').data('moresearch.'+ name)) {
                 $more.css('top', $parent.outerHeight() - 1).fadeIn()
@@ -176,7 +203,7 @@
                 
                 if (typeof val == 'undefined') val = $obj.val()
                 $.ajax({
-                    type     : 'POST',
+                    type     : 'GET',
                     dataType : 'json', 
                     url      : refurl.replace('{value}', encodeURIComponent(val)), 
                     cache    : false,
@@ -226,11 +253,23 @@
             if (!options.width) $element.data('width', 'auto')
             if (!options.container) $element.data('container', 'body')
             else if (options.container == true) $element.attr('data-container', 'false').data('container', false)
-            
-            $element.selectpicker()
-            
-            if ($next && $next.length && (typeof $next.data('val') != 'undefined'))
-                bjui_select_linkage($element, $next)
+
+            if(options.url){
+                options.callback = function(){
+                    $element.selectpicker();
+                    if(options.val){
+                       $element.selectpicker('val', options.val);
+                    }
+                };
+                $element.ajaxUrl(options);
+            }else{
+                $element.selectpicker()
+                if(options.val){
+                    $element.selectpicker('val', options.val);
+                }
+                if ($next && $next.length && (typeof $next.data('val') != 'undefined'))
+                    bjui_select_linkage($element, $next)
+            }
         })
         
         /* bootstrap - select - linkage && Trigger validation */

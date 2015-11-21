@@ -392,7 +392,7 @@
         }
         if ($target && $target.length) {
             $target.removeData('bjui.clientPaging')
-            that.reloadDiv($target, $.extend({}, $target.data('options') || {}, options))
+            that.reloadDiv($target, $.extend({}, $target.data('options') || $target.data() || {}, options))
         }
     }
     
